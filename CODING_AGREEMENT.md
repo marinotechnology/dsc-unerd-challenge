@@ -161,7 +161,7 @@ Urutan deklarasi di dalam Model:
 
 - **Larangan Obvious Comments:** Dilarang menulis komentar yang sekadar mengulang kode (misal: `// simpan data user` di atas `$user->save()`).
 - **Why, Not What:** Komentar hanya diperuntukkan menjelaskan alasan keputusan bisnis spesifik atau aturan regulasi teknis.
-- **Tag Tugas Standar:** Gunakan hanya tag resmi untuk kode sementara:
+- **Tag Tugas Standar:** Gunakan hanya tag  untuk kode sementara:
     - `// TODO: Implementasi toleransi berat timbangan jembatan saat modul timbang terpasang.`
     - `// SECURITY: Pastikan token transaksi divalidasi sebelum file binary dialirkan.`
 

@@ -70,6 +70,21 @@
             </span>
         </div>
 
+        <!-- Community Affiliation -->
+        <div>
+            <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                Komunitas Lari Afiliasi
+            </label>
+            <x-community-select :communities="$communities ?? []"
+                                :selected-id="old('community_id', $user->community_id)"
+                                :selected-name="$user->community?->name ?? ''"
+                                placeholder="Cari nama komunitas atau ketik nama baru..." />
+            <x-input-error class="mt-1.5" :messages="$errors->get('community_id')" />
+            <span class="block text-[11px] text-slate-400 dark:text-zinc-500 mt-1 font-mono">
+                Pilih komunitas lari tempatmu bernaung, atau tambahkan jika komunitasmu baru.
+            </span>
+        </div>
+
         <!-- Shoe Size Selection (EU 38 - 45) -->
         <div>
             <div class="flex items-center justify-between mb-1.5">

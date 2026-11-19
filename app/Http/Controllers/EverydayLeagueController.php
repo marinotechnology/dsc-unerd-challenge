@@ -215,7 +215,7 @@ class EverydayLeagueController extends Controller
                 }
 
                 return redirect()->route('customer.dashboard')
-                    ->with('status', 'Anda sudah mencatat hasil lari resmi di periode ini. Setiap pelari memiliki 1 kesempatan resmi per periode.');
+                    ->with('status', 'Anda sudah mencatat hasil lari  di periode ini. Setiap pelari memiliki 1 kesempatan  per periode.');
             }
 
             // Create new result for this period
@@ -250,6 +250,10 @@ class EverydayLeagueController extends Controller
             'terms_consent' => true,
             'acquisition_source' => 'WEB_LEAGUE',
         ]);
+
+        if ($user && ! empty($validatedData['community_id'])) {
+            $user->update(['community_id' => (int) $validatedData['community_id']]);
+        }
 
         return redirect()->route('everyday-league.success', $participant->participant_id);
     }
@@ -322,87 +326,40 @@ class EverydayLeagueController extends Controller
     /**
      * Display the shareable "My Result" card for a runner.
      */
-    public function result(Participant $participant): View
+    public function result(Request $request, Participant $participant): View
     {
-        $participant->load(['latestResult.challenge', 'community']);
-        $result = $participant->latestResult;
+        $result = null;
+        if ($request->has('result_id')) {
+            $result = ChallengeResult::with(['period', 'challenge'])
+                ->where('participant_id', $participant->id)
+                ->find($request->query('result_id'));
+        } elseif ($request->has('period_id')) {
+            $result = ChallengeResult::with(['period', 'challenge'])
+                ->where('participant_id', $participant->id)
+                ->where('challenge_period_id', $request->query('period_id'))
+                ->first();
+        }
 
-        // Calculate runner's overall rank if verified
+        if (! $result) {
+            $participant->load(['latestResult.challenge', 'latestResult.period', 'community']);
+            $result = $participant->latestResult;
+        } else {
+            $participant->load('community');
+        }
+
+        // Calculate runner's rank in period if verified
         $overallRank = null;
         if ($result && $result->verified_time_seconds) {
-            $overallRank = ChallengeResult::verified()
-                ->where('verified_time_seconds', '<', $result->verified_time_seconds)
-                ->count() + 1;
+            $overallRank = $result->rank_in_period ?? (
+                ChallengeResult::verified()
+                    ->when($result->challenge_period_id, fn ($q) => $q->where('challenge_period_id', $result->challenge_period_id))
+                    ->where('verified_time_seconds', '<', $result->verified_time_seconds)
+                    ->count() + 1
+            );
         }
 
-        $totalFinishers = ChallengeResult::verified()->count();
-
-        // Curated authentic UNERD footwear catalog from DB with fallback
-        $dbProducts = Product::where('is_active', true)->get();
-
-        if ($dbProducts->isNotEmpty()) {
-            $footwearCatalog = $dbProducts->map(fn (Product $p) => [
-                'name' => $p->name,
-                'slug' => $p->slug,
-                'category' => $p->category,
-                'tagline' => $p->subtitle ?? ($p->description ?? ''),
-                'price' => $p->price,
-                'discounted_price' => $p->discounted_price ?? (int) round($p->price * 0.9),
-                'image' => $p->image,
-                'shopee_url' => $p->shopee_url ?? '#',
-                'is_recovery' => str_contains(strtolower($p->name), 'reco') || str_contains(strtolower($p->category), 'lifestyle') || str_contains(strtolower($p->name), 'sandal'),
-            ])->all();
-        } else {
-            $footwearCatalog = [
-                [
-                    'name' => 'UNERD Beat Flow Performance',
-                    'slug' => 'unerd-beat-flow-performance',
-                    'category' => 'Performance',
-                    'tagline' => 'Bantalan responsif dengan stabilitas optimal untuk sprint 1 KM maupun long run',
-                    'price' => 469000,
-                    'discounted_price' => 422100,
-                    'image' => 'images/products/unerd-beat-flow-performance.jpg',
-                    'shopee_url' => 'https://shopee.co.id/UNERD-PERFORMANCE-BEAT-FLOW-NUSANTARA-SEPATU-RUNNING-PRIA-WANITA-JOGJA-i.305818928.48571828579?extraParams=%7B%22display_model_id%22%3A303096235058%2C%22model_selection_logic%22%3A3%7D&image_ids=sg-11134201-8259u-mvmw40mkmz9h4a',
-                    'is_recovery' => false,
-                ],
-                [
-                    'name' => 'UNERD Women Swift Move',
-                    'slug' => 'unerd-women-swift-move',
-                    'category' => 'Women',
-                    'tagline' => 'Siluet sporty dinamis dan ringan khusus rancangan anatomi wanita',
-                    'price' => 459000,
-                    'discounted_price' => 413100,
-                    'image' => 'images/products/unerd-women-swift-move.jpg',
-                    'shopee_url' => 'https://shopee.co.id/-UNERD-WOMEN-SWIFT-MOVE-Sepatu-Sport-Casual-Sport-Style-Wanita-Dewasa-Radiant-Lotus-i.305818928.45956395884?extraParams=%7B%22display_model_id%22%3A390575836112%2C%22model_selection_logic%22%3A3%7D&image_ids=id-11134207-8224y-ml3dar736a6e9b',
-                    'is_recovery' => false,
-                ],
-                [
-                    'name' => 'UNERD Thera Reco Lifestyle',
-                    'slug' => 'unerd-thera-reco-lifestyle',
-                    'category' => 'Lifestyle',
-                    'tagline' => 'Sandal sepatu recovery dengan footbed ergonomis empuk pelepas lelah kaki',
-                    'price' => 299000,
-                    'discounted_price' => 269100,
-                    'image' => 'images/products/unerd-thera-reco-lifestyle.jpg',
-                    'shopee_url' => 'https://shopee.co.id/UNERD-THERA-RECO-Sandal-Sepatu-Pria-Wanita-i.305818928.56018366974?extraParams=%7B%22display_model_id%22%3A366544255922%2C%22model_selection_logic%22%3A3%7D&image_ids=sg-11134201-82599-mthzt0pq8yrl86',
-                    'is_recovery' => true,
-                ],
-            ];
-        }
-
-        $recoveryProduct = collect($footwearCatalog)->firstWhere('is_recovery', true);
-        $regularProducts = collect($footwearCatalog)->where('is_recovery', false)->values()->all();
-
-        // Filter recommendations if participant selected specific product interest
-        $recommendedProducts = $regularProducts;
-        if ($participant->product_interest && $participant->product_interest !== 'Belum Menentukan') {
-            $matched = array_filter($regularProducts, fn ($p) => $p['category'] === $participant->product_interest);
-            if (! empty($matched)) {
-                $recommendedProducts = array_values($matched);
-            }
-        }
-
-        $voucherCode = 'MOVE-GBK-10%';
+        $prize = $result?->getPrize();
+        $voucherCode = ! empty($prize['voucher_code']) ? $prize['voucher_code'] : 'MOVE-GBK-10%';
 
         // Log result view & share event
         ActivityEvent::create([
@@ -415,10 +372,8 @@ class EverydayLeagueController extends Controller
             'result' => $result,
             'overallRank' => $overallRank,
             'rank' => $overallRank ?? 1,
-            'totalFinishers' => $totalFinishers,
+            'prize' => $prize,
             'voucherCode' => $voucherCode,
-            'recoveryProduct' => $recoveryProduct,
-            'recommendedProducts' => $recommendedProducts,
         ]);
     }
 

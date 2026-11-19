@@ -40,8 +40,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-unerd-ink dark:text-zinc-100 bg-unerd-canvas dark:bg-unerd-black min-h-screen flex flex-col transition-colors duration-200">
-        <!-- Sticky Navigation Header (72px) -->
-        <header class="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-unerd-hairline dark:border-zinc-800 transition-colors">
+        <!-- Sticky Navigation Header (72px) with Collapsible Mobile Navbar -->
+        <header x-data="{ mobileNavOpen: false }" class="sticky top-0 z-40 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-unerd-hairline dark:border-zinc-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[68px] sm:h-[72px] flex items-center justify-between">
                 <div class="flex items-center gap-4 sm:gap-8">
                     <!-- Brand Anchor: Icon on Mobile, Master Logo on Desktop -->
@@ -52,7 +52,7 @@
                     <!-- Section Quick Anchors (Desktop) -->
                     <nav class="hidden lg:flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-unerd-body dark:text-zinc-300">
                         <a href="#time-attack" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Time Attack Challenge</a>
-                        <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Kerja & Timing</a>
+                        <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Kerja</a>
                         <a href="#community-race" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Komunitas & Kategori</a>
                         <a href="#footwear-performance" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Sepatu UNERD</a>
                         <a href="#prizes-rewards" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Hadiah Juara & Voucher</a>
@@ -65,17 +65,76 @@
 
                     @auth
                         <a href="{{ route('dashboard') }}"
-                           class="inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition">
+                           class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition">
                             <span class="hidden sm:inline">Masuk ke</span> Dashboard →
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                           class="inline-flex items-center justify-center h-10 px-3 sm:px-4 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md transition">
+                           class="hidden sm:inline-flex items-center justify-center h-10 px-3 sm:px-4 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md transition">
                             Sign In
                         </a>
                         <a href="{{ route('register') }}"
-                           class="inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs">
+                           class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs">
                             Ikut Challenge
+                        </a>
+                    @endauth
+
+                    <!-- Mobile Hamburger Toggle Button -->
+                    <button type="button"
+                            @click="mobileNavOpen = !mobileNavOpen"
+                            class="lg:hidden p-2 rounded-xl text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition flex items-center justify-center"
+                            aria-label="Toggle Menu">
+                        <svg x-show="!mobileNavOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-show="mobileNavOpen" x-cloak class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsible Mobile Menu Drawer -->
+            <div x-show="mobileNavOpen"
+                 x-cloak
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-100"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 class="lg:hidden border-t border-unerd-hairline dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-4 space-y-3 shadow-xl">
+
+                <nav class="flex flex-col space-y-1 text-xs font-bold uppercase tracking-wider text-unerd-body dark:text-zinc-300">
+                    <a href="#time-attack" @click="mobileNavOpen = false" class="px-3.5 py-2.5 rounded-xl bg-unerd-volt text-unerd-ink font-black flex items-center justify-between">
+                        <span>Time Attack Challenge</span>
+                        <span>&rarr;</span>
+                    </a>
+                    <a href="#timing-system" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                        Cara Kerja
+                    </a>
+                    <a href="#community-race" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                        Komunitas & Kategori
+                    </a>
+                    <a href="#footwear-performance" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                        Sepatu UNERD
+                    </a>
+                    <a href="#prizes-rewards" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                        Hadiah Juara & Voucher
+                    </a>
+                </nav>
+
+                <div class="pt-3 border-t border-slate-100 dark:border-zinc-800 flex flex-col gap-2">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                            Masuk ke Dashboard &rarr;
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition shadow-xs">
+                            Ikut Challenge (Daftar)
+                        </a>
+                        <a href="{{ route('login') }}" class="w-full text-center py-2.5 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition">
+                            Sign In
                         </a>
                     @endauth
                 </div>
@@ -111,7 +170,7 @@
                         </div>
 
                         <p class="text-sm sm:text-base text-unerd-body dark:text-zinc-300 leading-relaxed font-sans max-w-xl">
-                            Tantang batas kecepatanmu di lintasan resmi GBK Jakarta! Ikuti sprint 1.000 meter (1 KM), catat waktu resmimu dengan verifikasi stopwatch kru panitia, dan buktikan catatan waktu terbaikmu di papan peringkat live.
+                            Tantang batas kecepatanmu di lintasan GBK Jakarta! Ikuti sprint 1.000 meter (1 KM), catat waktumu dengan verifikasi stopwatch kru panitia, dan buktikan catatan waktu terbaikmu di papan peringkat live.
                         </p>
 
                         <!-- Action Buttons -->
@@ -162,7 +221,7 @@
                                 </div>
                                 <div class="absolute bottom-2.5 left-4">
                                     <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-300">
-                                        Lintasan Resmi GBK Senayan
+                                        Lintasan GBK Senayan
                                     </span>
                                 </div>
                             </div>
@@ -214,60 +273,55 @@
                         <!-- Left Explanation of 3 Steps -->
                         <div class="lg:col-span-6 space-y-6">
                             <div>
-                                <span class="px-3 py-1 rounded-pill bg-unerd-black dark:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[2px] inline-block mb-3">
-                                    ALUR PARTISIPASI
+                                <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                                    Cara Kerja Time Attack
                                 </span>
                                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                    Cara Kerja & Verifikasi Stopwatch Kru
+                                    Cara Kerja Challenge Time Attack
                                 </h2>
                                 <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                    Setiap milidetik lari dicatat secara objektif oleh kru operasional di lapangan untuk menjaga sportivitas dan akurasi peringkat.
+                                    Tata cara registrasi dan challenge time attack dari Unerd Performace
                                 </p>
                             </div>
 
-                            <div class="space-y-4">
-                                <!-- Step 1 -->
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-4 shadow-xs">
-                                    <div class="w-9 h-9 rounded-xl bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-sm shrink-0">
+                            <div class="space-y-3.5">
+                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         01
                                     </div>
                                     <div>
-                                        <h3 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">
-                                            Daftar & Dapatkan Nomor BIB
-                                        </h3>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
-                                            Daftar akun dan pilih kategori pelari. Kamu akan langsung menerima nomor BIB unik untuk identifikasi resmi di lintasan.
-                                        </p>
+                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Daftar Akun</h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Daftarkan akun anda melalui halaman register, pilih tipe pengguna sesuai preferensi</p>
                                     </div>
                                 </div>
 
-                                <!-- Step 2 -->
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-4 shadow-xs">
-                                    <div class="w-9 h-9 rounded-xl bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-sm shrink-0">
+                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         02
                                     </div>
                                     <div>
-                                        <h3 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">
-                                            Lari Sprint 1.000 Meter di GBK
-                                        </h3>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
-                                            Mulai dari garis start dan pacu ritme terbaikmu sepanjang 1 KM lintasan Gelora Bung Karno.
-                                        </p>
+                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Join Challenge</h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Join challenge untuk mendaftarkan diri anda dan dapatkan nomor peserta unik.</p>
                                     </div>
                                 </div>
 
-                                <!-- Step 3 -->
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-4 shadow-xs">
-                                    <div class="w-9 h-9 rounded-xl bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-sm shrink-0">
+                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         03
                                     </div>
                                     <div>
-                                        <h3 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">
-                                            Kru Input Waktu Stopwatch & Sahkan Hasil
-                                        </h3>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
-                                            Kru panitia di garis finish mencatat waktu menggunakan format resmi (mm:ss,ms). Hasil seketika terverifikasi di profilmu tanpa refresh.
-                                        </p>
+                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Datang ke booth unerd performance & mulai lari</h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Datang & silahkan konfirmasi dulu ke petugas unerd, lalu lari sesuai arahan petugas</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                        04
+                                    </div>
+                                    <div>
+                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Catat waktu lari anda & jadi juara</h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Catat waktu tercepat & jadilah juara, dapatkan hadiah menarik.</p>
                                     </div>
                                 </div>
                             </div>
@@ -528,11 +582,11 @@
                                     KOLEKSI PILIHAN PELARI • SHOP THE MOVE
                                 </span>
                                 <h3 class="font-display text-xl sm:text-3xl font-extrabold uppercase text-unerd-ink dark:text-white mt-1">
-                                    Koleksi Resmi Sepatu UNERD
+                                    Koleksi Sepatu UNERD
                                 </h3>
                             </div>
                             <span class="text-xs text-unerd-muted dark:text-zinc-400">
-                                Dapatkan potongan 10% voucher resmi langsung di official store Shopee
+                                Dapatkan potongan 10% voucher langsung untuk belanja unerd
                             </span>
                         </div>
 

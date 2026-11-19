@@ -82,7 +82,6 @@ test('authenticated runner can view challenge selection page with prefilled prof
     $response = $this->actingAs($user)->get(route('everyday-league.register'));
 
     $response->assertStatus(200);
-    $response->assertSee('Data Profil Akun Pelari');
     $response->assertSee('Dimas Pratama');
     $response->assertSee('EU 42');
 });
@@ -264,6 +263,18 @@ test('livewire leaderboard component can switch role tabs and poll realtime', fu
         ->assertSet('activeRoleTab', 'Komunitas')
         ->call('setRoleTab', 'Profesional')
         ->assertSet('activeRoleTab', 'Profesional');
+});
+
+test('livewire leaderboard component can select period and search runners directly', function () {
+    $period = ChallengePeriod::first();
+
+    Livewire::test(Leaderboard::class)
+        ->assertStatus(200)
+        ->assertSet('selectedPeriodId', $period->id)
+        ->call('selectPeriod', $period->id)
+        ->assertSet('selectedPeriodId', $period->id)
+        ->set('search', 'UMS-0001')
+        ->assertSet('search', 'UMS-0001');
 });
 
 test('user can register with shoe size and runner role', function () {
@@ -568,7 +579,7 @@ test('livewire runner live status updates and shows verified result, rank, and t
         ->assertStatus(200)
         ->assertSee('SELESAI LARI (FINISHER)')
         ->assertSee('03:15,00')
-        ->assertSee('HADIAH RESMI TOP 10');
+        ->assertSee('HADIAH  TOP 10');
 });
 
 test('admin can export csv filtered by period and export user directory csv', function () {
@@ -741,4 +752,53 @@ test('runner cannot register when no challenge period is active', function () {
     // Restore period
     ChallengePeriod::first()?->update(['is_active' => true, 'is_open_for_registration' => true]);
     Challenge::first()?->update(['status' => 'ACTIVE']);
+});
+
+test('users can search and create communities dynamically', function () {
+    $community = Community::create([
+        'name' => 'Senayan Morning Striders',
+        'slug' => 'senayan-morning-striders',
+        'city' => 'Jakarta Pusat',
+    ]);
+
+    // Search existing community
+    $response = $this->getJson(route('communities.search', ['q' => 'Morning']));
+    $response->assertStatus(200);
+    $response->assertJsonFragment(['name' => 'Senayan Morning Striders']);
+
+    // Create a new community
+    $createResponse = $this->postJson(route('communities.store'), [
+        'name' => 'Kebayoran Runners Club',
+        'city' => 'Jakarta Selatan',
+    ]);
+    $createResponse->assertStatus(201);
+    $createResponse->assertJsonPath('community.name', 'Kebayoran Runners Club');
+
+    expect(Community::where('name', 'Kebayoran Runners Club')->exists())->toBeTrue();
+});
+
+test('user registration saves community affiliation', function () {
+    $community = Community::create([
+        'name' => 'Tangerang Pace Crew',
+        'slug' => 'tangerang-pace-crew',
+        'city' => 'Tangerang',
+    ]);
+
+    $response = $this->post(route('register'), [
+        'name' => 'Budi Runner',
+        'email' => 'budi.runner@example.com',
+        'phone_number' => '081298765432',
+        'shoe_size' => 43,
+        'role_slug' => 'komunitas',
+        'community_id' => $community->id,
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ]);
+
+    $response->assertRedirect(route('dashboard'));
+
+    $user = User::where('email', 'budi.runner@example.com')->first();
+    expect($user)->not->toBeNull();
+    expect($user->community_id)->toBe($community->id);
+    expect($user->community?->name)->toBe('Tangerang Pace Crew');
 });

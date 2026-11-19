@@ -37,6 +37,7 @@ class User extends Authenticatable
         'shoe_size',
         'password',
         'role_id',
+        'community_id',
         'is_blocked',
     ];
 
@@ -58,6 +59,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_blocked' => 'boolean',
             'shoe_size' => 'integer',
+            'community_id' => 'integer',
         ];
     }
 
@@ -67,6 +69,14 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
+     * @return BelongsTo<Community, User>
+     */
+    public function community(): BelongsTo
+    {
+        return $this->belongsTo(Community::class, 'community_id');
     }
 
     /**

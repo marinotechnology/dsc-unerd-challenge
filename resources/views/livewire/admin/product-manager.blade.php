@@ -29,7 +29,7 @@
                 Manajemen Produk Sepatu & Footwear
             </h1>
             <p class="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
-                Kelola koleksi sepatu resmi UNERD yang ditampilkan di beranda tantangan dan dashboard pelari.
+                Kelola koleksi sepatu  UNERD yang ditampilkan di beranda tantangan dan dashboard pelari.
             </p>
         </div>
 

@@ -4,7 +4,7 @@ Tetapi saya merevisi tiga hal agar sistemnya tidak keliru sejak awal.
 
 | Keputusan | Evaluasi dan penyempurnaan |
 | --- | --- |
-| Run 500 m–1 km | Rekomendasi 500 meter. Pilih satu jarak resmi, jangan campur waktu 500 m dan 1 km dalam leaderboard yang sama. Finalisasi bergantung pada lintasan yang diizinkan. |
+| Run 500 m–1 km | Rekomendasi 500 meter. Pilih satu jarak , jangan campur waktu 500 m dan 1 km dalam leaderboard yang sama. Finalisasi bergantung pada lintasan yang diizinkan. |
 | Kategori Umum / Komunitas / Pekerja | Dipakai untuk segmentasi peserta dan CRM, bukan otomatis menjadi tiga kategori juara. Peserta juga dapat memilih afiliasi komunitas secara terpisah. |
 | Individual + Community + Personal Record | Ketiganya ditampilkan. Namun pada 21 November, Personal Record baru menjadi baseline pertama. Perbandingan peningkatan baru valid setelah percobaan berikutnya dengan jarak yang setara. |
 | Custom website | Tepat. Gunakan infrastruktur website UNERD yang ada, tanpa aplikasi atau sistem fitness baru. |
@@ -102,7 +102,7 @@ Pengunjung melihat tiga kartu challenge.
 Setelah memilih Run Challenge, peserta melihat:
 
 - Lokasi dan tanggal.
-- Jarak resmi setelah finalisasi.
+- Jarak  setelah finalisasi.
 - Aturan challenge dan persyaratan keselamatan.
 - Informasi leaderboard dan penghargaan.
 - Tombol REGISTER NOW.
@@ -183,8 +183,8 @@ Jarak final harus diukur dan disetujui di area GBK yang diizinkan.
 
 Ketentuan:
 
-- Semua peserta mengikuti jarak resmi yang sama.
-- Satu percobaan resmi per peserta untuk pilot.
+- Semua peserta mengikuti jarak  yang sama.
+- Satu percobaan  per peserta untuk pilot.
 - Stopwatch/manual timing.
 - Petugas mencatat hasil.
 - Admin memvalidasi hasil sebelum publikasi.
@@ -204,7 +204,7 @@ Menampilkan:
 - Display name
 - Kategori peserta
 - Nama komunitas, bila ada
-- Waktu resmi
+- Waktu 
 
 Urutan berdasarkan waktu tercepat yang sudah diverifikasi.
 
@@ -597,7 +597,7 @@ Brief fungsional sudah final. Namun saya tidak akan menganggap spesifikasi lapan
 
 | Keputusan | Rekomendasi |
 | --- | --- |
-| Jarak resmi | 500 meter, jika diizinkan dan lintasan aman; jika tidak, satu jarak alternatif yang konsisten |
+| Jarak  | 500 meter, jika diizinkan dan lintasan aman; jika tidak, satu jarak alternatif yang konsisten |
 | Formula community leaderboard | Rata-rata tiga waktu tercepat tiap komunitas, minimum tiga finisher |
 | Hadiah fisik | Tetapkan jenis, jumlah, kategori pemenang, dan nilai maksimum dari anggaran |
 | Integrasi website | Konfirmasi database, admin login, analytics, dan hubungan dengan sistem checkout existing |

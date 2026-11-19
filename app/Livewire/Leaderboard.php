@@ -11,9 +11,12 @@ use App\Models\Community;
 use App\Models\Participant;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Leaderboard extends Component
 {
+    use WithPagination;
+
     /**
      * Active role/category tab: 'Umum', 'Komunitas', 'Profesional', 'CommunityAvg'
      */
@@ -25,49 +28,70 @@ class Leaderboard extends Component
     public ?int $selectedPeriodId = null;
 
     /**
-     * Search query for period selector
-     */
-    public string $periodSearch = '';
-
-    /**
-     * Realtime search query for personal record
+     * Realtime search query for runner / BIB
      */
     public string $search = '';
 
     public function mount(): void
     {
-        $activePeriod = ChallengePeriod::where('is_active', true)->first();
+        $activePeriod = ChallengePeriod::where('is_active', true)->first()
+            ?? ChallengePeriod::orderByDesc('event_date')->first();
         if ($activePeriod) {
             $this->selectedPeriodId = $activePeriod->id;
         }
     }
 
     /**
-     * Switch category tab
+     * Switch category tab / dropdown
      */
     public function setRoleTab(string $tab): void
     {
         $this->activeRoleTab = $tab;
+        $this->resetPage();
+    }
+
+    /**
+     * Select period from searchable dropdown
+     */
+    public function selectPeriod(int|string $periodId): void
+    {
+        $this->selectedPeriodId = (int) $periodId;
+        $this->resetPage();
+    }
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
     }
 
     public function render(): View
     {
-        $periodsQuery = ChallengePeriod::orderByDesc('event_date');
-        if ($this->periodSearch !== '') {
-            $term = trim($this->periodSearch);
-            $periodsQuery->where(function ($q) use ($term) {
-                $q->where('name', 'like', "%{$term}%")
-                    ->orWhere('period_code', 'like', "%{$term}%");
-            });
-        }
-        $periods = $periodsQuery->get();
+        $periods = ChallengePeriod::orderByDesc('event_date')->get();
 
-        $currentPeriod = ChallengePeriod::find($this->selectedPeriodId)
-            ?? ChallengePeriod::where('is_active', true)->first();
+        $periodsList = $periods->map(fn ($p) => [
+            'id' => $p->id,
+            'name' => $p->name,
+            'clean_name' => $p->cleanName(),
+            'code' => (string) $p->period_code,
+            'is_active' => (bool) $p->is_active,
+            'date' => $p->event_date?->translatedFormat('d F Y') ?? '',
+        ])->values()->all();
+
+        $currentPeriod = null;
+        if ($this->selectedPeriodId) {
+            $currentPeriod = ChallengePeriod::find($this->selectedPeriodId);
+        }
+        if (! $currentPeriod) {
+            $currentPeriod = ChallengePeriod::where('is_active', true)->first()
+                ?? ChallengePeriod::orderByDesc('event_date')->first();
+            if ($currentPeriod) {
+                $this->selectedPeriodId = $currentPeriod->id;
+            }
+        }
 
         $activeChallenge = Challenge::where('status', 'ACTIVE')->first();
 
-        // 1. Category-specific individual leaderboard filtered by Period
+        // 1. Category-specific individual leaderboard filtered by Period & Search
         $query = ChallengeResult::with(['participant.community', 'challenge', 'period'])
             ->verified()
             ->when($currentPeriod, fn ($q) => $q->where('challenge_period_id', $currentPeriod->id))
@@ -79,26 +103,29 @@ class Leaderboard extends Component
             });
         }
 
+        if (! empty(trim($this->search))) {
+            $keyword = trim($this->search);
+            $query->whereHas('participant', function ($q) use ($keyword) {
+                $q->where('participant_id', 'like', "%{$keyword}%")
+                    ->orWhere('display_name', 'like', "%{$keyword}%")
+                    ->orWhere('full_name', 'like', "%{$keyword}%");
+            });
+        }
+
         $results = $query->paginate(25);
 
         // 2. Community Average Ranking (Top 3 finishers avg, min 3 finishers rule)
         $communityRankings = $this->calculateCommunityLeaderboard($currentPeriod?->id);
 
-        // 3. Search Personal Record
-        $personalResult = null;
         if (! empty(trim($this->search))) {
-            $keyword = trim($this->search);
-            $personalResult = Participant::with(['latestResult.challenge', 'community'])
-                ->where(function ($q) use ($keyword) {
-                    $q->where('participant_id', 'like', "%{$keyword}%")
-                        ->orWhere('display_name', 'like', "%{$keyword}%")
-                        ->orWhere('full_name', 'like', "%{$keyword}%")
-                        ->orWhere('whatsapp', 'like', "%{$keyword}%");
-                })
-                ->first();
+            $keyword = strtolower(trim($this->search));
+            $communityRankings = array_values(array_filter($communityRankings, function ($comm) use ($keyword) {
+                return str_contains(strtolower($comm['community']->name), $keyword)
+                    || str_contains(strtolower($comm['community']->city ?? ''), $keyword);
+            }));
         }
 
-        // 4. Participant counts for tabs within current period
+        // 3. Participant counts for tabs within current period
         $periodFilter = fn ($q) => $currentPeriod ? $q->where('challenge_period_id', $currentPeriod->id) : $q;
 
         $countUmum = ChallengeResult::verified()
@@ -119,12 +146,12 @@ class Leaderboard extends Component
         return view('livewire.leaderboard', [
             'results' => $results,
             'communityRankings' => $communityRankings,
-            'personalResult' => $personalResult,
             'countUmum' => $countUmum,
             'countKomunitas' => $countKomunitas,
             'countProfesional' => $countProfesional,
             'activeChallenge' => $activeChallenge,
             'periods' => $periods,
+            'periodsList' => $periodsList,
             'currentPeriod' => $currentPeriod,
             'lastUpdated' => now()->format('H:i:s'),
         ]);

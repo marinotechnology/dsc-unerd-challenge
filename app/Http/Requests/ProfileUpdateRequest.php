@@ -28,6 +28,7 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'phone_number' => ['nullable', 'string', 'max:25'],
             'shoe_size' => ['nullable', 'integer', 'between:36,48'],
+            'community_id' => ['nullable', 'integer', 'exists:communities,id'],
         ];
     }
 }

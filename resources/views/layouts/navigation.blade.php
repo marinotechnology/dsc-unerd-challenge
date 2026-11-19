@@ -50,13 +50,21 @@
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('customer.dashboard') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
                             Hub Pelari
                         </a>
+                        <a href="{{ route('customer.history') }}"
+                           class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('customer.history') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
+                            Riwayat Lari
+                        </a>
+                        <a href="{{ route('customer.rewards') }}"
+                           class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('customer.rewards') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
+                            Voucher & Sepatu
+                        </a>
                         <a href="{{ route('everyday-league.register') }}"
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('everyday-league.register') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
                             Time Attack Challenge
                         </a>
                         <a href="{{ route('everyday-league.leaderboard') }}"
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('everyday-league.leaderboard') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
-                            Leaderboard Realtime
+                            Leaderboard
                         </a>
                     @endif
                 </div>
@@ -156,9 +164,11 @@
         @elseif (Auth::user()->isB2bClient())
             <a href="{{ route('portal.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md bg-unerd-surface-card dark:bg-zinc-800 dark:text-white">Komunitas & Partner</a>
         @else
-            <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.dashboard') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Hub Pelari</a>
+            <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.dashboard') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Hub Pelari (Tantangan Aktif)</a>
+            <a href="{{ route('customer.history') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.history') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Riwayat Lari & Rekor</a>
+            <a href="{{ route('customer.rewards') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.rewards') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Voucher & Hadiah Sepatu</a>
             <a href="{{ route('everyday-league.register') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('everyday-league.register') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Time Attack Challenge</a>
-            <a href="{{ route('everyday-league.leaderboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('everyday-league.leaderboard') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Leaderboard Realtime</a>
+            <a href="{{ route('everyday-league.leaderboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('everyday-league.leaderboard') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Leaderboard</a>
         @endif
 
         <div class="pt-3 border-t border-unerd-hairline dark:border-zinc-800 space-y-1">

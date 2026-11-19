@@ -1,6 +1,6 @@
 <x-guest-layout>
-    <!-- Top Nav Header (72px) -->
-    <header class="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-unerd-hairline dark:border-zinc-800 transition-colors">
+    <!-- Top Nav Header (72px) with Collapsible Mobile Navbar -->
+    <header x-data="{ mobileNavOpen: false }" class="sticky top-0 z-40 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-unerd-hairline dark:border-zinc-800 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[68px] sm:h-[72px] flex items-center justify-between">
             <div class="flex items-center gap-4 sm:gap-8">
                 <!-- Master Logo (Desktop) & Icon (Mobile) -->
@@ -17,7 +17,7 @@
                     @else
                         <a href="#challenges" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Time Attack Challenge</a>
                     @endif
-                    <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Kerja & Timing</a>
+                    <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Kerja</a>
                     <a href="#products" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Koleksi Sepatu</a>
                     <a href="#prizes-rewards" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Hadiah & Voucher</a>
                     <a href="{{ route('everyday-league.leaderboard') }}" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Leaderboard Live</a>
@@ -30,17 +30,77 @@
 
                 @auth
                     <a href="{{ route('dashboard') }}"
-                       class="inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition">
+                       class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition">
                         Dashboard →
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                       class="inline-flex items-center justify-center h-10 px-3 sm:px-4 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md transition">
+                       class="hidden sm:inline-flex items-center justify-center h-10 px-3 sm:px-4 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md transition">
                         Masuk
                     </a>
                     <a href="{{ route('register') }}"
-                       class="inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs">
+                       class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs">
                         Daftar Akun
+                    </a>
+                @endauth
+
+                <!-- Mobile Hamburger Toggle Button -->
+                <button type="button"
+                        @click="mobileNavOpen = !mobileNavOpen"
+                        class="md:hidden p-2 rounded-xl text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition flex items-center justify-center"
+                        aria-label="Toggle Menu">
+                    <svg x-show="!mobileNavOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="mobileNavOpen" x-cloak class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Collapsible Mobile Menu Drawer -->
+        <div x-show="mobileNavOpen"
+             x-cloak
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2"
+             class="md:hidden border-t border-unerd-hairline dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-4 space-y-3 shadow-xl">
+
+            <nav class="flex flex-col space-y-1 text-xs font-bold uppercase tracking-wider text-unerd-body dark:text-zinc-300">
+                <a href="#challenges" @click="mobileNavOpen = false" class="px-3.5 py-2.5 rounded-xl bg-unerd-volt text-unerd-ink font-black flex items-center justify-between">
+                    <span>Time Attack Challenge</span>
+                    <span>&rarr;</span>
+                </a>
+                <a href="#timing-system" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Cara Kerja
+                </a>
+                <a href="#products" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Koleksi Sepatu
+                </a>
+                <a href="#prizes-rewards" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Hadiah & Voucher
+                </a>
+                <a href="{{ route('everyday-league.leaderboard') }}" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition flex items-center justify-between">
+                    <span>Leaderboard Live</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                </a>
+            </nav>
+
+            <div class="pt-3 border-t border-slate-100 dark:border-zinc-800 flex flex-col gap-2">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                        Buka Dashboard &rarr;
+                    </a>
+                @else
+                    <a href="{{ route('register') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition shadow-xs">
+                        Daftar Akun Baru
+                    </a>
+                    <a href="{{ route('login') }}" class="w-full text-center py-2.5 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition">
+                        Masuk ke Akun
                     </a>
                 @endauth
             </div>
@@ -53,42 +113,22 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <!-- Left Hero Content -->
                 <div class="lg:col-span-7 space-y-4 sm:space-y-6">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill">
-                            @if ($activeChallenge)
-                                {{ strtoupper($activeChallenge->name) }} • {{ strtoupper(explode(',', $activeChallenge->location ?? 'JAKARTA')[0]) }}
-                            @else
-                                UNERD MOVE SERIES • TIME ATTACK
-                            @endif
-                        </span>
-                        <span class="px-3 py-1 bg-unerd-surface-card dark:bg-zinc-800 text-unerd-ink dark:text-zinc-300 text-[11px] font-mono font-bold uppercase tracking-wider rounded-pill border border-unerd-hairline dark:border-zinc-700">
-                            Every Week
-                        </span>
-                    </div>
-
-                    <div class="space-y-1">
-                        <div class="text-xs sm:text-sm font-bold tracking-[3px] uppercase text-unerd-muted dark:text-zinc-400 font-mono">
-                            UNERD EVERY WEEK LEAGUE
-                        </div>
+                    <div class="space-y-2">
                         <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-[-2px] sm:tracking-[-3px] leading-[0.98] uppercase text-unerd-ink dark:text-white">
-                            EVERY WEEK <br>
-                            <span class="text-unerd-volt">COUNTS.</span>
+                            TIME ATTACK <br>
+                            <span class="text-unerd-volt">CHALLENGE.</span>
                         </h1>
                     </div>
 
                     <p class="text-sm sm:text-base text-unerd-body dark:text-zinc-300 leading-relaxed font-sans max-w-xl">
-                        @if ($activeChallenge)
-                            Saatnya uji batas kecepatanmu di lintasan resmi! Ikuti <span class="font-bold text-unerd-ink dark:text-white">{{ $activeChallenge->name }}</span> di {{ $activeChallenge->location ?? 'lintasan resmi' }}. Catat waktu terbaikmu, bawa nama komunitasmu memuncaki leaderboard, dan jadikan setiap langkah larimu berarti.
-                        @else
-                            Saatnya uji batas kecepatanmu di lintasan resmi! Ikuti tantangan lari <span class="font-bold text-unerd-ink dark:text-white">UNERD Move Series</span>. Catat waktu terbaikmu, bawa nama komunitasmu memuncaki leaderboard, dan jadikan setiap langkah larimu berarti.
-                        @endif
+                        Tantangan sprint 1.000 meter dari UNERD. Daftarkan diri, pacu ritme terbaikmu di lintasan, dan buktikan catatan waktumu di leaderboard!
                     </p>
 
                     <!-- CTAs -->
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                         <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
                            class="inline-flex items-center justify-center h-12 px-6 sm:px-8 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
-                            {{ auth()->check() ? 'PILIH CHALLENGE →' : 'DAFTAR AKUN & JOIN →' }}
+                            {{ auth()->check() ? 'JOIN CHALLENGE →' : 'DAFTAR AKUN & JOIN →' }}
                         </a>
                         <a href="{{ route('everyday-league.leaderboard') }}"
                            class="inline-flex items-center justify-center h-12 px-5 bg-white dark:bg-zinc-900 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 text-unerd-ink dark:text-zinc-100 font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase border border-unerd-hairline dark:border-zinc-700 rounded-md transition text-center">
@@ -99,20 +139,20 @@
                     <!-- Fast Facts for Runners -->
                     <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-unerd-hairline dark:border-zinc-800 max-w-lg text-center sm:text-left">
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">JARAK RESMI</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">TANTANGAN LARI</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
-                                {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' M' : '1.0 KM Sprint' }}
+                                {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' M Sprint' : '1.000 M Sprint' }}
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">LINTASAN</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">LOKASI SESI</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
-                                {{ $activeChallenge ? explode(',', $activeChallenge->location ?? 'Lintasan Resmi')[0] : 'Lintasan Resmi' }}
+                                {{ $activeChallenge ? explode(',', $activeChallenge->location ?? 'Lintasan')[0] : 'GBK Senayan' }}
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">HASIL & REKOR</div>
-                            <div class="font-display font-black text-sm sm:text-base text-unerd-volt mt-0.5">Live Realtime</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">SISTEM PERINGKAT</div>
+                            <div class="font-display font-black text-sm sm:text-base text-unerd-volt mt-0.5">Leaderboard Live</div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +214,7 @@
                                 </div>
                             @empty
                                 <div class="py-6 text-center text-xs text-unerd-muted dark:text-zinc-400">
-                                    Jadilah yang pertama mencatatkan waktu resmi di lintasan!
+                                    Jadilah yang pertama mencatatkan waktu di lintasan!
                                 </div>
                             @endforelse
                         </div>
@@ -194,18 +234,11 @@
         <section id="challenges" class="py-12 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-y border-unerd-hairline dark:border-zinc-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-                    <span class="px-3 py-1 rounded-pill bg-unerd-black dark:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[2px] inline-block mb-3 font-mono">
-                        TANTANGAN LARI
-                    </span>
                     <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                        UNERD MOVE SERIES
+                        UNERD TIME ATTACK
                     </h2>
                     <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                        @if ($activeChallenge)
-                            Tantangan resmi sprint {{ number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') }} meter di lintasan {{ $activeChallenge->location ?? 'resmi' }}.
-                        @else
-                            Kompetisi sprint time attack terverifikasi stopwatch kru panitia lapangan.
-                        @endif
+                        Challenge time attack dari unerd performance, untuk mendapatkan hadiah.
                     </p>
                 </div>
 
@@ -214,19 +247,11 @@
                     <div class="rounded-2xl bg-white dark:bg-zinc-900 border-2 border-unerd-black dark:border-unerd-volt overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
                         <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between space-y-6">
                             <div class="space-y-4">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="px-3 py-1 rounded-full bg-unerd-volt text-unerd-ink text-xs font-mono font-black uppercase tracking-wider">
-                                        ACTIVE NOW • {{ strtoupper($activePeriod?->cleanName() ?? ($activeChallenge->name ?? 'RUN CHALLENGE')) }}
-                                    </span>
-                                    <span class="px-3 py-1 rounded-full bg-zinc-100 dark:bg-white/10 text-slate-800 dark:text-zinc-200 text-xs font-mono font-bold">
-                                        {{ number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') }} METER ({{ round(($activeChallenge->distance_meter ?? 1000) / 1000, 1) }} KM)
-                                    </span>
-                                </div>
                                 <h3 class="font-display font-extrabold text-3xl sm:text-4xl uppercase text-unerd-ink dark:text-white leading-tight">
-                                    {{ $activeChallenge->name ?? 'UNERD Run Challenge' }}
+                                    {{ $activeChallenge->name }}
                                 </h3>
                                 <p class="text-sm text-unerd-body dark:text-zinc-300 leading-relaxed">
-                                    {{ $activeChallenge->description ?? 'Kompetisi lari berbasis waktu (Time Attack 1.000 meter) di lintasan resmi GBK Senayan. Catat waktu resmimu dengan verifikasi stopwatch kru panitia, raih peringkat di leaderboard kategori (Umum, Komunitas, Profesional), dan dapatkan voucher diskon sepatu UNERD!' }}
+                                    Time attack 1 KM di lintasan {{ $activeChallenge->location ?? 'GBK' }}. Catat waktu terbaikmu dan puncaki leaderboard!
                                 </p>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-unerd-hairline dark:border-zinc-800 text-xs text-unerd-body dark:text-zinc-300">
                                     <div class="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-unerd-hairline dark:border-white/5">
@@ -239,7 +264,7 @@
                                     </div>
                                     <div class="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-unerd-hairline dark:border-white/5">
                                         <span class="block font-mono text-[10px] text-zinc-400 uppercase">Format</span>
-                                        <strong class="text-unerd-ink dark:text-white">Stopwatch Verified</strong>
+                                        <strong class="text-unerd-ink dark:text-white">Time Attack</strong>
                                     </div>
                                 </div>
                             </div>
@@ -247,7 +272,7 @@
                             <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
                                 <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
                                    class="w-full sm:w-auto px-8 py-3.5 text-center text-xs font-black uppercase tracking-wider rounded-xl bg-unerd-black dark:bg-white text-white dark:text-unerd-black hover:opacity-90 transition shadow-md">
-                                    {{ auth()->check() ? 'MASUK KE CHALLENGE →' : 'DAFTAR AKUN & IKUT RUN →' }}
+                                    {{ auth()->check() ? 'JOIN CHALLENGE →' : 'DAFTAR AKUN & JOIN →' }}
                                 </a>
                                 <a href="{{ route('everyday-league.leaderboard') }}"
                                    class="w-full sm:w-auto px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 transition">
@@ -260,8 +285,8 @@
                             <img src="{{ asset('images/gallery/gallery-2.jpg') }}" alt="Runners Track" class="w-full h-full object-cover filter brightness-95" />
                             <div class="absolute inset-0 bg-black/60"></div>
                             <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink text-[10px] font-mono font-bold uppercase">SPRINT MOMENT</span>
-                                <div class="font-display font-bold text-sm mt-1">{{ $activeChallenge->location ?? 'Lintasan Lari Resmi' }}</div>
+                                <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink text-[10px] font-mono font-bold uppercase">SUASANA LINTASAN</span>
+                                <div class="font-display font-bold text-sm mt-1">{{ $activeChallenge->location ?? 'Lintasan Lari ' }}</div>
                             </div>
                         </div>
                     </div>
@@ -293,17 +318,17 @@
         <section id="timing-system" class="py-14 sm:py-20 bg-white dark:bg-unerd-black transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    <!-- Left: 3 Steps of Timing & Verification -->
+                    <!-- Left: 4 Steps of Timing & Verification -->
                     <div class="lg:col-span-6 space-y-6">
                         <div>
-                            <span class="px-3 py-1 rounded-pill bg-unerd-black dark:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[2px] inline-block mb-3 font-mono">
-                                SISTEM RESMI TIMING
+                            <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                                Cara Kerja Time Attack
                             </span>
                             <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                Cara Kerja & Verifikasi Stopwatch Kru
+                                Cara Kerja Challenge Time Attack
                             </h2>
                             <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                Waktu sprint dicatat secara objektif oleh kru panitia di garis finish dengan standar stopwatch milidetik resmi.
+                                Tata cara registrasi dan challenge time attack dari Unerd Performace
                             </p>
                         </div>
 
@@ -313,8 +338,8 @@
                                     01
                                 </div>
                                 <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Daftar & Bawa Nomor BIB</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Daftarkan akun dan pilih kategori pelari untuk mendapatkan nomor BIB unik.</p>
+                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Daftar Akun</h4>
+                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Daftarkan akun anda melalui halaman register, pilih tipe pengguna sesuai preferensi</p>
                                 </div>
                             </div>
 
@@ -323,32 +348,31 @@
                                     02
                                 </div>
                                 <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">
-                                        @if ($activeChallenge)
-                                            Lari Sprint {{ number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') }} Meter di {{ explode(',', $activeChallenge->location ?? 'GBK')[0] }}
-                                        @else
-                                            Lari Sprint 1.000 Meter di Lintasan Resmi
-                                        @endif
-                                    </h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
-                                        @if ($activeChallenge)
-                                            Mulai lari di lintasan resmi {{ explode(',', $activeChallenge->location ?? 'GBK')[0] }} dan pertahankan ritme terbaikmu hingga finish.
-                                        @else
-                                            Mulai lari di lintasan resmi yang ditentukan dan pertahankan ritme terbaikmu hingga finish.
-                                        @endif
-                                    </p>
+                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Join Challenge</h4>
+                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Join challenge untuk mendaftarkan diri anda dan dapatkan nomor peserta unik.</p>
                                 </div>
                             </div>
 
-                            <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                             <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
                                 <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                     03
                                 </div>
                                 <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Sahkan Waktu & Masuk Leaderboard</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Kru menginput catatan waktu stopwatch. Peringkatmu langsung tayang secara realtime.</p>
+                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Datang ke booth unerd performance & mulai lari</h4>
+                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Datang & silahkan konfirmasi dulu ke petugas unerd, lalu lari sesuai arahan petugas</p>
                                 </div>
                             </div>
+
+                             <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                    04
+                                </div>
+                                <div>
+                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Catat waktu lari anda & jadi juara</h4>
+                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Catat waktu tercepat & jadilah juara, dapatkan hadiah menarik.</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -390,39 +414,22 @@
 
         <!-- PRODUCT DISCOVERY & ON-TRACK PERFORMANCE (Photo: gallery-3.jpg) -->
         <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-[2px] text-unerd-volt-dark dark:text-unerd-volt font-mono">
-                        OFFICIAL FOOTWEAR DISPLAY
-                    </span>
-                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase text-unerd-ink dark:text-white mt-1">
-                        YOUR NEXT MOVE STARTS WITH UNERD.
-                    </h2>
-                </div>
-                <div class="text-xs text-unerd-muted dark:text-zinc-400 max-w-sm">
-                    Koleksi sepatu Performance, Lifestyle, dan Women yang didesain dan diproduksi secara lokal dengan standar kenyamanan tertinggi.
-                </div>
+            <div class="mb-8">
+                <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase text-unerd-ink dark:text-white">
+                    Engineered for Everyday Performance
+                </h2>
             </div>
 
             <!-- Featured On-Track Photo Card -->
             <div class="mb-10 rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 overflow-hidden relative shadow-lg h-64 sm:h-80 group">
                 <img src="{{ asset('images/gallery/gallery-3.jpg') }}"
-                     alt="Sepatu Lari UNERD on Track GBK"
+                     alt="Engineered for Everyday Performance"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" />
                 <div class="absolute inset-0 bg-black/60"></div>
-                <div class="absolute top-4 left-4">
-                    <span class="px-3 py-1 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-xs uppercase tracking-wider">
-                        ON MY FEET • {{ $activeChallenge ? strtoupper(explode(',', $activeChallenge->location ?? 'LINTASAN RESMI')[0]) : 'LINTASAN LARI' }}
-                    </span>
-                </div>
                 <div class="absolute bottom-5 left-5 right-5 text-white max-w-xl">
-                    <span class="text-[11px] font-mono text-zinc-300 uppercase block">Uji Kenyamanan Nyata</span>
                     <h3 class="font-display font-extrabold text-xl sm:text-2xl uppercase mt-0.5">
-                        Didesain untuk Anatomi Kaki Pelari Indonesia
+                        Dirancang Khusus untuk Performa Lari dan Kenyamanan Harian
                     </h3>
-                    <p class="text-xs text-zinc-300 mt-1 hidden sm:block">
-                        Fitting ergonomis true to size (EU 38–45) dengan cengkeraman outsole maksimal di aspal lintasan.
-                    </p>
                 </div>
             </div>
 
@@ -516,7 +523,7 @@
                                 Hadiah Juara 1–10 & Voucher Belanja
                             </h2>
                             <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                Setiap catatan waktu resmi di lintasan berkesempatan memenangkan hadiah sepatu, uang tunai, dan voucher belanja.
+                                Setiap catatan waktu  di lintasan berkesempatan memenangkan hadiah sepatu, uang tunai, dan voucher belanja.
                             </p>
                         </div>
 
@@ -577,13 +584,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="pt-2">
-                            <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
-                               class="inline-flex items-center justify-center px-8 py-3.5 bg-unerd-black dark:bg-white text-white dark:text-unerd-black font-display text-xs font-bold uppercase tracking-wider rounded-xl hover:opacity-90 transition shadow-md">
-                                Ikut Challenge & Rebut Hadiahnya →
-                            </a>
                         </div>
                     </div>
 

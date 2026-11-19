@@ -34,14 +34,14 @@ class EverydayLeagueSeeder extends Seeder
 
         // 2. Challenges: 1 KM Run Challenge
         $runChallenge = Challenge::updateOrCreate(['slug' => 'unerd-run-challenge'], [
-            'name' => 'UNERD Run Challenge 1 KM',
+            'name' => 'Unerd Time Attack',
             'slug' => 'unerd-run-challenge',
             'challenge_type' => 'RUN',
             'distance_meter' => 1000,
             'location' => 'Gelora Bung Karno, Jakarta',
             'event_date' => '2026-11-21',
             'status' => 'ACTIVE',
-            'description' => 'Time attack 1 KM di lintasan resmi GBK. Catat waktu terbaikmu dan puncaki leaderboard!',
+            'description' => 'Time attack 1 KM di lintasan  GBK. Catat waktu terbaikmu dan puncaki leaderboard!',
         ]);
 
         Challenge::updateOrCreate(['slug' => 'unerd-step-challenge'], [

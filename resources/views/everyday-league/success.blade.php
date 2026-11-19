@@ -12,7 +12,7 @@
                     Registrasi Berhasil!
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    ID Pelarimu telah diterbitkan resmi untuk gelaran UNERD Move Series di GBK.
+                    ID Pelarimu telah diterbitkan  untuk gelaran UNERD Move Series di GBK.
                 </p>
             </div>
 
@@ -110,7 +110,7 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">3</span>
-                        <span><strong>Start Run Challenge:</strong> Berlari di lintasan 1 KM yang telah ditentukan. Kru akan mencatat catatan waktumu menggunakan stopwatch resmi.</span>
+                        <span><strong>Start Run Challenge:</strong> Berlari di lintasan 1 KM yang telah ditentukan. Kru akan mencatat catatan waktumu menggunakan stopwatch .</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">4</span>

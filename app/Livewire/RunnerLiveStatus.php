@@ -15,6 +15,10 @@ use Livewire\Component;
 
 class RunnerLiveStatus extends Component
 {
+    public bool $showLiveStatus = true;
+
+    public bool $showHistory = true;
+
     public function restartRunInPeriod(): void
     {
         /** @var User|null $user */

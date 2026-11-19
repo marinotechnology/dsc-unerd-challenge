@@ -162,7 +162,7 @@
                 </span>
             </div>
             <div class="text-xs font-black uppercase tracking-wider font-display">3. Selesai (Finisher)</div>
-            <div class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">Waktu resmi & ranking terverifikasi</div>
+            <div class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">Waktu  & ranking terverifikasi</div>
         </button>
 
         <!-- Tab 4: Semua Pelari (ALL) -->
@@ -245,7 +245,7 @@
                         <th class="py-3.5 px-4">Kategori & Komunitas</th>
                         <th class="py-3.5 px-4 text-center">Ukuran Sepatu</th>
                         <th class="py-3.5 px-4 text-center">Status Lari</th>
-                        <th class="py-3.5 px-4 text-right">Waktu Resmi</th>
+                        <th class="py-3.5 px-4 text-right">Waktu </th>
                         <th class="py-3.5 px-4 text-center">Peringkat & Hadiah</th>
                         <th class="py-3.5 px-4 text-center">Aksi Kru di Lokasi</th>
                     </tr>
@@ -308,7 +308,7 @@
                                 @endif
                             </td>
 
-                            <!-- Waktu Resmi -->
+                            <!-- Waktu  -->
                             <td class="py-3.5 px-4 text-right font-mono font-bold">
                                 @if ($result && $result->verified_time_seconds)
                                     <span class="text-emerald-600 dark:text-unerd-volt text-sm">{{ $result->formattedTime() }}</span>
@@ -407,7 +407,7 @@
                             {{ $selectedParticipantCode }} &bull; {{ $currentPeriod?->name }}
                         </span>
                         <h3 class="font-black uppercase tracking-wider text-sm text-slate-900 dark:text-white">
-                            Catat Waktu Stopwatch Resmi
+                            Catat Waktu Stopwatch 
                         </h3>
                     </div>
                     <button wire:click="closeTimeModal" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold cursor-pointer">

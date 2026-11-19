@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Actions\Authentication\RegisterUserAction;
 use App\Http\Controllers\Controller;
+use App\Models\Community;
 use App\Models\User;
 use App\Support\Enums\UserRole;
 use Illuminate\Auth\Events\Registered;
@@ -24,7 +25,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'communities' => Community::orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -46,6 +49,7 @@ class RegisteredUserController extends Controller
                 'customer',
                 'b2b-client',
             ])],
+            'community_id' => ['nullable', 'integer', 'exists:communities,id'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -55,6 +59,7 @@ class RegisteredUserController extends Controller
             'phone_number' => $validatedData['phone_number'] ?? null,
             'shoe_size' => isset($validatedData['shoe_size']) ? (int) $validatedData['shoe_size'] : 42,
             'role_slug' => $validatedData['role_slug'] ?? UserRole::UMUM->value,
+            'community_id' => ! empty($validatedData['community_id']) ? (int) $validatedData['community_id'] : null,
             'password' => $validatedData['password'],
         ]);
 

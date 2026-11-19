@@ -1,92 +1,104 @@
 <x-guest-layout>
     <div class="py-6 sm:py-10">
         <div class="max-w-xl mx-auto px-4 sm:px-6">
-            <!-- Navigation Back -->
+            <!-- Navigation Back (Route Back History) -->
             <div class="mb-6 flex items-center justify-between">
-                <a href="{{ route('everyday-league.leaderboard') }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition">
+                <a href="{{ url()->previous() ?? route('home') }}"
+                   onclick="if (window.history.length > 1) { window.history.back(); return false; }"
+                   class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white transition cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Lihat Leaderboard
+                    <span>Kembali</span>
                 </a>
-                <span class="text-xs font-mono text-slate-400">{{ $participant->participant_id }}</span>
+                <span class="text-xs font-mono font-bold text-slate-400 dark:text-zinc-500">{{ $participant->participant_id }}</span>
             </div>
 
-            <!-- DIGITAL RESULT CARD (Story Share Card) -->
-            <div id="resultCard" class="relative bg-zinc-950 rounded-3xl border-2 border-unerd-volt/40 p-6 sm:p-8 shadow-2xl text-white overflow-hidden mb-6">
-                <!-- Background Accent Glow -->
-                <div class="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-unerd-volt/15 blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-16 -bottom-16 w-56 h-56 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
-
+            <!-- DIGITAL RESULT CARD (Clean, Solid, No Gradients) -->
+            <div id="resultCard" class="relative bg-slate-900 dark:bg-[#181818] rounded-3xl border-2 border-unerd-volt p-6 sm:p-8 shadow-xl text-white mb-6">
                 <!-- Card Header -->
-                <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6 relative z-10">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
                     <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-unerd-volt animate-ping"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-unerd-volt"></span>
                         <span class="text-xs font-black tracking-widest uppercase text-unerd-volt">
-                            UNERD MOVE SERIES &bull; RUN CHALLENGE
+                            UNERD MOVE SERIES &bull; TIME ATTACK
                         </span>
                     </div>
-                    <span class="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-bold text-slate-300">
-                        GBK JAKARTA
+                    <span class="px-2.5 py-0.5 rounded-md bg-white/10 text-[10px] font-mono font-bold text-slate-300">
+                        {{ $result?->period?->cleanName() ?? 'GBK JAKARTA' }}
                     </span>
                 </div>
 
                 <!-- Runner Identity -->
-                <div class="text-center mb-6 relative z-10">
-                    <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">OFFICIAL RUNNER</span>
+                <div class="text-center mb-6">
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 block font-bold">OFFICIAL RUNNER</span>
                     <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight mt-0.5">
                         {{ $participant->display_name }}
                     </h1>
-                    <div class="inline-flex items-center gap-2 mt-1">
-                        <span class="text-xs font-mono text-unerd-volt font-bold">{{ $participant->participant_id }}</span>
+                    <div class="inline-flex flex-wrap items-center justify-center gap-2 mt-1.5 text-xs text-slate-300 font-medium">
+                        <span class="font-mono text-unerd-volt font-bold">{{ $participant->participant_id }}</span>
                         <span class="text-slate-500">&bull;</span>
-                        <span class="text-xs text-slate-300">{{ $participant->community ? $participant->community->name : 'Mandiri' }}</span>
+                        <span class="font-mono">EU {{ $participant->shoe_size }}</span>
+                        <span class="text-slate-500">&bull;</span>
+                        <span>{{ $participant->community ? $participant->community->name : 'Mandiri' }}</span>
                     </div>
                 </div>
 
-                <!-- Big Result Stats Box -->
+                <!-- Result Stats Box -->
                 @if ($result)
-                    <div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5 text-center my-4 relative z-10">
-                        <span class="text-[10px] uppercase font-mono tracking-widest text-slate-400 block">
-                            CATATAN WAKTU RESMI (1 KM RUN)
+                    <div class="bg-white/5 rounded-2xl border border-white/10 p-5 text-center my-4">
+                        <span class="text-[10px] uppercase font-mono tracking-widest text-slate-400 block font-bold">
+                            CATATAN WAKTU  (1 KM RUN)
                         </span>
-                        <div class="text-5xl sm:text-6xl font-black tracking-wider text-unerd-volt font-mono my-2">
+                        <div class="text-4xl sm:text-5xl font-black tracking-wider text-unerd-volt font-mono my-2.5">
                             {{ $result->formatted_time }}
                         </div>
 
                         <div class="grid grid-cols-3 gap-2 pt-3 border-t border-white/10 text-xs">
                             <div>
-                                <span class="block text-[10px] uppercase text-slate-400">Jarak</span>
+                                <span class="block text-[10px] uppercase text-slate-400 font-mono">Jarak</span>
                                 <span class="font-bold text-white">1.0 KM</span>
                             </div>
                             <div>
-                                <span class="block text-[10px] uppercase text-slate-400">Pace</span>
+                                <span class="block text-[10px] uppercase text-slate-400 font-mono">Pace</span>
                                 <span class="font-bold text-white font-mono">{{ $result->formatted_pace }}</span>
                             </div>
                             <div>
-                                <span class="block text-[10px] uppercase text-slate-400">Peringkat</span>
+                                <span class="block text-[10px] uppercase text-slate-400 font-mono">Peringkat</span>
                                 <span class="font-bold text-amber-400 font-mono">#{{ $rank }}</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Clean Prize / Voucher Badge (if available) -->
+                    <div class="my-4 p-3.5 rounded-xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase text-slate-400 block">Apresiasi & Hadiah Pelari</span>
+                            <span class="font-bold text-white block mt-0.5">{{ $prize['title'] ?? 'Finisher  UNERD Move' }}</span>
+                        </div>
+                        <!-- <div class="text-left sm:text-right">
+                            <span class="text-[10px] font-mono uppercase text-slate-400 block">Kode Promo (10% OFF)</span>
+                            <span class="font-mono font-black text-unerd-volt select-all">{{ $voucherCode }}</span>
+                        </div> -->
+                    </div>
                 @else
-                    <div class="bg-amber-500/10 rounded-2xl border border-amber-500/30 p-5 text-center my-4 relative z-10">
-                        <p class="text-xs font-bold text-amber-300">Menunggu Verifikasi Waktu Resmi</p>
+                    <div class="bg-amber-500/10 rounded-2xl border border-amber-500/30 p-5 text-center my-4">
+                        <p class="text-xs font-bold text-amber-300">Menunggu Verifikasi Waktu </p>
                         <p class="text-[11px] text-slate-400 mt-1">
-                            Kamu telah terdaftar. Selesaikan lari 500m di lintasan GBK dan kru akan mencatat waktumu langsung di stopwatch resmi.
+                            Kamu telah terdaftar. Selesaikan sprint 1 KM di lintasan dan kru akan mencatat waktumu langsung di stopwatch .
                         </p>
                     </div>
                 @endif
 
-                <!-- Card Footer Info -->
-                <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
-                    <span>Every Week</span>
-                    <span class="font-bold text-slate-200">#EverydayCounts</span>
+                <!-- Card Footer: Tagline UNERD Performance -->
+                <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+                    <span class="font-bold text-slate-400 tracking-wider uppercase">Engineered for Everyday Performance</span>
+                    <!-- <span class="font-black text-unerd-volt tracking-widest uppercase">RACE. MOVE. SHARE.</span> -->
                 </div>
             </div>
 
             <!-- Share Action Buttons (Native Web Share + WhatsApp + Salin Link) -->
-            <div class="mb-6 space-y-2">
+            <div class="space-y-2.5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <!-- Native Web Share Button -->
                     <button type="button" onclick="shareResult()"
@@ -98,7 +110,7 @@
                     </button>
 
                     <!-- WhatsApp Share Button -->
-                    <a href="https://api.whatsapp.com/send?text={{ rawurlencode('Catatan waktu resmi 1 KM ' . $participant->display_name . ' di UNERD Move Series Time Attack: ' . ($result?->formatted_time ?? '--:--') . '! Cek kartu hasil lengkap di sini: ' . url()->current()) }}"
+                    <a href="https://api.whatsapp.com/send?text={{ rawurlencode('Catatan waktu  1 KM ' . $participant->display_name . ' di UNERD Move Series: ' . ($result?->formatted_time ?? '--:--') . '! Cek kartu hasil lengkap di sini: ' . url()->current()) }}"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-wider bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-xs">
@@ -122,7 +134,7 @@
                     if (navigator.share) {
                         navigator.share({
                             title: 'Kartu Hasil Lari - {{ $participant->display_name }}',
-                            text: 'Catatan waktu resmi 1 KM: {{ $result?->formatted_time ?? "--:--" }} di UNERD Move Series Time Attack!',
+                            text: 'Catatan waktu  1 KM: {{ $result?->formatted_time ?? "--:--" }} di UNERD Move Series!',
                             url: window.location.href,
                         }).catch(() => {});
                     } else {
@@ -140,151 +152,6 @@
                     }
                 }
             </script>
-
-            <!-- REWARD VOUCHER SECTION -->
-            <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/10 p-6 shadow-sm mb-6">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-300/40">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Reward Event Terbuka
-                    </span>
-                    <span class="text-xs font-mono font-bold text-slate-400">Kupon 10% OFF</span>
-                </div>
-
-                <h2 class="text-base sm:text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white">
-                    Voucher Khusus Pelari Move Series
-                </h2>
-                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                    Sebagai apresiasi telah berpartisipasi, gunakan kode voucher ini untuk pembelian sepatu UNERD dengan diskon khusus 10%.
-                </p>
-
-                <!-- Voucher Code Box -->
-                <div class="mt-4 p-3.5 rounded-xl bg-slate-50 dark:bg-black/40 border-2 border-dashed border-unerd-volt/60 flex items-center justify-between">
-                    <div>
-                        <span class="block text-[10px] uppercase font-mono tracking-widest text-slate-400">Kode Promo</span>
-                        <span class="text-lg font-black font-mono tracking-wider text-slate-900 dark:text-unerd-volt">{{ $voucherCode }}</span>
-                    </div>
-                    <button type="button" onclick="navigator.clipboard.writeText('{{ $voucherCode }}'); alert('Kode voucher {{ $voucherCode }} berhasil disalin!');"
-                        class="px-3.5 py-2 rounded-lg bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition">
-                        Salin Kode
-                    </button>
-                </div>
-            </div>
-
-            <!-- HIGHLIGHT SEPATU RECOVERY (POST-RUN RECOVERY FOOTWEAR) -->
-            @if ($recoveryProduct)
-                <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl border-2 border-unerd-volt/40 p-5 sm:p-6 shadow-sm mb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink">
-                            POST-RUN RECOVERY FOOTWEAR
-                        </span>
-                        <span class="text-xs font-mono font-bold text-emerald-600 dark:text-unerd-volt">
-                            Diskon 10%
-                        </span>
-                    </div>
-
-                    <h2 class="text-base sm:text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white font-display">
-                        Sandal Sepatu Recovery Setelah Sprint 1 KM
-                    </h2>
-                    <p class="text-xs text-slate-500 dark:text-zinc-400 mt-1">
-                        Footbed ergonomis empuk yang dirancang khusus untuk melemaskan otot telapak kaki dan mempercepat pemulihan setelah berlari kencang.
-                    </p>
-
-                    <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div class="flex items-center gap-3.5">
-                            @if (isset($recoveryProduct['image']))
-                                <img src="{{ asset($recoveryProduct['image']) }}" alt="{{ $recoveryProduct['name'] }}" class="w-16 h-16 object-cover rounded-xl border border-slate-200 dark:border-zinc-800 shrink-0 shadow-xs" />
-                            @endif
-                            <div>
-                                <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 mb-1">
-                                    {{ $recoveryProduct['category'] }}
-                                </span>
-                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">
-                                    {{ $recoveryProduct['name'] }}
-                                </h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                    {{ $recoveryProduct['tagline'] }} &bull; Ukuranmu: <span class="font-bold text-slate-900 dark:text-white">EU {{ $participant->shoe_size }}</span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">
-                            <div class="text-right">
-                                <span class="text-[10px] line-through text-slate-400 block">Rp {{ number_format($recoveryProduct['price'], 0, ',', '.') }}</span>
-                                <span class="text-sm font-black font-mono text-emerald-600 dark:text-unerd-volt">
-                                    Rp {{ number_format($recoveryProduct['discounted_price'] ?? ($recoveryProduct['price'] * 0.9), 0, ',', '.') }}
-                                </span>
-                            </div>
-                            <a href="{{ $recoveryProduct['shopee_url'] ?? '#' }}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-xs">
-                                Beli Sekarang &rarr;
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            <!-- SHOE RECOMMENDATIONS BASED ON RUNNER SIZE -->
-            <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <div>
-                        <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">
-                            KOLEKSI PERFORMANCE
-                        </span>
-                        <h2 class="text-base sm:text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white font-display">
-                            Sepatu Lari Sesuai Ukuranmu (EU {{ $participant->shoe_size }})
-                        </h2>
-                    </div>
-                    <span class="text-xs font-bold text-slate-400">Tersedia</span>
-                </div>
-
-                <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">
-                    Koleksi sepatu lari UNERD dengan ukuran pas (EU {{ $participant->shoe_size }}) untuk meningkatkan catatan waktu larimu.
-                </p>
-
-                <div class="space-y-3.5">
-                    @foreach ($recommendedProducts as $product)
-                        @php
-                            $discountedPrice = $product['discounted_price'] ?? (int) ($product['price'] * 0.9);
-                        @endphp
-                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-unerd-volt transition">
-                            <div class="flex items-center gap-3.5">
-                                @if (isset($product['image']))
-                                    <img src="{{ asset($product['image']) }}" alt="{{ $product['name'] }}" class="w-16 h-16 object-cover rounded-xl border border-slate-200 dark:border-zinc-800 shrink-0 shadow-xs" />
-                                @endif
-                                <div>
-                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 mb-1">
-                                        {{ $product['category'] }}
-                                    </span>
-                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">
-                                        {{ $product['name'] }}
-                                    </h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                        {{ $product['tagline'] }} &bull; Ukuranmu: <span class="font-bold text-slate-900 dark:text-white">EU {{ $participant->shoe_size }}</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">
-                                <div class="text-right">
-                                    <span class="text-[10px] line-through text-slate-400 block">Rp {{ number_format($product['price'], 0, ',', '.') }}</span>
-                                    <span class="text-sm font-black font-mono text-emerald-600 dark:text-unerd-volt">
-                                        Rp {{ number_format($discountedPrice, 0, ',', '.') }}
-                                    </span>
-                                </div>
-                                <a href="{{ $product['shopee_url'] ?? '#' }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition">
-                                    Beli Sekarang &rarr;
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
         </div>
     </div>
 </x-guest-layout>

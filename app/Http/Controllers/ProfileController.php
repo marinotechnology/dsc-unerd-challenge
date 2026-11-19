@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Community;
 use App\Models\Participant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $request->user()->load('community'),
+            'communities' => Community::orderBy('name')->get(),
         ]);
     }
 
@@ -44,6 +46,7 @@ class ProfileController extends Controller
                 'full_name' => $user->name,
                 'display_name' => $user->name,
                 'whatsapp' => $user->phone_number ?? $participant->whatsapp,
+                'community_id' => $user->community_id,
             ]);
         }
 

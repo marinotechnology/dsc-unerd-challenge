@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Community;
 use App\Models\Participant;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,14 +14,53 @@ use Illuminate\View\View;
 class CustomerDashboardController extends Controller
 {
     /**
-     * Display the Runner / Customer Hub Dashboard.
+     * Display the Runner / Customer Hub Dashboard (Active Challenge Focus).
      */
     public function index(Request $request): View
     {
-        $user = $request->user();
+        $user = $request->user()->load(['role', 'community']);
         $participant = Participant::with(['latestResult.challenge', 'community'])
             ->where('email', $user->email)
             ->first();
+        $historyCount = $participant ? $participant->results()->count() : 0;
+        $communities = Community::orderBy('name')->get();
+
+        return view('customer.dashboard', [
+            'user' => $user,
+            'participant' => $participant,
+            'historyCount' => $historyCount,
+            'communities' => $communities,
+        ]);
+    }
+
+    /**
+     * Display the Runner Race History across all periods.
+     */
+    public function history(Request $request): View
+    {
+        $user = $request->user()->load(['role', 'community']);
+        $participant = Participant::with(['latestResult.challenge', 'community'])
+            ->where('email', $user->email)
+            ->first();
+        $historyCount = $participant ? $participant->results()->count() : 0;
+
+        return view('customer.history', [
+            'user' => $user,
+            'participant' => $participant,
+            'historyCount' => $historyCount,
+        ]);
+    }
+
+    /**
+     * Display the Footwear Rewards, Promo Vouchers, and Catalog.
+     */
+    public function rewards(Request $request): View
+    {
+        $user = $request->user()->load(['role', 'community']);
+        $participant = Participant::with(['latestResult.challenge', 'community'])
+            ->where('email', $user->email)
+            ->first();
+        $historyCount = $participant ? $participant->results()->count() : 0;
 
         $dbProducts = Product::where('is_active', true)->get();
 
@@ -81,9 +121,10 @@ class CustomerDashboardController extends Controller
         $recoveryFootwear = array_values(array_filter($featuredFootwearDrops, fn ($d) => ! empty($d['is_recovery'])));
         $runningFootwear = array_values(array_filter($featuredFootwearDrops, fn ($d) => empty($d['is_recovery'])));
 
-        return view('customer.dashboard', [
+        return view('customer.rewards', [
             'user' => $user,
             'participant' => $participant,
+            'historyCount' => $historyCount,
             'featuredFootwearDrops' => $featuredFootwearDrops,
             'recoveryFootwear' => $recoveryFootwear,
             'runningFootwear' => $runningFootwear,

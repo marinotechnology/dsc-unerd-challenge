@@ -5,69 +5,28 @@
             <!-- Authentic Runner Background Photo -->
             <img src="{{ asset('images/gallery/gallery-2.jpg') }}"
                  alt="UNERD Move GBK Community Runners"
-                 class="absolute inset-0 w-full h-full object-cover opacity-25 filter brightness-75 contrast-125 scale-105 pointer-events-none" />
-            <!-- Background Overlay for Legibility -->
-            <div class="absolute inset-0 bg-black/80 pointer-events-none"></div>
+                 class="absolute inset-0 w-full h-full object-cover filter brightness-90 contrast-110 pointer-events-none" />
+            <!-- Clean Background Overlay for Legibility -->
+            <div class="absolute inset-0 bg-black/60 pointer-events-none"></div>
 
             <div class="relative z-10 flex items-center justify-between">
                 <a href="/" class="inline-flex items-center gap-3">
                     <img src="/images/logos/master-dark.png" alt="UNERD MOVE" class="h-10 w-auto">
                 </a>
-                <span class="px-2.5 py-1 rounded-pill bg-white/10 backdrop-blur-xs text-unerd-volt text-[10px] font-mono font-bold uppercase border border-white/10">
-                    Challenge 2026
-                </span>
             </div>
 
             <div class="my-auto py-10 relative z-10">
-                <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-4">
-                    REGISTRASI PELARI GBK
-                </span>
-                <h1 class="font-display text-4xl lg:text-5xl font-extrabold tracking-[-1.5px] leading-[1.0] text-white mb-4 uppercase">
+                <h1 class="font-display text-4xl lg:text-6xl font-extrabold tracking-[-2px] leading-[0.98] text-white uppercase">
                     RUN. RECORD. <br>
                     <span class="text-unerd-volt">COMPETE.</span>
                 </h1>
-                <p class="text-xs uppercase tracking-[3px] font-bold text-zinc-400 mb-6 font-mono">
-                    GBK JAKARTA • 1 KM SPRINT CHALLENGE
+                <p class="text-xs uppercase tracking-[3px] font-bold text-zinc-300 font-mono mt-4">
+                    GBK JAKARTA • TIME ATTACK CHALLENGE
                 </p>
-                <p class="text-zinc-200 text-sm leading-relaxed max-w-sm font-sans">
-                    Daftarkan akun pelarimu untuk mengikuti <span class="text-white font-bold">UNERD Move Series 1 KM Run Challenge</span>, pilih kategori pelari (Umum, Komunitas, atau Profesional), dan pantau catatan waktumu secara live di leaderboard!
-                </p>
-
-                <div class="space-y-3 mt-8 pt-8 border-t border-zinc-800/80 max-w-sm text-xs">
-                    <div class="flex items-center gap-2.5 text-zinc-300">
-                        <span class="w-5 h-5 rounded-full bg-unerd-volt/20 text-unerd-volt flex items-center justify-center shrink-0">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span>Nomor BIB Digital & Tracking Waktu Otomatis</span>
-                    </div>
-                    <div class="flex items-center gap-2.5 text-zinc-300">
-                        <span class="w-5 h-5 rounded-full bg-unerd-volt/20 text-unerd-volt flex items-center justify-center shrink-0">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span>Leaderboard Khusus Sesuai Kategori Pelari</span>
-                    </div>
-                    <div class="flex items-center gap-2.5 text-zinc-300">
-                        <span class="w-5 h-5 rounded-full bg-unerd-volt/20 text-unerd-volt flex items-center justify-center shrink-0">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span>Voucher Diskon Belanja 10% Sepatu UNERD</span>
-                    </div>
-                </div>
             </div>
 
-            <div class="relative z-10 pt-6 border-t border-zinc-800/80 text-xs text-zinc-400 flex items-center justify-between">
-                <span>UNERD MOVE SERIES • GBK Jakarta</span>
-                <div class="flex items-center -space-x-2">
-                    <img src="{{ asset('images/gallery/gallery-4.jpg') }}" alt="Runner GBK" class="w-7 h-7 rounded-full object-cover border-2 border-zinc-900" />
-                    <img src="{{ asset('images/gallery/gallery-5.jpg') }}" alt="Runner GBK" class="w-7 h-7 rounded-full object-cover border-2 border-zinc-900" />
-                    <img src="{{ asset('images/gallery/gallery-6.jpg') }}" alt="Runner GBK" class="w-7 h-7 rounded-full object-cover border-2 border-zinc-900" />
-                </div>
+            <div class="relative z-10 pt-6 border-t border-white/10 text-xs text-zinc-400">
+                <span>UNERD MOVE SERIES • TIME ATTACK</span>
             </div>
         </div>
 
@@ -82,19 +41,11 @@
             </div>
 
             <div class="mb-6">
-                <div class="inline-flex items-center gap-2 mb-2">
-                    <span class="px-2.5 py-0.5 rounded-pill bg-unerd-volt text-unerd-ink font-display text-[10px] font-extrabold uppercase tracking-wider">
-                        REGISTRASI PELARI
-                    </span>
-                    <span class="text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">
-                        1 KM Challenge GBK
-                    </span>
-                </div>
                 <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-unerd-ink dark:text-white">
                     Gabung UNERD MOVE
                 </h2>
                 <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-1">
-                    Pilih kategori pelari dan masukkan ukuran sepatumu untuk mendapatkan rekomendasi produk & nomor BIB resmi.
+                    Pilih kategori pelari dan masukkan ukuran sepatumu untuk join challenge & rekomendasi sepatu performace buat kamu.
                 </p>
             </div>
 
@@ -109,7 +60,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-4">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4" x-data="{ role: '{{ old('role_slug', 'umum') }}' }">
                 @csrf
 
                 <!-- Role Selector (3 Pilihan: Umum, Komunitas, Profesional) -->
@@ -117,7 +68,7 @@
                     <x-input-label value="Pilih Kategori Pelari" />
                     <div class="grid grid-cols-3 gap-2 mt-1.5">
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
-                            <input type="radio" name="role_slug" value="umum" class="sr-only" {{ old('role_slug', 'umum') === 'umum' ? 'checked' : '' }}>
+                            <input type="radio" name="role_slug" value="umum" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
                                 Umum
                             </span>
@@ -127,7 +78,7 @@
                         </label>
 
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
-                            <input type="radio" name="role_slug" value="komunitas" class="sr-only" {{ old('role_slug') === 'komunitas' ? 'checked' : '' }}>
+                            <input type="radio" name="role_slug" value="komunitas" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
                                 Komunitas
                             </span>
@@ -137,7 +88,7 @@
                         </label>
 
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
-                            <input type="radio" name="role_slug" value="profesional" class="sr-only" {{ old('role_slug') === 'profesional' ? 'checked' : '' }}>
+                            <input type="radio" name="role_slug" value="profesional" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
                                 Profesional
                             </span>
@@ -145,6 +96,15 @@
                                 Atlet / Pro
                             </span>
                         </label>
+                    </div>
+
+                    <!-- Dropdown & Add Komunitas (Only visible when role === 'komunitas') -->
+                    <div x-show="role === 'komunitas'" x-transition class="mt-3 p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+                        <x-input-label value="Pilih atau Tambah Komunitas Lari" />
+                        <x-community-select :communities="$communities ?? []" :selected-id="old('community_id')" />
+                        <p class="text-[10px] text-slate-500 dark:text-zinc-400">
+                            Cari komunitasmu atau ketik nama baru lalu klik tambah jika belum terdaftar.
+                        </p>
                     </div>
                 </div>
 
@@ -164,7 +124,7 @@
                     </div>
 
                     <div>
-                        <x-input-label for="shoe_size" value="Ukuran Sepatu (EU)" />
+                        <x-input-label for="shoe_size" value="Ukuran Sepatu" />
                         <select id="shoe_size" name="shoe_size" required class="block mt-1 w-full rounded-md border border-unerd-hairline dark:border-zinc-700 bg-white dark:bg-zinc-900 text-unerd-ink dark:text-white px-3 py-2.5 text-xs sm:text-sm focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
                             @foreach (range(38, 45) as $size)
                                 <option value="{{ $size }}" {{ old('shoe_size', 42) == $size ? 'selected' : '' }}>EU {{ $size }}</option>

@@ -188,7 +188,7 @@ class EventOperationController extends Controller
                 'Minat Produk',
                 'Status Lari',
                 'Status Verifikasi',
-                'Waktu Resmi (Detik)',
+                'Waktu  (Detik)',
                 'Format Waktu Indonesia',
                 'Pace (per KM)',
                 'Peringkat Periode',
@@ -217,7 +217,7 @@ class EventOperationController extends Controller
                     $res ? $res->formattedTime() : '',
                     $res ? $res->formattedPace() : '',
                     $res?->rank_in_period ? '#'.$res->rank_in_period : '',
-                    $prize ? $prize['title'] : ($res?->isFinished() ? 'Finisher Resmi' : ''),
+                    $prize ? $prize['title'] : ($res?->isFinished() ? 'Finisher ' : ''),
                     $p->created_at->format('Y-m-d H:i:s'),
                 ]);
             }

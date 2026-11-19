@@ -118,6 +118,21 @@ test('retail customer can access customer dashboard and central /dashboard route
     $centralDashboard->assertRedirect(route('customer.dashboard'));
 });
 
+test('customer can access separate history and rewards pages', function () {
+    $customerRole = Role::where('slug', UserRole::CUSTOMER->value)->first();
+    $customer = User::factory()->create([
+        'role_id' => $customerRole->id,
+    ]);
+
+    $historyResponse = $this->actingAs($customer)->get('/customer/history');
+    $historyResponse->assertStatus(200);
+    $historyResponse->assertSee('Riwayat Perlombaan');
+
+    $rewardsResponse = $this->actingAs($customer)->get('/customer/rewards');
+    $rewardsResponse->assertStatus(200);
+    $rewardsResponse->assertSee('MOVE-GBK-10%');
+});
+
 test('blocked user is deactivated and rejected by role middleware', function () {
     $salesRole = Role::where('slug', UserRole::FIELD_SALES->value)->first();
     $blockedSalesUser = User::factory()->create([

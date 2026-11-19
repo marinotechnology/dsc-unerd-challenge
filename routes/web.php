@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\EventOperationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EverydayLeagueController;
@@ -28,6 +29,8 @@ Route::get('/everyday-league/success/{participant:participant_id}', [EverydayLea
 Route::get('/everyday-league/leaderboard', [EverydayLeagueController::class, 'leaderboard'])->name('everyday-league.leaderboard');
 Route::get('/everyday-league/result/{participant:participant_id}', [EverydayLeagueController::class, 'result'])->name('everyday-league.result');
 Route::match(['get', 'post'], '/everyday-league/track-product', [EverydayLeagueController::class, 'trackProductClick'])->name('everyday-league.track-product');
+Route::get('/communities/search', [CommunityController::class, 'search'])->name('communities.search');
+Route::post('/communities', [CommunityController::class, 'store'])->name('communities.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +88,8 @@ Route::middleware(['auth', 'role:komunitas,b2b-client,admin,administrator'])->pr
 // Peserta Lari Account Routes (Pelari Umum, Komunitas, Profesional, Customer)
 Route::middleware(['auth', 'role:umum,komunitas,profesional,customer,admin,administrator'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/history', [CustomerDashboardController::class, 'history'])->name('history');
+    Route::get('/rewards', [CustomerDashboardController::class, 'rewards'])->name('rewards');
 });
 
 Route::middleware('auth')->group(function () {

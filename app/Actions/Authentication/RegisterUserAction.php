@@ -15,7 +15,7 @@ final class RegisterUserAction
     /**
      * Register a new user with an assigned runner role and shoe size.
      *
-     * @param  array{name: string, email: string, password: string, phone_number?: string|null, shoe_size?: int|null, role_slug?: string|null}  $userData
+     * @param  array{name: string, email: string, password: string, phone_number?: string|null, shoe_size?: int|null, role_slug?: string|null, community_id?: int|null}  $userData
      */
     public function execute(array $userData): User
     {
@@ -28,6 +28,7 @@ final class RegisterUserAction
                 'phone_number' => $userData['phone_number'] ?? null,
                 'shoe_size' => isset($userData['shoe_size']) ? (int) $userData['shoe_size'] : 42,
                 'role_id' => $roleId,
+                'community_id' => ! empty($userData['community_id']) ? (int) $userData['community_id'] : null,
                 'password' => Hash::make($userData['password']),
                 'is_blocked' => false,
             ]);

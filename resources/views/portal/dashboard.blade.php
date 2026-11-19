@@ -67,7 +67,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-unerd-hairline dark:border-zinc-800 mb-4">
             <div>
                 <h2 class="font-display text-lg font-bold text-unerd-ink dark:text-white">Daftar Pelari Komunitas (Time Attack GBK)</h2>
-                <p class="text-xs text-unerd-muted dark:text-zinc-400">Anggota klub yang telah terdaftar dengan nomor BIB resmi</p>
+                <p class="text-xs text-unerd-muted dark:text-zinc-400">Anggota klub yang telah terdaftar dengan nomor BIB </p>
             </div>
             <span class="text-xs font-mono font-bold text-unerd-muted dark:text-zinc-400">
                 Batch 1 Selesai

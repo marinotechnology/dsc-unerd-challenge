@@ -1,120 +1,198 @@
 <div wire:poll.4s class="space-y-6">
-    <!-- Period Selector Dropdown (Leaderboard per Periode) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#1a1a1a] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xs">
-        <div class="flex items-center gap-2">
-            <span class="text-xs uppercase font-mono font-bold text-slate-500 dark:text-slate-400">PILIH PERIODE EVENT:</span>
-            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ $currentPeriod?->cleanName() }}</span>
-        </div>
-        <div class="w-full sm:w-auto flex items-center gap-2">
-            <input type="text"
-                   wire:model.live.debounce.250ms="periodSearch"
-                   placeholder="Cari periode..."
-                   class="w-32 py-2 px-2.5 rounded-xl border border-slate-300 dark:border-white/10 bg-slate-50 dark:bg-[#121212] text-slate-900 dark:text-white text-xs focus:border-unerd-volt" />
-            <select wire:model.live="selectedPeriodId"
-                    class="w-full sm:w-72 py-2 px-3 rounded-xl border border-slate-300 dark:border-white/10 bg-slate-50 dark:bg-[#121212] text-slate-900 dark:text-white text-xs font-bold focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt">
-                @foreach ($periods as $prd)
-                    <option value="{{ $prd->id }}">
-                        {{ $prd->cleanName() }} {{ $prd->is_active ? '(Aktif)' : '' }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    </div>
+    <!-- Filter Controls Card: Searchable Period, Category Dropdown, & Live Search -->
+    <div class="bg-white dark:bg-[#181818] p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- 1. Searchable Period Dropdown (Mirip Komunitas Search) -->
+            <div wire:key="period-searchable-select"
+                 x-data="{
+                    open: false,
+                    search: '',
+                    selectedId: @js($selectedPeriodId),
+                    selectedName: @js($currentPeriod ? $currentPeriod->name : ''),
+                    selectedIsActive: @js((bool) ($currentPeriod?->is_active)),
+                    periods: @js($periodsList),
 
-    <!-- Category Tabs Navigation (Umum, Komunitas, Profesional, Akumulasi Komunitas) -->
-    <div class="flex flex-wrap items-center justify-center gap-2">
-        <!-- Tab Pelari Umum -->
-        <button type="button" wire:click="setRoleTab('Umum')"
-                class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition flex items-center gap-2 {{ $activeRoleTab === 'Umum' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-md' : 'bg-white dark:bg-[#1a1a1a] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-unerd-volt' }}">
-            <span>Pelari Umum</span>
-            <span class="px-1.5 py-0.5 rounded-full text-[10px] font-mono {{ $activeRoleTab === 'Umum' ? 'bg-white/20 dark:bg-black/20' : 'bg-slate-100 dark:bg-white/10' }}">
-                {{ $countUmum }}
-            </span>
-        </button>
+                    get filtered() {
+                        if (!this.search.trim()) return this.periods;
+                        const q = this.search.toLowerCase().trim();
+                        return this.periods.filter(p =>
+                            (p.name && p.name.toLowerCase().includes(q)) ||
+                            (p.clean_name && p.clean_name.toLowerCase().includes(q)) ||
+                            (p.code && p.code.toLowerCase().includes(q)) ||
+                            (p.date && p.date.toLowerCase().includes(q))
+                        );
+                    },
 
-        <!-- Tab Pelari Komunitas -->
-        <button type="button" wire:click="setRoleTab('Komunitas')"
-                class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition flex items-center gap-2 {{ $activeRoleTab === 'Komunitas' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-md' : 'bg-white dark:bg-[#1a1a1a] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-unerd-volt' }}">
-            <span>Pelari Komunitas</span>
-            <span class="px-1.5 py-0.5 rounded-full text-[10px] font-mono {{ $activeRoleTab === 'Komunitas' ? 'bg-white/20 dark:bg-black/20' : 'bg-slate-100 dark:bg-white/10' }}">
-                {{ $countKomunitas }}
-            </span>
-        </button>
+                    openDropdown() {
+                        this.open = true;
+                        this.$nextTick(() => {
+                            this.$refs.periodSearchInput?.focus();
+                        });
+                    },
 
-        <!-- Tab Pelari Profesional -->
-        <button type="button" wire:click="setRoleTab('Profesional')"
-                class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition flex items-center gap-2 {{ $activeRoleTab === 'Profesional' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-md' : 'bg-white dark:bg-[#1a1a1a] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-unerd-volt' }}">
-            <span>Pelari Profesional</span>
-            <span class="px-1.5 py-0.5 rounded-full text-[10px] font-mono {{ $activeRoleTab === 'Profesional' ? 'bg-white/20 dark:bg-black/20' : 'bg-slate-100 dark:bg-white/10' }}">
-                {{ $countProfesional }}
-            </span>
-        </button>
+                    select(prd) {
+                        this.selectedId = prd.id;
+                        this.selectedName = prd.name;
+                        this.selectedIsActive = Boolean(prd.is_active);
+                        this.open = false;
+                        this.search = '';
+                        $wire.selectPeriod(prd.id);
+                    }
+                 }"
+                 x-init="
+                    $watch('$wire.selectedPeriodId', val => {
+                        if (!val) return;
+                        selectedId = val;
+                        const p = periods.find(x => x.id == val);
+                        if (p) {
+                            selectedName = p.name;
+                            selectedIsActive = Boolean(p.is_active);
+                        }
+                    });
+                 "
+                 @click.outside="open = false"
+                 class="relative space-y-1.5 text-left">
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300">
+                    Periode Event
+                </label>
 
-        <!-- Tab Akumulasi Komunitas -->
-        <button type="button" wire:click="setRoleTab('CommunityAvg')"
-                class="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition flex items-center gap-2 {{ $activeRoleTab === 'CommunityAvg' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-md' : 'bg-white dark:bg-[#1a1a1a] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-unerd-volt' }}">
-            <span>Klasemen Komunitas (Top 3 Avg)</span>
-        </button>
-    </div>
+                <div class="relative">
+                    <!-- Selected Card Display (when not open) -->
+                    <template x-if="selectedId && !open">
+                        <div @click="openDropdown()"
+                             class="flex items-center justify-between p-2.5 rounded-xl border border-unerd-volt/40 bg-unerd-volt/5 dark:bg-unerd-volt/10 transition cursor-pointer hover:border-unerd-volt">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <span class="w-7 h-7 rounded-lg bg-unerd-volt text-unerd-ink font-bold flex items-center justify-center shrink-0 text-xs">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </span>
+                                <div class="truncate">
+                                    <div class="flex items-center gap-1.5 truncate">
+                                        <span class="text-xs font-bold text-slate-900 dark:text-white truncate" x-text="selectedName"></span>
+                                        <template x-if="selectedIsActive">
+                                            <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-unerd-volt border border-emerald-500/20 shrink-0">
+                                                Aktif
+                                            </span>
+                                        </template>
+                                    </div>
+                                    <span class="block text-[10px] text-slate-500 dark:text-zinc-400">Periode Event Terpilih</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                                <button type="button"
+                                        @click.stop="openDropdown()"
+                                        class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 transition cursor-pointer">
+                                    Ganti
+                                </button>
+                            </div>
+                        </div>
+                    </template>
 
-    <!-- Search Personal Record -->
-    <div class="bg-white dark:bg-[#1a1a1a] p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xs">
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-            </div>
-            <input type="text"
-                   wire:model.live.debounce.300ms="search"
-                   placeholder="Cari catatan personal: ketik ID Peserta (UMS-xxxx) atau nama pelari..."
-                   class="block w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-white/10 bg-slate-50 dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
-        </div>
-
-        <!-- Personal Search Result Popup Card -->
-        @if ($personalResult)
-            <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-mono text-xs font-black text-unerd-volt-dark dark:text-unerd-volt">
-                            {{ $personalResult->participant_id }}
-                        </span>
-                        <span class="text-xs text-slate-400">&bull;</span>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300">
-                            {{ $personalResult->participant_category }}
-                        </span>
-                    </div>
-                    <div class="text-sm font-bold text-slate-900 dark:text-white mt-1">
-                        {{ $personalResult->full_name }} ({{ $personalResult->display_name }})
-                    </div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400">
-                        {{ $personalResult->community ? $personalResult->community->name : 'Mandiri' }} &bull; Ukuran: EU {{ $personalResult->shoe_size }}
-                    </div>
+                    <!-- Search Input (when open or nothing selected) -->
+                    <template x-if="!selectedId || open">
+                        <div class="relative">
+                            <input type="text"
+                                   x-ref="periodSearchInput"
+                                   x-model="search"
+                                   @focus="open = true"
+                                   @keydown.escape="open = false"
+                                   placeholder="Cari nama periode event..."
+                                   class="block w-full rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white px-3.5 py-2.5 pl-9 text-xs sm:text-sm focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                            <template x-if="search">
+                                <button type="button" @click="search = ''" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </template>
+                        </div>
+                    </template>
                 </div>
 
-                <div class="text-right flex sm:flex-col items-center sm:items-end justify-between gap-2">
-                    @if ($personalResult->latestResult && $personalResult->latestResult->is_verified)
-                        <div>
-                            <span class="block text-[10px] uppercase font-bold text-slate-400">Waktu Resmi 1 KM</span>
-                            <span class="text-lg font-black font-mono text-emerald-600 dark:text-unerd-volt">
-                                {{ $personalResult->latestResult->formatted_time }}
-                            </span>
+                <!-- Dropdown Options List -->
+                <div x-show="open"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute z-50 left-0 right-0 mt-1 max-h-60 overflow-y-auto rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#181818] shadow-2xl p-1.5 text-xs space-y-1">
+                    
+                    <template x-for="prd in filtered" :key="prd.id">
+                        <button type="button"
+                                @click="select(prd)"
+                                class="w-full text-left p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 flex items-center justify-between group transition cursor-pointer">
+                            <div>
+                                <span class="font-bold text-slate-900 dark:text-white block group-hover:text-unerd-volt-dark dark:group-hover:text-unerd-volt" x-text="prd.name"></span>
+                                <span class="text-[10px] text-slate-400 dark:text-zinc-500" x-text="prd.date || prd.code"></span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <template x-if="prd.is_active">
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-unerd-volt border border-emerald-500/20">
+                                        Aktif
+                                    </span>
+                                </template>
+                                <template x-if="selectedId == prd.id">
+                                    <span class="text-emerald-500 dark:text-unerd-volt font-bold text-xs">&#10003;</span>
+                                </template>
+                            </div>
+                        </button>
+                    </template>
+
+                    <template x-if="filtered.length === 0">
+                        <div class="p-3 text-center text-slate-400 dark:text-zinc-500 text-xs">
+                            Tidak ada periode event yang cocok dengan pencarian.
                         </div>
-                        <a href="{{ route('everyday-league.result', $personalResult->participant_id) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider bg-slate-900 text-white dark:bg-white dark:text-black hover:opacity-90 transition shadow-xs">
-                            <span>Detail & Share</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                        </a>
-                    @else
-                        <span class="text-xs font-semibold text-amber-500">Menunggu waktu dicatat kru GBK</span>
+                    </template>
+                </div>
+            </div>
+
+            <!-- 2. Kategori Klasemen Dropdown -->
+            <div>
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                    Kategori Klasemen
+                </label>
+                <select wire:model.live="activeRoleTab"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm font-bold focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
+                    <option value="Umum">Pelari Umum ({{ $countUmum }})</option>
+                    <option value="Komunitas">Pelari Komunitas ({{ $countKomunitas }})</option>
+                    <option value="Profesional">Pelari Profesional ({{ $countProfesional }})</option>
+                    <option value="CommunityAvg">Klasemen Komunitas (Top 3 Avg)</option>
+                </select>
+            </div>
+
+            <!-- 3. Cari Pelari / ID BIB -->
+            <div>
+                <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                    Cari Pelari / ID BIB
+                </label>
+                <div class="relative">
+                    <input type="text"
+                           wire:model.live.debounce.250ms="search"
+                           placeholder="Cari nama pelari atau ID BIB (UMS-xxxx)..."
+                           class="block w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    @if (! empty($search))
+                        <button type="button" wire:click="$set('search', '')" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
                     @endif
                 </div>
             </div>
-        @elseif (! empty(trim($search)))
-            <div class="mt-4 p-4 text-center text-xs text-slate-500 dark:text-slate-400">
-                Tidak ditemukan data pelari untuk "<span class="font-bold text-slate-900 dark:text-white">{{ $search }}</span>".
-            </div>
-        @endif
+        </div>
     </div>
 
     <!-- MAIN LEADERBOARD DISPLAY -->
@@ -188,23 +266,14 @@
     @else
         <!-- LEADERBOARD INDIVIDU SPESIFIK ROLE (Umum, Komunitas, atau Profesional) -->
         <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
-            <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.01]">
-                <div>
-                    <h2 class="text-sm font-black uppercase tracking-tight text-slate-900 dark:text-white font-display">
-                        Leaderboard Resmi &bull; Kategori {{ $activeRoleTab }} (1 KM)
-                    </h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Peringkat berdasarkan catatan waktu lari 1.000 meter terverifikasi tercepat.
-                    </p>
-                </div>
-                <span class="text-xs font-mono font-bold text-unerd-volt-dark dark:text-unerd-volt">
-                    Live Rank
-                </span>
-            </div>
 
             @if ($results->isEmpty())
                 <div class="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-                    Belum ada pelari dengan catatan waktu resmi untuk kategori {{ $activeRoleTab }}.
+                    @if (! empty($search))
+                        Tidak ada pelari yang cocok dengan pencarian "<strong class="text-slate-900 dark:text-white">{{ $search }}</strong>" pada kategori {{ $activeRoleTab }}.
+                    @else
+                        Belum ada pelari dengan catatan waktu  untuk kategori {{ $activeRoleTab }}.
+                    @endif
                 </div>
             @else
                 <div class="overflow-x-auto">
