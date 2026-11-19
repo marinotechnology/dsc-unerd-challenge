@@ -57,6 +57,7 @@
                         <th class="pb-3.5">Nama & Kontak</th>
                         <th class="pb-3.5">Alamat Email</th>
                         <th class="pb-3.5">Tipe Role / Wewenang</th>
+                        <th class="pb-3.5">Komunitas</th>
                         <th class="pb-3.5">Status Akun</th>
                         <th class="pb-3.5">Terdaftar</th>
                         <th class="pb-3.5 text-right">Tindakan</th>
@@ -84,6 +85,15 @@
                                 <x-badge :variant="$badgeVariant">
                                     {{ $userItem->role?->name ?? 'None' }}
                                 </x-badge>
+                            </td>
+                            <td class="py-4 text-xs font-medium text-slate-700 dark:text-zinc-300">
+                                @if ($userItem->community)
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-unerd-volt border border-emerald-200 dark:border-emerald-800/40 font-mono text-[11px]">
+                                        {{ $userItem->community->name }}
+                                    </span>
+                                @else
+                                    <span class="text-slate-400 dark:text-zinc-500 font-mono">—</span>
+                                @endif
                             </td>
                             <td class="py-4">
                                 @if ($userItem->is_blocked)
@@ -120,16 +130,16 @@
 
                                     <!-- Edit Role Modal Trigger -->
                                     <button type="button"
-                                            onclick="openEditUserModal({{ $userItem->id }}, '{{ addslashes($userItem->name) }}', '{{ addslashes($userItem->email) }}', '{{ addslashes($userItem->phone_number ?? '') }}', {{ $userItem->role_id ?? 'null' }})"
+                                            onclick="openEditUserModal({{ $userItem->id }}, '{{ addslashes($userItem->name) }}', '{{ addslashes($userItem->email) }}', '{{ addslashes($userItem->phone_number ?? '') }}', {{ $userItem->role_id ?? 'null' }}, {{ $userItem->community_id ?? 'null' }})"
                                             class="px-2.5 py-1 text-xs font-bold text-unerd-ink dark:text-white bg-unerd-surface-card dark:bg-zinc-800 hover:bg-unerd-surface-strong dark:hover:bg-zinc-700 border border-unerd-hairline dark:border-zinc-700 rounded transition cursor-pointer">
-                                        Ubah Role
+                                        Ubah Data
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-unerd-muted dark:text-zinc-500 text-sm">
+                            <td colspan="7" class="py-8 text-center text-unerd-muted dark:text-zinc-500 text-sm">
                                 Tidak ada data pengguna yang sesuai dengan kriteria pencarian.
                             </td>
                         </tr>
@@ -149,7 +159,7 @@
             <div class="flex items-center justify-between pb-4 border-b border-unerd-hairline dark:border-zinc-800">
                 <div>
                     <h3 class="font-display text-lg font-bold text-unerd-ink dark:text-white">Tambah Pengguna Baru</h3>
-                    <p class="text-xs text-unerd-muted dark:text-zinc-400">Tetapkan role wewenang akun</p>
+                    <p class="text-xs text-unerd-muted dark:text-zinc-400">Tetapkan role wewenang akun dan komunitas</p>
                 </div>
                 <button type="button" onclick="document.getElementById('modal-create-user').classList.add('hidden')" class="text-unerd-muted dark:text-zinc-400 hover:text-unerd-ink dark:hover:text-white p-1 rounded-lg">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -185,6 +195,16 @@
                             @endforeach
                         </select>
                     </div>
+                </div>
+
+                <div>
+                    <x-input-label for="new_community" value="Komunitas Lari (Opsional)" />
+                    <select id="new_community" name="community_id" class="h-12 w-full px-3 bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-700 text-unerd-ink dark:text-white text-sm rounded-md focus:border-unerd-black dark:focus:border-white focus:ring-1 focus:ring-unerd-black dark:focus:ring-white">
+                        <option value="">-- Tanpa Komunitas / Mandiri --</option>
+                        @foreach ($communities as $com)
+                            <option value="{{ $com->id }}">{{ $com->name }} ({{ $com->city }})</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div>
@@ -249,6 +269,16 @@
                     </div>
                 </div>
 
+                <div>
+                    <x-input-label for="edit_community" value="Komunitas Lari (Opsional)" />
+                    <select id="edit_community" name="community_id" class="h-12 w-full px-3 bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-700 text-unerd-ink dark:text-white text-sm rounded-md focus:border-unerd-black dark:focus:border-white focus:ring-1 focus:ring-unerd-black dark:focus:ring-white">
+                        <option value="">-- Tanpa Komunitas / Mandiri --</option>
+                        @foreach ($communities as $com)
+                            <option value="{{ $com->id }}">{{ $com->name }} ({{ $com->city }})</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="flex items-center justify-end gap-3 pt-3 border-t border-unerd-hairline dark:border-zinc-800">
                     <x-secondary-button type="button" onclick="document.getElementById('modal-edit-user').classList.add('hidden')">
                         Batal
@@ -262,12 +292,16 @@
     </div>
 
     <script>
-        function openEditUserModal(id, name, email, phone, roleId) {
+        function openEditUserModal(id, name, email, phone, roleId, communityId) {
             document.getElementById('form-edit-user').action = '/admin/users/' + id;
             document.getElementById('edit_name').value = name;
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_phone').value = phone;
             document.getElementById('edit_role').value = roleId;
+            document.getElementById('edit_community').value = communityId || '';
+            document.getElementById('modal-edit-user').classList.remove('hidden');
+        }
+    </script>
             document.getElementById('modal-edit-user').classList.remove('hidden');
         }
     </script>

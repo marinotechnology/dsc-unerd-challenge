@@ -67,7 +67,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-unerd-hairline dark:border-zinc-800 mb-4">
             <div>
                 <h2 class="font-display text-lg font-bold text-unerd-ink dark:text-white">Daftar Pelari Komunitas (Time Attack GBK)</h2>
-                <p class="text-xs text-unerd-muted dark:text-zinc-400">Anggota klub yang telah terdaftar dengan nomor BIB </p>
+                <p class="text-xs text-unerd-muted dark:text-zinc-400">Anggota klub yang telah terdaftar dengan nomor  </p>
             </div>
             <span class="text-xs font-mono font-bold text-unerd-muted dark:text-zinc-400">
                 Batch 1 Selesai
@@ -78,7 +78,7 @@
             <table class="w-full text-left text-sm">
                 <thead>
                     <tr class="border-b border-unerd-hairline dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-unerd-muted dark:text-zinc-400">
-                        <th class="pb-3">Nomor BIB & Nama</th>
+                        <th class="pb-3">Nomor  & Nama</th>
                         <th class="pb-3">Kategori</th>
                         <th class="pb-3">Waktu Finis</th>
                         <th class="pb-3">Pace Rata-rata</th>
@@ -88,7 +88,7 @@
                 <tbody class="divide-y divide-unerd-hairline dark:divide-zinc-800">
                     <tr class="hover:bg-unerd-surface-soft dark:hover:bg-zinc-800/60 transition">
                         <td class="py-3.5">
-                            <div class="font-display font-bold text-unerd-ink dark:text-white">BIB #0112 • Kevin Sanjaya</div>
+                            <div class="font-display font-bold text-unerd-ink dark:text-white"> #0112 • Kevin Sanjaya</div>
                             <div class="text-xs text-unerd-muted dark:text-zinc-400 font-mono">kevin@runbyfive.club</div>
                         </td>
                         <td class="py-3.5 text-xs text-unerd-body dark:text-zinc-300">1.0 km Sprint</td>
@@ -102,7 +102,7 @@
                     </tr>
                     <tr class="hover:bg-unerd-surface-soft dark:hover:bg-zinc-800/60 transition">
                         <td class="py-3.5">
-                            <div class="font-display font-bold text-unerd-ink dark:text-white">BIB #0118 • Nadia Safitri</div>
+                            <div class="font-display font-bold text-unerd-ink dark:text-white"> #0118 • Nadia Safitri</div>
                             <div class="text-xs text-unerd-muted dark:text-zinc-400 font-mono">nadia@runbyfive.club</div>
                         </td>
                         <td class="py-3.5 text-xs text-unerd-body dark:text-zinc-300">1.0 km Sprint</td>

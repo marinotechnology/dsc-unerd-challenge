@@ -32,7 +32,7 @@
                     {{ $currentPeriod?->name ?? 'Operasional Time Attack Challenge' }}
                 </h1>
                 <p class="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
-                    Lintasan 1 KM GBK Senayan &bull; Tanggal Event: {{ $currentPeriod?->event_date?->translatedFormat('d F Y') ?? '21 November 2026' }}
+                    Lintasan {{ $currentPeriod ? $currentPeriod->formattedDistance() : '3 KM' }} &bull; Lokasi: {{ $currentPeriod->location ?? 'Gelora Bung Karno, Jakarta' }} &bull; Tanggal Event: {{ $currentPeriod?->event_date?->translatedFormat('d F Y') ?? '21 November 2026' }}
                 </p>
             </div>
 
@@ -149,7 +149,7 @@
                 </span>
             </div>
             <div class="text-xs font-black uppercase tracking-wider font-display">2. Sedang Lari (Lintasan)</div>
-            <div class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">Pelari aktif di lintasan 1 KM</div>
+            <div class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">Pelari aktif di lintasan 3 KM</div>
         </button>
 
         <!-- Tab 3: Sudah Selesai (FINISHED) -->
@@ -239,7 +239,7 @@
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
                     <tr class="bg-slate-50 dark:bg-zinc-900/50 border-b border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 uppercase tracking-wider text-[10px] font-bold">
-                        <th class="py-3.5 px-4">ID BIB</th>
+                        <th class="py-3.5 px-4">ID </th>
                         <th class="py-3.5 px-4">Nama Pelari</th>
                         <th class="py-3.5 px-4 hidden md:table-cell">Kontak</th>
                         <th class="py-3.5 px-4">Kategori & Komunitas</th>
@@ -260,7 +260,7 @@
                             $prize = $result ? $result->getPrize() : null;
                         @endphp
                         <tr class="hover:bg-slate-50/70 dark:hover:bg-zinc-900/40 transition">
-                            <!-- BIB ID -->
+                            <!--  ID -->
                             <td class="py-3.5 px-4 font-mono font-black text-slate-900 dark:text-unerd-volt">
                                 {{ $p->participant_id }}
                             </td>
@@ -498,7 +498,7 @@
                     <!-- Juara 1 -->
                     <div>
                         <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                            Hadiah Juara 1 (Sepatu Pilihan + Voucher 10%)
+                            Hadiah Juara 1 (Sepatu Pilihan)
                         </label>
                         <input type="text" wire:model="prize1"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt">
@@ -507,7 +507,7 @@
                     <!-- Juara 2 -->
                     <div>
                         <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                            Hadiah Juara 2 (Hadiah Uang Tunai + Voucher 10%)
+                            Hadiah Juara 2 (Hadiah Uang Tunai)
                         </label>
                         <input type="text" wire:model="prize2"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt">
@@ -516,7 +516,7 @@
                     <!-- Juara 3 -->
                     <div>
                         <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                            Hadiah Juara 3 (Hadiah Uang Tunai + Voucher 10%)
+                            Hadiah Juara 3 (Hadiah Uang Tunai)
                         </label>
                         <input type="text" wire:model="prize3"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt">
@@ -525,7 +525,7 @@
                     <!-- Peringkat 4-10 -->
                     <div>
                         <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                            Hadiah Peringkat 4–10 (Voucher Diskon Belanja 10%)
+                            Hadiah Partisipan Challenge (Voucher Diskon Belanja 10%)
                         </label>
                         <input type="text" wire:model="prizeTop10"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt">
@@ -582,7 +582,7 @@
                                 Nama Periode
                             </label>
                             <input type="text" wire:model="periodFormName"
-                                   placeholder="Contoh: Periode 2 — GBK Night Sprint"
+                                   placeholder="Contoh: Periode 2 — Seri Lari 3 KM"
                                    class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
                             @error('periodFormName') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
                         </div>
@@ -599,6 +599,37 @@
 
                         <div>
                             <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                                Lokasi / Venue Lintasan
+                            </label>
+                            <input type="text" wire:model="periodFormLocation"
+                                   placeholder="Contoh: Gelora Bung Karno, Jakarta"
+                                   class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
+                            @error('periodFormLocation') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                                    Jarak (Meter)
+                                </label>
+                                <input type="number" wire:model="periodFormDistance"
+                                       placeholder="3000"
+                                       class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
+                                @error('periodFormDistance') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                                    Durasi (Menit)
+                                </label>
+                                <input type="number" wire:model="periodFormDuration"
+                                       placeholder="60"
+                                       class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
+                                @error('periodFormDuration') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
                                 Tanggal Event
                             </label>
                             <input type="date" wire:model="periodFormDate"
@@ -606,7 +637,32 @@
                             @error('periodFormDate') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
                         </div>
 
-                        <div class="flex flex-col justify-end space-y-1.5 pt-1">
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                                Upload Foto / Banner Periode (storage:link)
+                            </label>
+                            <input type="file" wire:model="periodFormImageFile" accept="image/*"
+                                   class="w-full px-3 py-1.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-slate-900 file:text-white dark:file:bg-unerd-volt dark:file:text-black hover:file:opacity-90 cursor-pointer" />
+                            @error('periodFormImageFile') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+
+                            <div wire:loading wire:target="periodFormImageFile" class="text-[10px] font-mono text-emerald-600 dark:text-unerd-volt mt-1">
+                                Mengunggah gambar...
+                            </div>
+
+                            @if ($periodFormImageFile)
+                                <div class="mt-2 flex items-center gap-2">
+                                    <img src="{{ $periodFormImageFile->temporaryUrl() }}" class="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-zinc-700" alt="Preview Upload" />
+                                    <span class="text-[10px] text-slate-500 dark:text-zinc-400 font-mono">Preview gambar yang akan disimpan</span>
+                                </div>
+                            @elseif ($periodFormImage)
+                                <div class="mt-2 flex items-center gap-2">
+                                    <img src="{{ asset($periodFormImage) }}" class="w-16 h-10 object-cover rounded-lg border border-slate-200 dark:border-zinc-700" alt="Current Image" />
+                                    <span class="text-[10px] text-slate-500 dark:text-zinc-400 font-mono">Gambar aktif: {{ basename($periodFormImage) }}</span>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="sm:col-span-2 flex flex-wrap items-center gap-4 pt-1">
                             <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-700 dark:text-zinc-300">
                                 <input type="checkbox" wire:model="periodFormIsActive" class="rounded border-slate-300 text-slate-900 dark:text-unerd-volt focus:ring-unerd-volt" />
                                 <span class="font-bold">Jadikan Periode Aktif Saat Ini</span>
@@ -643,6 +699,7 @@
                             <thead class="bg-slate-100 dark:bg-zinc-900 font-mono uppercase text-slate-500 dark:text-zinc-400 text-[10px]">
                                 <tr>
                                     <th class="p-2.5">Periode</th>
+                                    <th class="p-2.5">Lokasi & Jarak</th>
                                     <th class="p-2.5">Tanggal</th>
                                     <th class="p-2.5 text-center">Status Aktif</th>
                                     <th class="p-2.5 text-center">Pendaftaran</th>
@@ -655,6 +712,10 @@
                                         <td class="p-2.5 font-bold text-slate-900 dark:text-white">
                                             {{ $item->name }}
                                             <div class="text-[10px] text-slate-400 font-mono">{{ $item->period_code }}</div>
+                                        </td>
+                                        <td class="p-2.5 text-[11px] text-slate-600 dark:text-zinc-400">
+                                            <span class="font-medium text-slate-800 dark:text-zinc-200 block truncate max-w-[140px]">{{ $item->location ?? 'GBK, Jakarta' }}</span>
+                                            <span class="font-mono text-[10px] text-emerald-600 dark:text-unerd-volt font-bold">{{ $item->formattedDistance() }} &bull; {{ $item->duration_minutes ?? 60 }} mnt</span>
                                         </td>
                                         <td class="p-2.5 font-mono text-slate-600 dark:text-zinc-400">
                                             {{ $item->event_date?->format('d M Y') ?? '-' }}

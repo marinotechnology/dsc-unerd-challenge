@@ -155,7 +155,7 @@
                                 PILOT GBK SENAYAN • 21 NOV 2026
                             </span>
                             <span class="text-xs font-mono font-bold text-slate-400 dark:text-zinc-400">
-                                1.000 Meter Sprint
+                                3.000 Meter Sprint
                             </span>
                         </div>
 
@@ -170,14 +170,14 @@
                         </div>
 
                         <p class="text-sm sm:text-base text-unerd-body dark:text-zinc-300 leading-relaxed font-sans max-w-xl">
-                            Tantang batas kecepatanmu di lintasan GBK Jakarta! Ikuti sprint 1.000 meter (1 KM), catat waktumu dengan verifikasi stopwatch kru panitia, dan buktikan catatan waktu terbaikmu di papan peringkat live.
+                            Tantang batas kecepatanmu di lintasan resmi! Ikuti sprint 3.000 meter (3 KM), catat waktumu dengan verifikasi stopwatch kru panitia, dan buktikan catatan waktu terbaikmu di papan peringkat live.
                         </p>
 
                         <!-- Action Buttons -->
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                             <a href="{{ route('register') }}"
                                class="inline-flex items-center justify-center h-12 px-6 sm:px-8 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
-                                Daftar Challenge 1 KM Sekarang →
+                                Daftar Challenge 3 KM Sekarang →
                             </a>
                             <a href="{{ route('everyday-league.leaderboard') }}"
                                class="inline-flex items-center justify-center h-12 px-5 bg-white dark:bg-zinc-900 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 text-unerd-ink dark:text-zinc-100 font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase border border-unerd-hairline dark:border-zinc-700 rounded-md transition text-center">
@@ -189,7 +189,7 @@
                         <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-unerd-hairline dark:border-zinc-800 max-w-lg text-center sm:text-left">
                             <div class="p-2 sm:p-0">
                                 <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">JARAK LARI</div>
-                                <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">1.000 Meter</div>
+                                <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">3.000 Meter</div>
                             </div>
                             <div class="p-2 sm:p-0">
                                 <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">REWARD FINISHER</div>
@@ -216,7 +216,7 @@
                                         UNERD TIME ATTACK
                                     </span>
                                     <span class="px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-xs text-white border border-white/10 font-bold">
-                                        BIB #0482
+                                         #0482
                                     </span>
                                 </div>
                                 <div class="absolute bottom-2.5 left-4">
@@ -257,7 +257,7 @@
                             </div>
 
                             <p class="text-xs text-unerd-muted dark:text-zinc-400 text-center mt-3">
-                                Tunjukkan BIB di garis finish, waktu langsung tayang di papan peringkat realtime.
+                                Tunjukkan  di garis finish, waktu langsung tayang di papan peringkat realtime.
                             </p>
                         </div>
                     </div>
@@ -270,98 +270,106 @@
             <section id="timing-system" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-y border-unerd-hairline dark:border-zinc-800 transition-colors">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                        <!-- Left Explanation of 3 Steps -->
+                        <!-- Left Explanation of 6 Steps -->
                         <div class="lg:col-span-6 space-y-6">
                             <div>
-                                <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
-                                    Cara Kerja Time Attack
-                                </span>
                                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                    Cara Kerja Challenge Time Attack
+                                    Cara Ikut UNERD Time Attack Challenge
                                 </h2>
-                                <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                    Tata cara registrasi dan challenge time attack dari Unerd Performace
-                                </p>
                             </div>
 
-                            <div class="space-y-3.5">
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                            <div class="space-y-3">
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                     <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         01
                                     </div>
-                                    <div>
-                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Daftar Akun</h4>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Daftarkan akun anda melalui halaman register, pilih tipe pengguna sesuai preferensi</p>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Buat akun gratis <a href="{{ route('register') }}" class="underline font-bold text-unerd-volt hover:text-unerd-volt/80 transition">disini</a>
                                     </div>
                                 </div>
 
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                     <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         02
                                     </div>
-                                    <div>
-                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Join Challenge</h4>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Join challenge untuk mendaftarkan diri anda dan dapatkan nomor peserta unik.</p>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Datang ke booth UNERD Performance di GBK
                                     </div>
                                 </div>
 
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                     <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         03
                                     </div>
-                                    <div>
-                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Datang ke booth unerd performance & mulai lari</h4>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Datang & silahkan konfirmasi dulu ke petugas unerd, lalu lari sesuai arahan petugas</p>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Tunjukan kode unik ke panitia untuk mulai Time Attack Challenge
                                     </div>
                                 </div>
 
-                                <div class="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                     <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                         04
                                     </div>
-                                    <div>
-                                        <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Catat waktu lari anda & jadi juara</h4>
-                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Catat waktu tercepat & jadilah juara, dapatkan hadiah menarik.</p>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Lari!
+                                    </div>
+                                </div>
+
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                        05
+                                    </div>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Kembali ke booth UNERD Performance
+                                    </div>
+                                </div>
+
+                                <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
+                                    <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                        06
+                                    </div>
+                                    <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                        Tunjukan hasil strava mu ke panitia, catat waktu tercepat & jadilah juara!
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Photos: 2 complementary images illustrating timing & focus -->
+                        <!-- Right Photos: 2 complementary images illustrating Activity, Leisure, Aqua & Special Discount -->
                         <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- Photo 1: Timing & Marshal verification (gallery-5.jpg) -->
+                            <!-- Photo 1: Activity & Leisure -->
                             <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96">
                                 <img src="{{ asset('images/gallery/gallery-5.jpg') }}"
-                                     alt="Verifikasi Stopwatch Kru GBK"
+                                     alt="Aktivitas Lari dan Leisure Pijat Gratis"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                 <div class="absolute inset-0 bg-black/60"></div>
                                 <div class="absolute top-3 left-3">
                                     <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
-                                        VERIFIKASI STOPWATCH
+                                        ACTIVITY & LEISURE
                                     </span>
                                 </div>
                                 <div class="absolute bottom-4 left-4 right-4 text-white">
-                                    <span class="text-[10px] font-mono text-zinc-300 uppercase block">Kru Panitia di Lapangan</span>
-                                    <h4 class="font-display font-bold text-base uppercase mt-0.5">Pencatatan Waktu Akurat</h4>
-                                    <p class="text-[11px] text-zinc-300 mt-0.5">Format standar Indonesia dengan presisi dua digit milidetik.</p>
+                                    <span class="text-[10px] font-mono text-zinc-300 uppercase block">Pemulihan Otot Pelari</span>
+                                    <h4 class="font-display font-bold text-base uppercase mt-0.5">Pijat Gratis & Fisioterapi</h4>
+                                    <p class="text-[11px] text-zinc-300 mt-0.5">Nikmati layanan pijat relaksasi gratis di booth untuk pemulihan optimal setelah lari.</p>
                                 </div>
                             </div>
 
-                            <!-- Photo 2: Running Focus & Rhythm (gallery-4.jpg) -->
+                            <!-- Photo 2: Aqua & Special Discount -->
                             <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96">
                                 <img src="{{ asset('images/gallery/gallery-4.jpg') }}"
-                                     alt="Fokus & Ritme Sprint"
+                                     alt="Air Gratis AQUA dan Diskon Spesial Voucher 10%"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                 <div class="absolute inset-0 bg-black/60"></div>
                                 <div class="absolute top-3 left-3">
                                     <span class="px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white border border-white/20 font-mono font-bold text-[10px] uppercase">
-                                        1 KM PACE FOCUS
+                                        HYDRATION & REWARD
                                     </span>
                                 </div>
                                 <div class="absolute bottom-4 left-4 right-4 text-white">
-                                    <span class="text-[10px] font-mono text-zinc-300 uppercase block">Menjelang Garis Finish</span>
-                                    <h4 class="font-display font-bold text-base uppercase mt-0.5">Ritme Maksimal di Lintasan</h4>
-                                    <p class="text-[11px] text-zinc-300 mt-0.5">Jaga kestabilan tarikan nafas dan cadence hingga batas akhir.</p>
+                                    <span class="text-[10px] font-mono text-zinc-300 uppercase block">Air Mineral & Diskon Spesial</span>
+                                    <h4 class="font-display font-bold text-base uppercase mt-0.5">Air Gratis AQUA & Diskon 10%</h4>
+                                    <p class="text-[11px] text-zinc-300 mt-0.5">Dapatkan hidrasi segar dari AQUA dan voucher diskon 10% untuk sepatu UNERD favoritmu.</p>
                                 </div>
                             </div>
                         </div>
@@ -440,7 +448,7 @@
                                     Pelari Umum (Independen)
                                 </h3>
                                 <p class="text-xs text-unerd-body dark:text-zinc-400 mt-1 leading-relaxed">
-                                    Bagi siapa saja yang ingin menguji batas diri, mengukur kecepatan sprint 1 KM, dan melihat posisimu di antara ratusan pelari harian di GBK Jakarta.
+                                    Bagi siapa saja yang ingin menguji batas diri, mengukur kecepatan sprint 3 KM, dan melihat posisimu di antara ratusan pelari harian di lintasan resmi.
                                 </p>
                             </div>
 
@@ -543,7 +551,7 @@
                                         <span>Midsole Rebound Cepat</span>
                                     </div>
                                     <p class="text-unerd-body dark:text-zinc-400">
-                                        Bantalan busa responsif yang mengembalikan energi dorong di setiap langkah sprint 1.000 meter.
+                                        Bantalan busa responsif yang mengembalikan energi dorong di setiap langkah sprint 3.000 meter.
                                     </p>
                                 </div>
 
@@ -623,7 +631,7 @@
                                             UNERD Beat Flow Performance
                                         </h4>
                                         <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-300 mt-2.5 leading-relaxed">
-                                            Bantalan responsif dengan stabilitas pijakan optimal untuk akselerasi sprint 1 KM maupun long run di lintasan aspal.
+                                            Bantalan responsif dengan stabilitas pijakan optimal untuk akselerasi sprint 3 KM maupun long run di lintasan aspal.
                                         </p>
                                     </div>
                                 </div>
@@ -807,7 +815,7 @@
                                             </h4>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span>
+                                    <!-- <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span> -->
                                 </div>
 
                                 <!-- Juara 2 & 3 -->
@@ -822,11 +830,11 @@
                                         <div>
                                             <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 2 & 3</span>
                                             <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                                Hadiah Uang Tunai Pembinaan
+                                                Hadiah Uang Tunai
                                             </h4>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span>
+                                    <!-- <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span> -->
                                 </div>
 
                                 <!-- Top 10 Finisher -->
@@ -838,7 +846,7 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PERINGKAT 4–10</span>
+                                            <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">Partisipan Challenge</span>
                                             <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
                                                 Voucher Diskon Belanja Eksklusif 10%
                                             </h4>
@@ -894,7 +902,7 @@
                             UNERD MOVE SERIES • Race. Move. Share.
                         </div>
                         <div class="text-[11px] text-unerd-muted dark:text-zinc-400">
-                            Pilot Activation: GBK Jakarta, 21 November 2026 • Official 1 KM Run Challenge
+                            Pilot Activation: 21 November 2026 • Official 3 KM Run Challenge
                         </div>
                     </div>
                 </div>

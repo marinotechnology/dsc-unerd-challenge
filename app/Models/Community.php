@@ -34,4 +34,12 @@ class Community extends Model
     {
         return $this->hasMany(Participant::class, 'community_id');
     }
+
+    /**
+     * @return HasMany<User>
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'community_id');
+    }
 }

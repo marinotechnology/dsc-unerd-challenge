@@ -168,15 +168,15 @@
                 </select>
             </div>
 
-            <!-- 3. Cari Pelari / ID BIB -->
+            <!-- 3. Cari Pelari / ID  -->
             <div>
                 <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
-                    Cari Pelari / ID BIB
+                    Cari Pelari / ID 
                 </label>
                 <div class="relative">
                     <input type="text"
                            wire:model.live.debounce.250ms="search"
-                           placeholder="Cari nama pelari atau ID BIB (UMS-xxxx)..."
+                           placeholder="Cari nama pelari atau ID  (UMS-xxxx)..."
                            class="block w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,7 +202,7 @@
             <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.01]">
                 <div>
                     <h2 class="text-sm font-black uppercase tracking-tight text-slate-900 dark:text-white font-display">
-                        Klasemen Rata-Rata Komunitas (1 KM)
+                        Klasemen Rata-Rata Komunitas (3 KM)
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         Dihitung dari rata-rata waktu 3 pelari tercepat per komunitas (min. 3 finisher).
@@ -223,7 +223,7 @@
                                 <th class="py-3 px-4">Nama Komunitas</th>
                                 <th class="py-3 px-4 hidden sm:table-cell">Kota Basis</th>
                                 <th class="py-3 px-4 text-center">Finisher</th>
-                                <th class="py-3 px-4 text-right">Rata-Rata Waktu (1 KM)</th>
+                                <th class="py-3 px-4 text-right">Rata-Rata Waktu (3 KM)</th>
                                 <th class="py-3 px-4 text-right hidden sm:table-cell">Pace Rata-Rata</th>
                             </tr>
                         </thead>
@@ -284,7 +284,7 @@
                                 <th class="py-3 px-4">Nama Pelari</th>
                                 <th class="py-3 px-4 hidden sm:table-cell">Kategori</th>
                                 <th class="py-3 px-4 hidden md:table-cell">Komunitas</th>
-                                <th class="py-3 px-4 text-right">Waktu 1 KM</th>
+                                <th class="py-3 px-4 text-right">Waktu 3 KM</th>
                                 <th class="py-3 px-4 text-right hidden sm:table-cell">Pace</th>
                                 <th class="py-3 px-4 text-center w-28">Detail & Share</th>
                             </tr>

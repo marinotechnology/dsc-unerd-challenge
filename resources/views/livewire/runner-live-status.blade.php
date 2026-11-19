@@ -45,13 +45,13 @@
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700 uppercase">
                             Periode Berakhir
                         </span>
-                        <span class="text-xs font-mono text-slate-400">Time Attack Challenge</span>
+                        <span class="text-xs font-mono text-slate-400">Time Attack Challenge &bull; Lintasan {{ $activePeriod->formattedDistance() }}</span>
                     </div>
                     <h3 class="text-base sm:text-lg font-black uppercase text-slate-900 dark:text-white font-display">
-                        Pendaftaran challenge {{ $activePeriod->name }} Telah Ditutup
+                        Pendaftaran dan Sesi Lari {{ $activePeriod->name }} Telah Ditutup
                     </h3>
                     <p class="text-xs text-slate-500 dark:text-zinc-400">
-                        Sesi pencatatan waktu untuk periode ini telah selesai. Anda dapat meninjau riwayat keikutsertaan Anda di bawah ini dan memantau klasemen akhir pada papan leaderboard .
+                        Sesi pencatatan waktu untuk periode ini telah selesai. Anda dapat meninjau riwayat keikutsertaan Anda di bawah ini dan memantau klasemen akhir pada papan leaderboard.
                     </p>
                 </div>
                 <a href="{{ route('everyday-league.leaderboard') }}"
@@ -60,7 +60,7 @@
                 </a>
             </div>
         @elseif ($currentResult && $currentResult->isPendingCheckin())
-        <!-- STATUS 1: SUDAH DAFTAR, MENUNGGU VERIFIKASI START DI BOOTH GBK -->
+        <!-- STATUS 1: SUDAH DAFTAR, MENUNGGU VERIFIKASI START DI BOOTH -->
         <div class="p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#181818] border-2 border-amber-500/40 text-slate-900 dark:text-white space-y-4 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-amber-200 dark:border-zinc-800">
                 <div class="flex items-center gap-3">
@@ -74,12 +74,12 @@
                             TERDAFTAR DI TIME ATTACK CHALLENGE
                         </span>
                         <h2 class="text-xl sm:text-2xl font-black font-display uppercase tracking-tight text-slate-900 dark:text-white">
-                            MENUNGGU VERIFIKASI START DI LOKASI GBK
+                            MENUNGGU START DI VENUE
                         </h2>
                     </div>
                 </div>
                 <div class="font-mono text-xs font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-zinc-800 px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-zinc-700">
-                    BIB ID: {{ $participant?->participant_id }}
+                     ID: {{ $participant?->participant_id }}
                 </div>
             </div>
 
@@ -89,23 +89,23 @@
                     <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>Langkah Selanjutnya: Konfirmasi Start di Booth Kru UNERD GBK</span>
+                    <span>Langkah Selanjutnya: Konfirmasi Start di Booth Kru Venue ({{ $activePeriod->location ?? 'Venue Lintasan' }})</span>
                 </div>
                 <p class="leading-relaxed">
-                    Silakan datangi kru atau admin UNERD di booth start lintasan GBK Senayan dan sampaikan:
+                    Silakan datangi kru atau panitia di booth start lintasan dan sampaikan:
                 </p>
                 <div class="p-3 bg-white dark:bg-black rounded-lg border border-amber-300 dark:border-zinc-700 font-medium text-slate-900 dark:text-white">
                     <span class="font-bold text-amber-700 dark:text-unerd-volt">"Kak, ini saya sudah daftar, saya mau lari"</span>
-                    <span class="block text-[11px] text-slate-500 dark:text-zinc-400 mt-1">Sebutkan ID BIB Anda: <strong class="text-slate-900 dark:text-white">{{ $participant?->participant_id }}</strong> ({{ $participant?->full_name }})</span>
+                    <span class="block text-[11px] text-slate-500 dark:text-zinc-400 mt-1">Sebutkan ID  Anda: <strong class="text-slate-900 dark:text-white">{{ $participant?->participant_id }}</strong> ({{ $participant?->full_name }})</span>
                 </div>
                 <p class="text-[11px] text-slate-500 dark:text-zinc-400">
-                    Kru panitia akan menekan tombol <strong>Mulai Lari</strong> di sistem operasional untuk mengaktifkan sesi lari Anda di lintasan. Halaman ini akan otomatis berubah menjadi status lari aktif tanpa perlu refresh.
+                    Kru panitia akan menekan tombol <strong>Mulai Lari (Start)</strong> di sistem operasional untuk mengaktifkan sesi lari Anda di lintasan {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }}. Status akan otomatis diperbarui secara live.
                 </p>
             </div>
         </div>
     @elseif ($currentResult && $currentResult->isRunning())
-        <!-- STATUS 2: SEDANG LARI DI LINTASAN GBK (ACTIVE) -->
-        <div class="p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#181818] border-2 border-rose-500/50 text-slate-900 dark:text-white space-y-4 shadow-sm">
+        <!-- STATUS 2: SEDANG LARI DI LINTASAN (ACTIVE) -->
+        <div class="p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#181818] border-2 border-rose-500/50 dark:border-unerd-volt text-slate-900 dark:text-white space-y-4 shadow-sm animate-pulse">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-rose-200 dark:border-zinc-800">
                 <div class="flex items-center gap-3">
                     <span class="relative flex h-4 w-4">
@@ -113,23 +113,25 @@
                         <span class="relative inline-flex rounded-full h-4 w-4 bg-rose-600"></span>
                     </span>
                     <div>
-                        <span class="text-xs font-mono font-bold uppercase text-rose-600 dark:text-rose-400 tracking-wider">
-                            STATUS LIVE PELARI &bull; TIME ATTACK CHALLENGE
+                        <span class="text-xs font-mono font-bold uppercase text-rose-600 dark:text-unerd-volt tracking-wider">
+                            STATUS LIVE PELARI &bull; SEDANG AKTIF
                         </span>
                         <h2 class="text-xl sm:text-2xl font-black font-display uppercase tracking-tight text-slate-900 dark:text-white">
-                            SEDANG LARI DI LINTASAN GBK (AKTIF)
+                            SILAKAN MULAI LARI!
                         </h2>
                     </div>
                 </div>
-                <div class="font-mono text-xs font-black text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-zinc-900 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/50">
-                    BIB ID: {{ $participant?->participant_id }}
+                <div class="font-mono text-xs font-black text-rose-700 dark:text-unerd-volt bg-rose-50 dark:bg-zinc-900 px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-zinc-800">
+                     ID: {{ $participant?->participant_id }}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div class="bg-slate-50 dark:bg-zinc-900 p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800">
                     <span class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Jarak Lintasan</span>
-                    <span class="font-bold text-sm text-slate-900 dark:text-white">1.000 Meter (1 KM Sprint)</span>
+                    <span class="font-bold text-sm text-slate-900 dark:text-white">
+                        {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }} ({{ $activePeriod?->distance_meter ?? 3000 }} Meter)
+                    </span>
                 </div>
                 <div class="bg-slate-50 dark:bg-zinc-900 p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800">
                     <span class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Pencatatan Waktu</span>
@@ -137,15 +139,21 @@
                 </div>
                 <div class="bg-slate-50 dark:bg-zinc-900 p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800">
                     <span class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Status Timer</span>
-                    <span class="font-bold text-sm text-rose-600 dark:text-rose-400 animate-pulse">Menuju Garis Finish...</span>
+                    <span class="font-bold text-sm text-rose-600 dark:text-unerd-volt animate-pulse">Menuju Garis Finish...</span>
                 </div>
             </div>
 
-            <div class="p-3.5 bg-slate-50 dark:bg-zinc-900 rounded-xl text-xs text-slate-600 dark:text-zinc-300 flex items-center gap-2 border border-slate-200 dark:border-zinc-800">
-                <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span>Saat mencapai garis finish, sampaikan <strong>BIB ID: {{ $participant?->participant_id }}</strong> kepada kru pencatat waktu stopwatch. Waktu mu akan langsung terverifikasi!</span>
+            <div class="p-3.5 bg-slate-50 dark:bg-zinc-900 rounded-xl text-xs text-slate-600 dark:text-zinc-300 flex items-center justify-between flex-wrap gap-3 border border-slate-200 dark:border-zinc-800">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Pacu kecepatan terbaikmu! Saat mencapai garis finish, sampaikan <strong> ID: {{ $participant?->participant_id }}</strong> kepada kru pencatat stopwatch.</span>
+                </div>
+                <a href="{{ route('everyday-league.result', $participant?->participant_id) }}"
+                   class="px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition">
+                    Lihat Hasil &rarr;
+                </a>
             </div>
         </div>
     @elseif ($currentResult && $currentResult->isFinished())
@@ -259,7 +267,7 @@
                     Time Attack Challenge (1 KM Sprint) Sedang Berlangsung!
                 </h3>
                 <p class="text-xs text-slate-500 dark:text-zinc-400 mt-1">
-                    Daftar sekarang untuk mendapatkan nomor BIB dan catatkan waktu sprint  di {{ $activeChallenge->location ?? 'lintasan ' }}.
+                    Daftar sekarang untuk mendapatkan nomor  dan catatkan waktu sprint  di {{ $activeChallenge->location ?? 'lintasan ' }}.
                 </p>
             </div>
             <a href="{{ route('everyday-league.register') }}"

@@ -59,7 +59,7 @@ test('public homepage displays everyday league activation', function () {
     $response = $this->get(route('everyday-league.index'));
 
     $response->assertStatus(200);
-    $response->assertSee('EVERYDAY');
+    $response->assertSee('EVERY WEEK');
     $response->assertSee('COUNTS');
     $response->assertSee('UNERD Move Series');
 });
@@ -117,7 +117,7 @@ test('authenticated runner can join challenge without re-entering personal data'
     $response->assertRedirect(route('everyday-league.success', $participant->participant_id));
 });
 
-test('runner can view registration success page and digital bib card', function () {
+test('runner can view registration success page and digital  card', function () {
     $participant = Participant::create([
         'participant_id' => 'UMS-9901',
         'full_name' => 'Siti Rahma',
@@ -561,7 +561,7 @@ test('livewire runner live status updates and shows verified result, rank, and t
     Livewire::actingAs($user)
         ->test(RunnerLiveStatus::class)
         ->assertStatus(200)
-        ->assertSee('SEDANG LARI DI LINTASAN GBK (AKTIF)');
+        ->assertSee('SILAKAN MULAI LARI!');
 
     // Kru finishes runner with 1st place time (03:15,00 = 195s)
     $result = $participant->results()->first();
@@ -693,7 +693,7 @@ test('runner live status displays on-site check-in instruction and closed period
 
     Livewire::actingAs($user)
         ->test(RunnerLiveStatus::class)
-        ->assertSee('MENUNGGU VERIFIKASI START DI LOKASI GBK')
+        ->assertSee('MENUNGGU START DI VENUE')
         ->assertSee('Kak, ini saya sudah daftar, saya mau lari')
         ->assertDontSee('Mulai Lari Ulang (Perbaiki Waktu Periode Ini)');
 
@@ -720,7 +720,7 @@ test('runner live status displays on-site check-in instruction and closed period
         ->assertSee('PENDAFTARAN TUTUP')
         ->assertSee('Pendaftaran dan Sesi Lari')
         ->assertSee('Telah Ditutup')
-        ->assertSee('Lintasan 1 KM GBK Senayan, Jakarta')
+        ->assertSee('Lintasan 3 KM')
         ->assertDontSee('SELESAI LARI (FINISHER)')
         ->assertDontSee('Mulai Lari Ulang (Perbaiki Waktu Periode Ini)');
 

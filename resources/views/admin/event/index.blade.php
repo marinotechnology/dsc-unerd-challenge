@@ -6,7 +6,7 @@
                     Operasional Event GBK (Kru & Panitia)
                 </h1>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    {{ $activeChallenge?->name ?? 'UNERD Move Series: 1 KM Run Challenge' }} &bull; Check-in peserta & pencatatan stopwatch lari 1 KM
+                    {{ $activeChallenge?->name ?? 'UNERD Move Series: 3 KM Run Challenge' }} &bull; Check-in peserta & pencatatan stopwatch lari 3 KM
                 </p>
             </div>
 

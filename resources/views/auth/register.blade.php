@@ -73,7 +73,7 @@
                                 Umum
                             </span>
                             <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
-                                Individu 1 KM
+                                Individu 3 KM
                             </span>
                         </label>
 

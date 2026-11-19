@@ -32,16 +32,16 @@ class EverydayLeagueSeeder extends Seeder
             $communities[$c['slug']] = Community::updateOrCreate(['slug' => $c['slug']], $c);
         }
 
-        // 2. Challenges: 1 KM Run Challenge
+        // 2. Challenges: 3 KM Run Challenge
         $runChallenge = Challenge::updateOrCreate(['slug' => 'unerd-run-challenge'], [
             'name' => 'Unerd Time Attack',
             'slug' => 'unerd-run-challenge',
             'challenge_type' => 'RUN',
-            'distance_meter' => 1000,
+            'distance_meter' => 3000,
             'location' => 'Gelora Bung Karno, Jakarta',
             'event_date' => '2026-11-21',
             'status' => 'ACTIVE',
-            'description' => 'Time attack 1 KM di lintasan  GBK. Catat waktu terbaikmu dan puncaki leaderboard!',
+            'description' => 'Time attack 3 KM di lintasan resmi. Catat waktu terbaikmu dan puncaki leaderboard!',
         ]);
 
         Challenge::updateOrCreate(['slug' => 'unerd-step-challenge'], [
@@ -70,6 +70,10 @@ class EverydayLeagueSeeder extends Seeder
         $activePeriod = ChallengePeriod::updateOrCreate(['period_code' => 'P1-GBK-20261121'], [
             'challenge_id' => $runChallenge->id,
             'name' => 'Periode 1 — Pilot GBK 21 Nov 2026',
+            'location' => 'Gelora Bung Karno, Jakarta',
+            'distance_meter' => 3000,
+            'duration_minutes' => 60,
+            'banner_image' => '/images/campaigns/gbk-track.jpg',
             'period_code' => 'P1-GBK-20261121',
             'event_date' => '2026-11-21',
             'is_active' => true,
@@ -80,6 +84,10 @@ class EverydayLeagueSeeder extends Seeder
         ChallengePeriod::updateOrCreate(['period_code' => 'P2-GBK-20261128'], [
             'challenge_id' => $runChallenge->id,
             'name' => 'Periode 2 — GBK Series 28 Nov 2026',
+            'location' => 'Gelora Bung Karno, Jakarta',
+            'distance_meter' => 3000,
+            'duration_minutes' => 60,
+            'banner_image' => '/images/campaigns/gbk-track.jpg',
             'period_code' => 'P2-GBK-20261128',
             'event_date' => '2026-11-28',
             'is_active' => false,
@@ -95,7 +103,7 @@ class EverydayLeagueSeeder extends Seeder
             [
                 'participant_id' => 'UMS-0001',
                 'full_name' => 'Agus Prayogo',
-                'display_name' => 'Agus Prayogo (Pro)',
+                'display_name' => 'Agus Prayogo',
                 'whatsapp' => '081211110001',
                 'email' => 'agus@atlet.id',
                 'shoe_size' => 42,
@@ -117,7 +125,7 @@ class EverydayLeagueSeeder extends Seeder
             [
                 'participant_id' => 'UMS-0003',
                 'full_name' => 'Triyaningsih',
-                'display_name' => 'Triyaningsih (Pro)',
+                'display_name' => 'Triyaningsih',
                 'whatsapp' => '081211110003',
                 'email' => 'triyaningsih@atlet.id',
                 'shoe_size' => 38,

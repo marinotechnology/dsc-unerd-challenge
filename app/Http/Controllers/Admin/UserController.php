@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Users\CreateUserAction;
 use App\Http\Controllers\Controller;
+use App\Models\Community;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +25,7 @@ class UserController extends Controller
         $selectedRoleSlug = $request->query('role');
         $searchQuery = $request->query('search');
 
-        $usersQuery = User::with('role')->latest();
+        $usersQuery = User::with(['role', 'community'])->latest();
 
         if ($selectedRoleSlug) {
             $usersQuery->whereHas('role', function ($query) use ($selectedRoleSlug) {
@@ -42,10 +43,12 @@ class UserController extends Controller
 
         $users = $usersQuery->paginate(12)->withQueryString();
         $roles = Role::orderBy('name')->get();
+        $communities = Community::orderBy('name')->get();
 
         return view('admin.users.index', [
             'users' => $users,
             'roles' => $roles,
+            'communities' => $communities,
             'selectedRoleSlug' => $selectedRoleSlug,
             'searchQuery' => $searchQuery,
         ]);
@@ -61,6 +64,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone_number' => ['nullable', 'string', 'max:25'],
             'role_id' => ['required', 'integer', 'exists:roles,id'],
+            'community_id' => ['nullable', 'integer', 'exists:communities,id'],
             'password' => ['required', Password::defaults()],
         ]);
 
@@ -69,6 +73,7 @@ class UserController extends Controller
             'email' => $validatedData['email'],
             'phone_number' => $validatedData['phone_number'] ?? null,
             'role_id' => (int) $validatedData['role_id'],
+            'community_id' => ! empty($validatedData['community_id']) ? (int) $validatedData['community_id'] : null,
             'password' => $validatedData['password'],
             'is_blocked' => false,
         ]);
@@ -86,6 +91,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone_number' => ['nullable', 'string', 'max:25'],
             'role_id' => ['required', 'integer', 'exists:roles,id'],
+            'community_id' => ['nullable', 'integer', 'exists:communities,id'],
         ]);
 
         $user->update([
@@ -93,6 +99,7 @@ class UserController extends Controller
             'email' => $validatedData['email'],
             'phone_number' => $validatedData['phone_number'] ?? null,
             'role_id' => (int) $validatedData['role_id'],
+            'community_id' => ! empty($validatedData['community_id']) ? (int) $validatedData['community_id'] : null,
         ]);
 
         return redirect()->route('admin.users.index')->with('status', 'Data pengguna berhasil diperbarui.');

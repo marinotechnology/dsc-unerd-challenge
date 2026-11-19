@@ -11,10 +11,12 @@ use App\Models\Participant;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class EventOperations extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     /**
@@ -90,6 +92,19 @@ class EventOperations extends Component
     public string $periodFormName = '';
 
     public string $periodFormCode = '';
+
+    public string $periodFormLocation = 'Gelora Bung Karno, Jakarta';
+
+    public int $periodFormDistance = 3000;
+
+    public ?int $periodFormDuration = 60;
+
+    public string $periodFormImage = '';
+
+    /**
+     * @var mixed
+     */
+    public $periodFormImageFile = null;
 
     public string $periodFormDate = '';
 
@@ -432,12 +447,22 @@ class EventOperations extends Component
         $this->editingPeriodId = null;
         $this->periodFormName = '';
         $this->periodFormCode = 'PERIODE-'.now()->format('Y-m-d');
+        $this->periodFormLocation = 'Gelora Bung Karno, Jakarta';
+        $this->periodFormDistance = 3000;
+        $this->periodFormDuration = 60;
+        $this->periodFormImage = '';
+        $this->periodFormImageFile = null;
         $this->periodFormDate = now()->format('Y-m-d');
         $this->periodFormIsActive = false;
         $this->periodFormIsOpen = true;
         $this->resetValidation([
             'periodFormName',
             'periodFormCode',
+            'periodFormLocation',
+            'periodFormDistance',
+            'periodFormDuration',
+            'periodFormImage',
+            'periodFormImageFile',
             'periodFormDate',
         ]);
     }
@@ -452,6 +477,11 @@ class EventOperations extends Component
         $this->editingPeriodId = $period->id;
         $this->periodFormName = $period->name;
         $this->periodFormCode = $period->period_code;
+        $this->periodFormLocation = $period->location ?? 'Gelora Bung Karno, Jakarta';
+        $this->periodFormDistance = (int) ($period->distance_meter ?: 3000);
+        $this->periodFormDuration = $period->duration_minutes ? (int) $period->duration_minutes : 60;
+        $this->periodFormImage = $period->banner_image ?? '';
+        $this->periodFormImageFile = null;
         $this->periodFormDate = $period->event_date?->format('Y-m-d') ?? now()->format('Y-m-d');
         $this->periodFormIsActive = (bool) $period->is_active;
         $this->periodFormIsOpen = (bool) $period->is_open_for_registration;
@@ -463,12 +493,26 @@ class EventOperations extends Component
         $this->validate([
             'periodFormName' => ['required', 'string', 'max:255'],
             'periodFormCode' => ['required', 'string', 'max:100'],
+            'periodFormLocation' => ['nullable', 'string', 'max:255'],
+            'periodFormDistance' => ['required', 'integer', 'min:100'],
+            'periodFormDuration' => ['nullable', 'integer', 'min:1'],
+            'periodFormImageFile' => ['nullable', 'image', 'max:5120'],
             'periodFormDate' => ['required', 'date'],
         ], [
             'periodFormName.required' => 'Nama periode wajib diisi.',
             'periodFormCode.required' => 'Kode periode wajib diisi.',
+            'periodFormDistance.required' => 'Jarak lintasan wajib diisi.',
             'periodFormDate.required' => 'Tanggal event wajib diisi.',
+            'periodFormImageFile.image' => 'File harus berupa gambar.',
+            'periodFormImageFile.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
+
+        $imagePath = $this->periodFormImage ?: null;
+        if ($this->periodFormImageFile) {
+            $stored = $this->periodFormImageFile->store('periods', 'public');
+            $imagePath = '/storage/'.$stored;
+            $this->periodFormImage = $imagePath;
+        }
 
         $activeChallenge = Challenge::where('status', 'ACTIVE')->first() ?? Challenge::first();
 
@@ -483,6 +527,10 @@ class EventOperations extends Component
                 $period->update([
                     'name' => $this->periodFormName,
                     'period_code' => $this->periodFormCode,
+                    'location' => $this->periodFormLocation ?: 'Gelora Bung Karno, Jakarta',
+                    'distance_meter' => $this->periodFormDistance,
+                    'duration_minutes' => $this->periodFormDuration,
+                    'banner_image' => $imagePath,
                     'event_date' => $this->periodFormDate,
                     'is_active' => $this->periodFormIsActive,
                     'is_open_for_registration' => $this->periodFormIsOpen,
@@ -497,6 +545,10 @@ class EventOperations extends Component
                 'challenge_id' => $activeChallenge?->id,
                 'name' => $this->periodFormName,
                 'period_code' => $this->periodFormCode,
+                'location' => $this->periodFormLocation ?: 'Gelora Bung Karno, Jakarta',
+                'distance_meter' => $this->periodFormDistance,
+                'duration_minutes' => $this->periodFormDuration,
+                'banner_image' => $imagePath,
                 'event_date' => $this->periodFormDate,
                 'is_active' => $this->periodFormIsActive,
                 'is_open_for_registration' => $this->periodFormIsOpen,
@@ -634,6 +686,8 @@ class EventOperations extends Component
 
         $currentPeriod = ChallengePeriod::find($this->selectedPeriodId)
             ?? ChallengePeriod::where('is_active', true)->first();
+
+        $currentPeriod?->autoCloseIfExpired();
 
         $query = Participant::with(['results' => function ($q) use ($currentPeriod) {
             if ($currentPeriod) {

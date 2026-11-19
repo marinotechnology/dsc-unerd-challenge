@@ -9,17 +9,11 @@
                 </a>
 
                 <nav class="hidden md:flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-unerd-body dark:text-zinc-300">
-                    @if ($activeChallenge)
-                        <a href="#challenges" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-unerd-volt text-unerd-ink font-black text-xs uppercase tracking-wider transition shadow-xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-unerd-ink animate-pulse"></span>
-                            <span>Time Attack Challenge</span>
-                        </a>
-                    @else
-                        <a href="#challenges" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Time Attack Challenge</a>
-                    @endif
-                    <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Kerja</a>
-                    <a href="#products" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Koleksi Sepatu</a>
+                    <a href="#timing-system" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Cara Ikut</a>
+                    <a href="#event-experience" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Aktivitas Event</a>
+                    <a href="#challenges" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Join Challenge</a>
                     <a href="#prizes-rewards" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Hadiah & Voucher</a>
+                    <a href="#products" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Koleksi Sepatu</a>
                     <a href="{{ route('everyday-league.leaderboard') }}" class="px-3 py-1.5 hover:text-unerd-ink dark:hover:text-white rounded-md transition">Leaderboard Live</a>
                 </nav>
             </div>
@@ -71,18 +65,20 @@
              class="md:hidden border-t border-unerd-hairline dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-4 space-y-3 shadow-xl">
 
             <nav class="flex flex-col space-y-1 text-xs font-bold uppercase tracking-wider text-unerd-body dark:text-zinc-300">
-                <a href="#challenges" @click="mobileNavOpen = false" class="px-3.5 py-2.5 rounded-xl bg-unerd-volt text-unerd-ink font-black flex items-center justify-between">
-                    <span>Time Attack Challenge</span>
-                    <span>&rarr;</span>
-                </a>
                 <a href="#timing-system" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
-                    Cara Kerja
+                    Cara Ikut
                 </a>
-                <a href="#products" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
-                    Koleksi Sepatu
+                <a href="#event-experience" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Aktivitas Event
+                </a>
+                <a href="#challenges" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Join Challenge
                 </a>
                 <a href="#prizes-rewards" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
                     Hadiah & Voucher
+                </a>
+                <a href="#products" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
+                    Koleksi Sepatu
                 </a>
                 <a href="{{ route('everyday-league.leaderboard') }}" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition flex items-center justify-between">
                     <span>Leaderboard Live</span>
@@ -121,38 +117,53 @@
                     </div>
 
                     <p class="text-sm sm:text-base text-unerd-body dark:text-zinc-300 leading-relaxed font-sans max-w-xl">
-                        Tantangan sprint 1.000 meter dari UNERD. Daftarkan diri, pacu ritme terbaikmu di lintasan, dan buktikan catatan waktumu di leaderboard!
+                        Daftarkan dirimu dan Ikuti tantangan lari 3000 Meter dari UNERD Performance, Buktikan bahwa dirimu yang tercepat di live leaderboard!
                     </p>
 
                     <!-- CTAs -->
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                    <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
+                        @auth
+                            <a href="{{ route('dashboard') }}"
+                               class="inline-flex items-center justify-center h-12 px-6 sm:px-7 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
+                                DASHBOARD
+                            </a>
+                        @else
+                            <a href="{{ route('register') }}"
+                               class="inline-flex items-center justify-center h-12 px-6 sm:px-7 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
+                                DAFTAR SEKARANG
+                            </a>
+                        @endauth
+
                         <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
-                           class="inline-flex items-center justify-center h-12 px-6 sm:px-8 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
-                            {{ auth()->check() ? 'JOIN CHALLENGE →' : 'DAFTAR AKUN & JOIN →' }}
+                           class="inline-flex items-center justify-center h-12 px-6 sm:px-7 bg-unerd-volt hover:bg-unerd-volt-dark text-unerd-ink font-display text-xs sm:text-sm font-extrabold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
+                            JOIN CHALLENGE
                         </a>
+
                         <a href="{{ route('everyday-league.leaderboard') }}"
                            class="inline-flex items-center justify-center h-12 px-5 bg-white dark:bg-zinc-900 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 text-unerd-ink dark:text-zinc-100 font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase border border-unerd-hairline dark:border-zinc-700 rounded-md transition text-center">
-                            VIEW LEADERBOARD
+                            LIHAT LEADERBOARD
                         </a>
                     </div>
 
                     <!-- Fast Facts for Runners -->
                     <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-unerd-hairline dark:border-zinc-800 max-w-lg text-center sm:text-left">
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">TANTANGAN LARI</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">JARAK</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
-                                {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' M Sprint' : '1.000 M Sprint' }}
+                                3000M
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">LOKASI SESI</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">LOKASI</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
-                                {{ $activeChallenge ? explode(',', $activeChallenge->location ?? 'Lintasan')[0] : 'GBK Senayan' }}
+                                {{ $activePeriod ? explode(',', $activePeriod->location ?? 'GBK Jakarta')[0] : 'GBK Jakarta' }}
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
-                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">SISTEM PERINGKAT</div>
-                            <div class="font-display font-black text-sm sm:text-base text-unerd-volt mt-0.5">Leaderboard Live</div>
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">TANGGAL</div>
+                            <div class="font-display font-black text-sm sm:text-base text-unerd-volt mt-0.5">
+                                {{ ($activePeriod && $activePeriod->event_date) ? $activePeriod->event_date->translatedFormat('d M Y') : '21 Nov 2026' }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -169,7 +180,7 @@
                                     {{ $activeChallenge ? 'LEADERBOARD • ' . strtoupper(explode(',', $activeChallenge->location ?? 'LIVE')[0]) : 'LIVE LEADERBOARD' }}
                                 </span>
                                 <span class="text-[11px] font-mono font-bold text-white">
-                                    {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' Meter' : '1.000 Meter Sprint' }}
+                                    {{ $activePeriod ? $activePeriod->formattedDistance() : ($activeChallenge ? $activeChallenge->formattedDistance() : '3 KM Sprint') }}
                                 </span>
                             </div>
                         </div>
@@ -230,181 +241,269 @@
             </div>
         </section>
 
-        <!-- THE CHALLENGE & ACTIVATION -->
-        <section id="challenges" class="py-12 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-y border-unerd-hairline dark:border-zinc-800 transition-colors">
+        <!-- SECTION 2: CARA IKUT UNERD PERFORMANCE TIME ATTACK CHALLENGE (1 IMAGE) -->
+        <section id="timing-system" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-y border-unerd-hairline dark:border-zinc-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                        UNERD TIME ATTACK
-                    </h2>
-                    <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                        Challenge time attack dari unerd performance, untuk mendapatkan hadiah.
-                    </p>
-                </div>
-
-                @if ($activeChallenge)
-                    <!-- Featured 1 KM Run Challenge Banner with Authentic Photo -->
-                    <div class="rounded-2xl bg-white dark:bg-zinc-900 border-2 border-unerd-black dark:border-unerd-volt overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
-                        <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between space-y-6">
-                            <div class="space-y-4">
-                                <h3 class="font-display font-extrabold text-3xl sm:text-4xl uppercase text-unerd-ink dark:text-white leading-tight">
-                                    {{ $activeChallenge->name }}
-                                </h3>
-                                <p class="text-sm text-unerd-body dark:text-zinc-300 leading-relaxed">
-                                    Time attack 1 KM di lintasan {{ $activeChallenge->location ?? 'GBK' }}. Catat waktu terbaikmu dan puncaki leaderboard!
-                                </p>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-unerd-hairline dark:border-zinc-800 text-xs text-unerd-body dark:text-zinc-300">
-                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-unerd-hairline dark:border-white/5">
-                                        <span class="block font-mono text-[10px] text-zinc-400 uppercase">Lokasi</span>
-                                        <strong class="text-unerd-ink dark:text-white">{{ $activeChallenge->location ?? 'GBK Senayan, Jkt' }}</strong>
-                                    </div>
-                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-unerd-hairline dark:border-white/5">
-                                        <span class="block font-mono text-[10px] text-zinc-400 uppercase">Tanggal</span>
-                                        <strong class="text-unerd-ink dark:text-white">{{ $activePeriod?->event_date?->translatedFormat('d F Y') ?? ($activeChallenge->event_date?->translatedFormat('d F Y') ?? '21 November 2026') }}</strong>
-                                    </div>
-                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-unerd-hairline dark:border-white/5">
-                                        <span class="block font-mono text-[10px] text-zinc-400 uppercase">Format</span>
-                                        <strong class="text-unerd-ink dark:text-white">Time Attack</strong>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
-                                <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
-                                   class="w-full sm:w-auto px-8 py-3.5 text-center text-xs font-black uppercase tracking-wider rounded-xl bg-unerd-black dark:bg-white text-white dark:text-unerd-black hover:opacity-90 transition shadow-md">
-                                    {{ auth()->check() ? 'JOIN CHALLENGE →' : 'DAFTAR AKUN & JOIN →' }}
-                                </a>
-                                <a href="{{ route('everyday-league.leaderboard') }}"
-                                   class="w-full sm:w-auto px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-700 transition">
-                                    CEK KLASEMEN LIVE
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="lg:col-span-5 relative min-h-[260px] lg:min-h-full overflow-hidden bg-zinc-900 border-t lg:border-t-0 lg:border-l border-unerd-hairline dark:border-zinc-800">
-                            <img src="{{ asset('images/gallery/gallery-2.jpg') }}" alt="Runners Track" class="w-full h-full object-cover filter brightness-95" />
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink text-[10px] font-mono font-bold uppercase">SUASANA LINTASAN</span>
-                                <div class="font-display font-bold text-sm mt-1">{{ $activeChallenge->location ?? 'Lintasan Lari ' }}</div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <!-- Fallback State When No Challenge is Active -->
-                    <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 p-8 sm:p-14 text-center space-y-4 max-w-2xl mx-auto shadow-xs">
-                        <div class="w-14 h-14 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 mx-auto flex items-center justify-center">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div class="space-y-1.5">
-                            <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 font-mono text-[11px] font-bold uppercase tracking-wider inline-block">
-                                Status Event
-                            </span>
-                            <h3 class="font-display font-extrabold text-2xl uppercase text-slate-900 dark:text-white">
-                                Belum Ada Challenge Aktif Saat Ini
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 max-w-md mx-auto">
-                                Panitia sedang menyiapkan periode tantangan berikutnya. Pantau terus jadwal rilis dan pembukaan registrasi di halaman ini!
-                            </p>
-                        </div>
-                    </div>
-                @endif
-            </div>
-        </section>
-
-        <!-- CARA KERJA & VERIFIKASI STOPWATCH KRU (Photos: gallery-5.jpg & gallery-4.jpg) -->
-        <section id="timing-system" class="py-14 sm:py-20 bg-white dark:bg-unerd-black transition-colors">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    <!-- Left: 4 Steps of Timing & Verification -->
-                    <div class="lg:col-span-6 space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                    <!-- Left: 6 Steps to Join -->
+                    <div class="lg:col-span-6 space-y-6 flex flex-col justify-between">
                         <div>
-                            <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
-                                Cara Kerja Time Attack
-                            </span>
                             <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                Cara Kerja Challenge Time Attack
+                                Cara Ikut UNERD Time Attack Challenge
                             </h2>
-                            <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                Tata cara registrasi dan challenge time attack dari Unerd Performace
-                            </p>
                         </div>
 
-                        <div class="space-y-3.5">
-                            <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                        <div class="space-y-3">
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                 <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                     01
                                 </div>
-                                <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Daftar Akun</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Daftarkan akun anda melalui halaman register, pilih tipe pengguna sesuai preferensi</p>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Buat akun gratis <a href="{{ route('register') }}" class="underline font-bold text-unerd-volt hover:text-unerd-volt/80 transition">disini</a>
                                 </div>
                             </div>
 
-                            <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                 <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                     02
                                 </div>
-                                <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Join Challenge</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Join challenge untuk mendaftarkan diri anda dan dapatkan nomor peserta unik.</p>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Datang ke booth UNERD Performance di GBK
                                 </div>
                             </div>
 
-                             <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                 <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                     03
                                 </div>
-                                <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Datang ke booth unerd performance & mulai lari</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Datang & silahkan konfirmasi dulu ke petugas unerd, lalu lari sesuai arahan petugas</p>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Tunjukan kode unik ke panitia untuk mulai Time Attack Challenge
                                 </div>
                             </div>
 
-                             <div class="p-4 rounded-xl bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-start gap-3.5 shadow-xs">
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
                                 <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
                                     04
                                 </div>
-                                <div>
-                                    <h4 class="font-display font-bold text-sm text-unerd-ink dark:text-white uppercase">Catat waktu lari anda & jadi juara</h4>
-                                    <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">Catat waktu tercepat & jadilah juara, dapatkan hadiah menarik.</p>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Lari!
                                 </div>
                             </div>
 
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
+                                <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                    05
+                                </div>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Kembali ke booth UNERD Performance
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center gap-3.5 shadow-xs">
+                                <div class="w-8 h-8 rounded-lg bg-unerd-black text-white dark:bg-unerd-volt dark:text-black flex items-center justify-center font-black font-display text-xs shrink-0">
+                                    06
+                                </div>
+                                <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
+                                    Tunjukan hasil strava mu ke panitia, catat waktu tercepat & jadilah juara!
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Right Photos illustrating Timing & Pace Focus -->
-                    <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-5.jpg') }}" alt="Stopwatch Kru GBK" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <!-- Right: Single Clean Prominent Photo -->
+                    <div class="lg:col-span-6 relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-full min-h-[380px] sm:min-h-[480px] group flex flex-col justify-end p-6 sm:p-8">
+                        <img src="{{ asset('images/gallery/gallery-2.jpg') }}" alt="UNERD Time Attack Track GBK" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" />
+                        <div class="absolute inset-0 bg-black/60"></div>
+                        <div class="absolute top-4 left-4">
+                            <!-- <span class="px-3 py-1 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-xs uppercase tracking-wider">
+                                RESMI UNERD PERFORMANCE
+                            </span> -->
+                        </div>
+                        <div class="relative z-10 text-white max-w-md">
+                            <!-- <span class="text-xs font-mono text-zinc-300 uppercase block tracking-wider">Lintasan Resmi GBK Jakarta</span> -->
+                            <h3 class="font-display font-extrabold text-xl sm:text-2xl uppercase mt-1">
+                                Catat Waktu Tercepatmu di GBK & Dapatkan Hadiah Menarik!
+                            </h3>
+                            <!-- <p class="text-xs sm:text-sm text-zinc-300 mt-1.5 leading-relaxed">
+                                Tunjukkan nomor unik  pelari di booth panitia, lari 3.000 meter, dan pantau rekor waktumu secara langsung di live leaderboard.
+                            </p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: ENGINEERED FOR EVERY WEEK PERFORMANCE (4 IMAGES: DRINKING, RECOVERY, LUCKY DRAW, TRIAL) -->
+        <section id="event-experience" class="py-14 sm:py-20 bg-white dark:bg-unerd-black transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-10 sm:mb-12">
+                    <!-- <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                        EVENT ACTIVATION & EXPERIENCE
+                    </span> -->
+                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
+                        Run, relax, recharge, and get prizes!
+                    </h2>
+                    <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                        Suasana dan fasilitas pendukung di booth UNERD untuk kenyamanan dan performa maksimal setiap pelari.
+                    </p>
+                </div>
+
+                <!-- 3 Photo Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- 1. Water stations -->
+                    <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96 flex flex-col justify-end p-5">
+                        <img src="{{ asset('images/gallery/water.jpeg') }}" alt="Water stations" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-black/60"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                                WATER STATIONS
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Hidrasi Resmi</span>
+                            <h4 class="font-display font-bold text-base uppercase mt-0.5">Water Stations</h4>
+                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Stasiun air mineral gratis untuk menjaga hidrasi dan stamina optimal seluruh pelari.</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Free Massage stations -->
+                    <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96 flex flex-col justify-end p-5">
+                        <img src="{{ asset('images/gallery/massage.jpeg') }}" alt="Free Massage stations" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-black/60"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                                FREE MASSAGE STATIONS
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Pemulihan Otot</span>
+                            <h4 class="font-display font-bold text-base uppercase mt-0.5">Free Massage Stations</h4>
+                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Layanan fisioterapi dan relaksasi otot gratis pasca race untuk pemulihan tubuh.</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Live Leaderboard -->
+                    <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96 flex flex-col justify-end p-5">
+                        <img src="{{ asset('images/gallery/gallery-1.jpg') }}" alt="Live Leaderboard" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-black/60"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                                LIVE LEADERBOARD
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Peringkat Realtime</span>
+                            <h4 class="font-display font-bold text-base uppercase mt-0.5">Live Leaderboard</h4>
+                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Pantau rekor catatan waktu tercepat dan posisi peringkat pelari secara realtime.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: APRESIASI PELARI - HADIAH JUARA 1–10 & VOUCHER BELANJA -->
+        <section id="prizes-rewards" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-t border-unerd-hairline dark:border-zinc-800 transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <!-- Left: Rewards List -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div>
+                            <span class="px-3 py-1 rounded-pill bg-unerd-volt text-unerd-ink text-[11px] font-extrabold uppercase tracking-[2px] inline-block mb-3 font-display">
+                                APRESIASI PELARI
+                            </span>
+                            <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
+                                Hadiah Juara 1–10 & Voucher Belanja
+                            </h2>
+                            <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                                Setiap catatan waktu di lintasan berkesempatan memenangkan hadiah sepatu, uang tunai, dan voucher belanja.
+                            </p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Juara 1 -->
+                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
+                                        <svg class="w-5 h-5 text-unerd-volt-dark dark:text-unerd-volt" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4m-6-17h12a2 2 0 012 2v2a6 6 0 01-6 6h0a6 6 0 01-6-6V4a2 2 0 012-2zm-2 4H2a2 2 0 00-2 2v1a4 4 0 004 4h2m12-7h2a2 2 0 012 2v1a4 4 0 01-4 4h-2" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 1</span>
+                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
+                                            Sepatu UNERD Pilihan Sesuai Ukuran Kaki
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Juara 2 & 3 -->
+                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
+                                        <svg class="w-5 h-5 text-unerd-ink dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <circle cx="12" cy="8" r="6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 2 & 3</span>
+                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
+                                            Hadiah Uang Tunai
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Top 10 Finisher -->
+                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
+                                        <svg class="w-5 h-5 text-unerd-ink dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">Partisipan Challenge</span>
+                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
+                                            Voucher Diskon Belanja Eksklusif 10%
+                                        </h4>
+                                        <span class="text-[11px] text-unerd-muted dark:text-zinc-400 font-mono block mt-0.5">
+                                            *Masa berlaku voucher: 1 Minggu (7 Hari) sejak diterbitkan
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Two Photos (gallery-7.jpg & gallery-1.jpg) -->
+                    <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
+                            <img src="{{ asset('images/gallery/gallery-7.jpg') }}" alt="Podium Juara" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                             <div class="absolute inset-0 bg-black/60"></div>
                             <div class="absolute top-3 left-3">
                                 <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
-                                    VERIFIKASI STOPWATCH
+                                    PODIUM JUARA
                                 </span>
                             </div>
                             <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="text-[10px] font-mono text-zinc-300 uppercase block">Kru Panitia di Lapangan</span>
-                                <h4 class="font-display font-bold text-base uppercase mt-0.5">Pencatatan Waktu Akurat</h4>
-                                <p class="text-[11px] text-zinc-300 mt-0.5">Format standar Indonesia dengan presisi dua digit milidetik.</p>
+                                <h4 class="font-display font-bold text-sm uppercase">Apresiasi Kemenangan</h4>
+                                <span class="text-[11px] text-zinc-300">Hadiah sepatu UNERD & voucher diskon</span>
                             </div>
                         </div>
 
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-80 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-4.jpg') }}" alt="Sprint Finish Focus" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
+                            <img src="{{ asset('images/gallery/gallery-1.jpg') }}" alt="Solidaritas Finisher" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                             <div class="absolute inset-0 bg-black/60"></div>
                             <div class="absolute top-3 left-3">
                                 <span class="px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white border border-white/20 font-mono font-bold text-[10px] uppercase">
-                                    PACE & CADENCE
+                                    FINISHER VIBE
                                 </span>
                             </div>
                             <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="text-[10px] font-mono text-zinc-300 uppercase block">Sprint {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' Meter' : '1.000 Meter' }}</span>
-                                <h4 class="font-display font-bold text-base uppercase mt-0.5">Fokus Ritme Hingga Finish</h4>
-                                <p class="text-[11px] text-zinc-300 mt-0.5">Menjaga kecepatan stabil untuk meraih peringkat puncak.</p>
+                                <h4 class="font-display font-bold text-sm uppercase">Semangat Komunitas</h4>
+                                <span class="text-[11px] text-zinc-300">Merayakan pencapaian personal record di lintasan lari</span>
                             </div>
                         </div>
                     </div>
@@ -412,25 +511,18 @@
             </div>
         </section>
 
-        <!-- PRODUCT DISCOVERY & ON-TRACK PERFORMANCE (Photo: gallery-3.jpg) -->
-        <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-            <div class="mb-8">
+        <!-- SECTION 5: KOLEKSI SEPATU UNERD PERFORMANCE (PRODUK DI PALING BAWAH) -->
+        <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 border-t border-unerd-hairline dark:border-zinc-800">
+            <div class="max-w-3xl mb-8 sm:mb-10">
+                <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                    KOLEKSI RESMI UNERD
+                </span>
                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase text-unerd-ink dark:text-white">
-                    Engineered for Everyday Performance
+                    Pilihan Sepatu UNERD Performance
                 </h2>
-            </div>
-
-            <!-- Featured On-Track Photo Card -->
-            <div class="mb-10 rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 overflow-hidden relative shadow-lg h-64 sm:h-80 group">
-                <img src="{{ asset('images/gallery/gallery-3.jpg') }}"
-                     alt="Engineered for Everyday Performance"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" />
-                <div class="absolute inset-0 bg-black/60"></div>
-                <div class="absolute bottom-5 left-5 right-5 text-white max-w-xl">
-                    <h3 class="font-display font-extrabold text-xl sm:text-2xl uppercase mt-0.5">
-                        Dirancang Khusus untuk Performa Lari dan Kenyamanan Harian
-                    </h3>
-                </div>
+                <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                    Gunakan voucher diskon belanja 10% milikmu untuk mendapatkan produk sepatu lari UNERD terbaik di Official Store.
+                </p>
             </div>
 
             <!-- 3 Physical Display Articles Gallery Showcase -->
@@ -508,118 +600,6 @@
                 @endforeach
             </div>
         </section>
-
-        <!-- HADIAH JUARA 1–10 & VOUCHER BELANJA (Photos: gallery-7.jpg & gallery-6.jpg) -->
-        <section id="prizes-rewards" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-t border-unerd-hairline dark:border-zinc-800 transition-colors">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    <!-- Left: Rewards List -->
-                    <div class="lg:col-span-7 space-y-6">
-                        <div>
-                            <span class="px-3 py-1 rounded-pill bg-unerd-volt text-unerd-ink text-[11px] font-extrabold uppercase tracking-[2px] inline-block mb-3 font-display">
-                                APRESIASI PELARI
-                            </span>
-                            <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                Hadiah Juara 1–10 & Voucher Belanja
-                            </h2>
-                            <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                Setiap catatan waktu  di lintasan berkesempatan memenangkan hadiah sepatu, uang tunai, dan voucher belanja.
-                            </p>
-                        </div>
-
-                        <div class="space-y-3">
-                            <!-- Juara 1 -->
-                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
-                                        <svg class="w-5 h-5 text-unerd-volt-dark dark:text-unerd-volt" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4m-6-17h12a2 2 0 012 2v2a6 6 0 01-6 6h0a6 6 0 01-6-6V4a2 2 0 012-2zm-2 4H2a2 2 0 00-2 2v1a4 4 0 004 4h2m12-7h2a2 2 0 012 2v1a4 4 0 01-4 4h-2" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 1</span>
-                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Sepatu UNERD Pilihan Sesuai Ukuran Kaki
-                                        </h4>
-                                    </div>
-                                </div>
-                                <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span>
-                            </div>
-
-                            <!-- Juara 2 & 3 -->
-                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
-                                        <svg class="w-5 h-5 text-unerd-ink dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <circle cx="12" cy="8" r="6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 2 & 3</span>
-                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Hadiah Uang Tunai Pembinaan
-                                        </h4>
-                                    </div>
-                                </div>
-                                <span class="text-xs font-mono font-bold text-unerd-ink dark:text-white shrink-0">+ Voucher 10%</span>
-                            </div>
-
-                            <!-- Top 10 Finisher -->
-                            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
-                                        <svg class="w-5 h-5 text-unerd-ink dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PERINGKAT 4–10</span>
-                                        <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Voucher Diskon Belanja Eksklusif 10%
-                                        </h4>
-                                        <span class="text-[11px] text-unerd-muted dark:text-zinc-400 font-mono block mt-0.5">
-                                            *Masa berlaku voucher: 1 Minggu (7 Hari) sejak diterbitkan
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right: Two Photos (gallery-7.jpg & gallery-6.jpg) -->
-                    <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-7.jpg') }}" alt="Podium Juara" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="absolute top-3 left-3">
-                                <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
-                                    PODIUM JUARA
-                                </span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <h4 class="font-display font-bold text-sm uppercase">Apresiasi Kemenangan</h4>
-                                <span class="text-[11px] text-zinc-300">Hadiah sepatu UNERD & voucher diskon</span>
-                            </div>
-                        </div>
-
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-6.jpg') }}" alt="Solidaritas Finisher" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="absolute top-3 left-3">
-                                <span class="px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white border border-white/20 font-mono font-bold text-[10px] uppercase">
-                                    FINISHER VIBE
-                                </span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <h4 class="font-display font-bold text-sm uppercase">Semangat Komunitas</h4>
-                                <span class="text-[11px] text-zinc-300">Merayakan pencapaian personal record di lintasan lari</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -629,7 +609,7 @@
                 <x-application-logo />
                 <div>
                     <div class="text-xs font-mono font-bold uppercase text-unerd-ink dark:text-white">
-                        UNERD EVERYDAY LEAGUE • EVERYDAY COUNTS
+                        UNERD EVERY WEEK LEAGUE • EVERY WEEK COUNTS
                     </div>
                     <div class="text-[11px] text-unerd-muted dark:text-zinc-400">
                         @if ($activeChallenge)

@@ -13,7 +13,7 @@ final class CreateUserAction
     /**
      * Create a new user with assigned role and status by an administrator.
      *
-     * @param  array{name: string, email: string, password: string, role_id: int, phone_number?: string|null, is_blocked?: bool}  $userData
+     * @param  array{name: string, email: string, password: string, role_id: int, phone_number?: string|null, community_id?: int|null, is_blocked?: bool}  $userData
      */
     public function execute(array $userData): User
     {
@@ -23,6 +23,7 @@ final class CreateUserAction
                 'email' => strtolower(trim($userData['email'])),
                 'phone_number' => isset($userData['phone_number']) ? trim($userData['phone_number']) : null,
                 'role_id' => $userData['role_id'],
+                'community_id' => isset($userData['community_id']) && $userData['community_id'] ? (int) $userData['community_id'] : null,
                 'password' => Hash::make($userData['password']),
                 'is_blocked' => $userData['is_blocked'] ?? false,
             ]);

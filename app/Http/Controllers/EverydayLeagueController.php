@@ -55,9 +55,9 @@ class EverydayLeagueController extends Controller
             $featuredFootwear = [
                 [
                     'name' => 'UNERD Beat Flow Performance',
-                    'subtitle' => 'Nusantara Edition - Road & Sprint 1 KM',
+                    'subtitle' => 'Nusantara Edition - Road & Sprint 3 KM',
                     'category' => 'Performance',
-                    'description' => 'Bantalan responsif dengan stabilitas pijakan optimal untuk akselerasi sprint 1 KM maupun long run di lintasan aspal.',
+                    'description' => 'Bantalan responsif dengan stabilitas pijakan optimal untuk akselerasi sprint 3 KM maupun long run di lintasan aspal.',
                     'price' => 469000,
                     'retail_price' => 469000,
                     'discounted_price' => 422100,
@@ -259,7 +259,7 @@ class EverydayLeagueController extends Controller
     }
 
     /**
-     * Display registration confirmation and digital BIB card.
+     * Display registration confirmation and digital  card.
      */
     public function success(Participant $participant): View
     {

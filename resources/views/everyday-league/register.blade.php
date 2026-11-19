@@ -61,7 +61,7 @@
                             Time Attack Challenge
                         </h2>
                         <p class="text-xs text-slate-500 dark:text-zinc-400">
-                            Tantangan sprint {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' Meter' : '1.000 Meter' }} di lintasan  {{ $activeChallenge->location ?? 'Gelora Bung Karno, Jakarta' }}.
+                            Tantangan sprint {{ $activePeriod ? $activePeriod->formattedDistance() : ($activeChallenge ? $activeChallenge->formattedDistance() : '3 KM') }} di lintasan {{ $activePeriod->location ?? $activeChallenge->location ?? 'resmi' }}.
                         </p>
                     </div>
 
@@ -95,7 +95,7 @@
                                 Time Attack Challenge
                             </h3>
                             <p class="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed">
-                                {{ $activeChallenge->description ?? 'Time attack sprint 1.000 meter di lintasan  Gelora Bung Karno, Jakarta. Catat waktu stopwatch terbaikmu dan bawa namamu ke puncak leaderboard.' }}
+                                {{ $activeChallenge->description ?? 'Time attack sprint 3 KM di lintasan resmi. Catat waktu stopwatch terbaikmu dan bawa namamu ke puncak leaderboard.' }}
                             </p>
                         </div>
 
@@ -104,19 +104,19 @@
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Jarak Lintasan</span>
                                 <span class="font-bold text-slate-900 dark:text-white font-mono mt-0.5 block">
-                                    {{ $activeChallenge ? number_format($activeChallenge->distance_meter ?? 1000, 0, ',', '.') . ' M' : '1.000 M' }}
+                                    {{ $activePeriod ? $activePeriod->formattedDistance() : ($activeChallenge ? $activeChallenge->formattedDistance() : '3 KM') }}
                                 </span>
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Lokasi</span>
                                 <span class="font-bold text-slate-900 dark:text-white truncate mt-0.5 block">
-                                    {{ $activeChallenge->location ?? 'Gelora Bung Karno, Jakarta' }}
+                                    {{ $activePeriod->location ?? $activeChallenge->location ?? 'Gelora Bung Karno, Jakarta' }}
                                 </span>
                             </div>
                             <div>
-                                <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Format Timing</span>
+                                <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Format</span>
                                 <span class="font-bold text-emerald-600 dark:text-unerd-volt mt-0.5 block">
-                                    Stopwatch Verified
+                                    Time Attack
                                 </span>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                                     <span>Kamu Sudah Terdaftar &bull; Menunggu Start di GBK</span>
                                 </div>
                                 <p class="text-xs text-amber-800 dark:text-amber-300">
-                                    BIB ID: <strong class="font-mono">{{ $existingParticipant?->participant_id }}</strong> &bull; Silakan datang ke booth kru di lintasan untuk konfirmasi start.
+                                     ID: <strong class="font-mono">{{ $existingParticipant?->participant_id }}</strong> &bull; Silakan datang ke booth kru di lintasan untuk konfirmasi start.
                                 </p>
                             </div>
                         @elseif (! $isOpenForRegistration)
@@ -206,11 +206,11 @@
                             @else
                                 <button type="submit"
                                         class="w-full py-3.5 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-xs text-center flex items-center justify-center gap-2 cursor-pointer">
-                                    <span>Konfirmasi & Mulai Lari Sekarang</span>
+                                    <span>Konfirmasi pendaftaran</span>
                                     <span>&rarr;</span>
                                 </button>
                                 <p class="text-center text-[11px] text-slate-400 mt-2">
-                                    Tanpa biaya pendaftaran. Kamu langsung mendapatkan nomor pelari  untuk diverifikasi oleh kru panitia.
+                                    Tanpa biaya pendaftaran. Kamu langsung mendapatkan nomor pelari untuk diverifikasi oleh kru panitia di lokasi kegiatan.
                                 </p>
                             @endif
                         </div>

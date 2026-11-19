@@ -28,7 +28,7 @@ class Leaderboard extends Component
     public ?int $selectedPeriodId = null;
 
     /**
-     * Realtime search query for runner / BIB
+     * Realtime search query for runner /
      */
     public string $search = '';
 
@@ -196,9 +196,11 @@ class Leaderboard extends Component
                 $remSec = $avgSeconds - ($minutes * 60);
                 $formattedTime = str_replace('.', ',', sprintf('%02d:%05.2f', $minutes, $remSec));
 
-                // Pace for 1 KM (1000m) is equal to time in seconds
-                $pMin = (int) floor($avgSeconds / 60);
-                $pSec = (int) round($avgSeconds % 60);
+                // Pace per KM calculated dynamically
+                $distKm = max(0.1, ($period?->distance_meter ?? 3000) / 1000);
+                $secPerKm = $avgSeconds / $distKm;
+                $pMin = (int) floor($secPerKm / 60);
+                $pSec = (int) round($secPerKm % 60);
                 $formattedPace = sprintf('%02d:%02d/km', $pMin, $pSec);
 
                 $ranked[] = [

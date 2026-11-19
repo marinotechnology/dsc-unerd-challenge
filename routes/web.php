@@ -73,6 +73,9 @@ Route::middleware(['auth', 'role:admin,administrator'])->prefix('admin')->name('
 
     // Product Catalog (CRUD)
     Route::get('/products', fn () => view('admin.products.index'))->name('products.index');
+
+    // Community Management (CRUD)
+    Route::get('/communities', fn () => view('admin.communities.index'))->name('communities.index');
 });
 
 // Crew Lapangan Routes (Pilar #02 PWA)

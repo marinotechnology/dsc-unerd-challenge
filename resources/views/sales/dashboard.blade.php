@@ -64,7 +64,7 @@
         <div class="flex items-center justify-between pb-4 border-b border-unerd-hairline dark:border-zinc-800 mb-5">
             <div>
                 <h2 class="font-display text-lg font-bold text-unerd-ink dark:text-white">Pos Titik Aktivasi & Check-in Offline</h2>
-                <p class="text-xs text-unerd-muted dark:text-zinc-400">Pemindaian QR code untuk verifikasi nomor BIB dan start peserta</p>
+                <p class="text-xs text-unerd-muted dark:text-zinc-400">Pemindaian QR code untuk verifikasi nomor  dan start peserta</p>
             </div>
             <span class="text-xs font-mono font-bold text-unerd-muted dark:text-zinc-400">
                 3 Titik Pos Aktif

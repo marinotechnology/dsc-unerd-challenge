@@ -44,6 +44,17 @@ class Challenge extends Model
     }
 
     /**
+     * Get formatted distance (e.g. "3 KM")
+     */
+    public function formattedDistance(): string
+    {
+        $meter = $this->distance_meter ?: 3000;
+        $km = $meter / 1000;
+
+        return ($meter % 1000 === 0 ? (string) (int) $km : number_format($km, 1)).' KM';
+    }
+
+    /**
      * @return HasMany<ChallengeResult>
      */
     public function results(): HasMany

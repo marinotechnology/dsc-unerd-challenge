@@ -31,6 +31,10 @@
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('admin.products.*') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
                             Katalog Produk
                         </a>
+                        <a href="{{ route('admin.communities.index') }}"
+                           class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('admin.communities.*') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
+                            Komunitas
+                        </a>
                     @elseif (Auth::user()->isFieldSales())
                         <a href="{{ route('admin.event.index') }}"
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('admin.event.*') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
@@ -158,6 +162,7 @@
             <a href="{{ route('admin.roles.index') }}" class="block px-3 py-2 text-sm font-bold rounded-md hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200">Tipe Role</a>
             <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 text-sm font-bold rounded-md hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200">Direktori User</a>
             <a href="{{ route('admin.products.index') }}" class="block px-3 py-2 text-sm font-bold rounded-md hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200">Katalog Produk</a>
+            <a href="{{ route('admin.communities.index') }}" class="block px-3 py-2 text-sm font-bold rounded-md hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200">Komunitas</a>
         @elseif (Auth::user()->isFieldSales())
             <a href="{{ route('admin.event.index') }}" class="block px-3 py-2 text-sm font-bold rounded-md bg-unerd-surface-card dark:bg-zinc-800 dark:text-white">Operasional Kru GBK</a>
             <a href="{{ route('sales.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200">Summary Sales</a>

@@ -25,8 +25,13 @@ class ChallengePeriod extends Model
     protected $fillable = [
         'challenge_id',
         'name',
+        'location',
+        'distance_meter',
+        'duration_minutes',
+        'banner_image',
         'period_code',
         'event_date',
+        'end_time',
         'is_active',
         'is_open_for_registration',
         'prizes_config',
@@ -38,11 +43,58 @@ class ChallengePeriod extends Model
     protected function casts(): array
     {
         return [
+            'distance_meter' => 'integer',
+            'duration_minutes' => 'integer',
             'event_date' => 'date',
+            'end_time' => 'datetime',
             'is_active' => 'boolean',
             'is_open_for_registration' => 'boolean',
             'prizes_config' => 'array',
         ];
+    }
+
+    /**
+     * Get formatted distance (e.g. "3 KM")
+     */
+    public function formattedDistance(): string
+    {
+        $meter = $this->distance_meter ?: 3000;
+        $km = $meter / 1000;
+
+        return ($meter % 1000 === 0 ? (string) (int) $km : number_format($km, 1)).' KM';
+    }
+
+    /**
+     * Check if challenge period is expired based on end_time or duration
+     */
+    public function isExpired(): bool
+    {
+        if ($this->end_time && now()->greaterThan($this->end_time)) {
+            return true;
+        }
+
+        if ($this->event_date && $this->duration_minutes) {
+            $eventDayEnd = $this->event_date->clone()->endOfDay();
+            if (now()->greaterThan($eventDayEnd)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Automatically close registration if period has expired
+     */
+    public function autoCloseIfExpired(): bool
+    {
+        if ($this->isExpired() && $this->is_open_for_registration) {
+            $this->update(['is_open_for_registration' => false]);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
