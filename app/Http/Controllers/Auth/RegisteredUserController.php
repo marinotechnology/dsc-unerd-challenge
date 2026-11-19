@@ -50,7 +50,7 @@ class RegisteredUserController extends Controller
                 'b2b-client',
             ])],
             'community_id' => ['nullable', 'integer', 'exists:communities,id'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
         ]);
 
         $user = $registerUserAction->execute([

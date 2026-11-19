@@ -62,3 +62,16 @@ test('new user can register as profesional and access dashboard without 403', fu
     $hubResponse->assertStatus(200);
     $hubResponse->assertSee('Dashboard Pelari Profesional');
 });
+
+test('new user can register with single password without confirmation field', function () {
+    $response = $this->post('/register', [
+        'name' => 'Runner Single Password',
+        'email' => 'runner.single@example.com',
+        'shoe_size' => 41,
+        'role_slug' => 'umum',
+        'password' => 'password123',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
+});
