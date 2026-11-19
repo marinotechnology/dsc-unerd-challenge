@@ -1,19 +1,64 @@
 <?php
 
-test('registration screen can be rendered', function () {
+test('registration screen can be rendered with favicon and title', function () {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
+    $response->assertSee('UNERD Move');
+    $response->assertSee('icon-light.png');
 });
 
-test('new users can register', function () {
+test('new user can register as umum and access dashboard without 403', function () {
     $response = $this->post('/register', [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
+        'name' => 'Runner Umum',
+        'email' => 'runner.umum@example.com',
+        'shoe_size' => 42,
+        'role_slug' => 'umum',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
     ]);
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+
+    // Follow redirect to dashboard and customer hub
+    $dashboardResponse = $this->get(route('dashboard'));
+    $dashboardResponse->assertRedirect(route('customer.dashboard'));
+
+    $hubResponse = $this->get(route('customer.dashboard'));
+    $hubResponse->assertStatus(200);
+    $hubResponse->assertSee('Dashboard Pelari Umum');
+    $hubResponse->assertSee('EU 42');
+});
+
+test('new user can register as komunitas and access dashboard without 403', function () {
+    $response = $this->post('/register', [
+        'name' => 'Runner Komunitas',
+        'email' => 'runner.komunitas@example.com',
+        'shoe_size' => 40,
+        'role_slug' => 'komunitas',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ]);
+
+    $this->assertAuthenticated();
+    $hubResponse = $this->get(route('customer.dashboard'));
+    $hubResponse->assertStatus(200);
+    $hubResponse->assertSee('Dashboard Pelari Komunitas');
+});
+
+test('new user can register as profesional and access dashboard without 403', function () {
+    $response = $this->post('/register', [
+        'name' => 'Runner Pro',
+        'email' => 'runner.pro@example.com',
+        'shoe_size' => 43,
+        'role_slug' => 'profesional',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ]);
+
+    $this->assertAuthenticated();
+    $hubResponse = $this->get(route('customer.dashboard'));
+    $hubResponse->assertStatus(200);
+    $hubResponse->assertSee('Dashboard Pelari Profesional');
 });

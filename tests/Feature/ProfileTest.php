@@ -13,13 +13,17 @@ test('profile page is displayed', function () {
 });
 
 test('profile information can be updated', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'shoe_size' => 41,
+    ]);
 
     $response = $this
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'shoe_size' => 43,
+            'phone_number' => '081299998888',
         ]);
 
     $response
@@ -30,6 +34,8 @@ test('profile information can be updated', function () {
 
     $this->assertSame('Test User', $user->name);
     $this->assertSame('test@example.com', $user->email);
+    $this->assertSame(43, $user->shoe_size);
+    $this->assertSame('081299998888', $user->phone_number);
     $this->assertNull($user->email_verified_at);
 });
 

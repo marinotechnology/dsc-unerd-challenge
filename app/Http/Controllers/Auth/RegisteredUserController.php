@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Authentication\RegisterUserAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\Enums\UserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -28,24 +32,36 @@ class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, RegisterUserAction $registerUserAction): RedirectResponse
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone_number' => ['nullable', 'string', 'max:25'],
+            'shoe_size' => ['nullable', 'integer', 'min:38', 'max:45'],
+            'role_slug' => ['nullable', 'string', Rule::in([
+                UserRole::UMUM->value,
+                UserRole::KOMUNITAS->value,
+                UserRole::PROFESIONAL->value,
+                'customer',
+                'b2b-client',
+            ])],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user = $registerUserAction->execute([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'phone_number' => $validatedData['phone_number'] ?? null,
+            'shoe_size' => isset($validatedData['shoe_size']) ? (int) $validatedData['shoe_size'] : 42,
+            'role_slug' => $validatedData['role_slug'] ?? UserRole::UMUM->value,
+            'password' => $validatedData['password'],
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }
