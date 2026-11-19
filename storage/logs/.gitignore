@@ -1,2 +1,7 @@
 *
 !.gitignore
+
+!public/
+!public/.htaccess
+!public/build/
+!public/build/**

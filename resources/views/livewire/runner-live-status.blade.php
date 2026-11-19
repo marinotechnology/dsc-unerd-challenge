@@ -10,7 +10,7 @@
                                 {{ $activePeriod->period_code ?? 'TIME ATTACK' }}
                             </span>
                             <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
-                                Tantangan Sprint 1 KM
+                                Time Attack Challenge
                             </span>
                         </div>
 
@@ -45,10 +45,10 @@
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700 uppercase">
                             Periode Berakhir
                         </span>
-                        <span class="text-xs font-mono text-slate-400">Time Attack Challenge &bull; Lintasan 1 KM GBK Senayan, Jakarta</span>
+                        <span class="text-xs font-mono text-slate-400">Time Attack Challenge</span>
                     </div>
                     <h3 class="text-base sm:text-lg font-black uppercase text-slate-900 dark:text-white font-display">
-                        Pendaftaran dan Sesi Lari {{ $activePeriod->name }} Telah Ditutup
+                        Pendaftaran challenge {{ $activePeriod->name }} Telah Ditutup
                     </h3>
                     <p class="text-xs text-slate-500 dark:text-zinc-400">
                         Sesi pencatatan waktu untuk periode ini telah selesai. Anda dapat meninjau riwayat keikutsertaan Anda di bawah ini dan memantau klasemen akhir pada papan leaderboard .
