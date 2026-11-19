@@ -343,9 +343,9 @@
                     <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
                         Run, relax, recharge, and get prizes!
                     </h2>
-                    <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                    <!-- <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
                         Suasana dan fasilitas pendukung di booth UNERD untuk kenyamanan dan performa maksimal setiap pelari.
-                    </p>
+                    </p> -->
                 </div>
 
                 <!-- 3 Photo Cards Grid -->
@@ -355,14 +355,14 @@
                         <img src="{{ asset('images/gallery/water.jpeg') }}" alt="Water stations" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-black/60"></div>
                         <div class="absolute top-3 left-3">
-                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                            <!-- <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
                                 WATER STATIONS
-                            </span>
+                            </span> -->
                         </div>
                         <div class="relative z-10 text-white">
-                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Hidrasi Resmi</span>
+                            <!-- <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Hidrasi Resmi</span> -->
                             <h4 class="font-display font-bold text-base uppercase mt-0.5">Water Stations</h4>
-                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Stasiun air mineral gratis untuk menjaga hidrasi dan stamina optimal seluruh pelari.</p>
+                            <!-- <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Stasiun air mineral gratis untuk menjaga hidrasi dan stamina optimal seluruh pelari.</p> -->
                         </div>
                     </div>
 
@@ -371,14 +371,14 @@
                         <img src="{{ asset('images/gallery/massage.jpeg') }}" alt="Free Massage stations" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-black/60"></div>
                         <div class="absolute top-3 left-3">
-                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                            <!-- <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
                                 FREE MASSAGE STATIONS
-                            </span>
+                            </span> -->
                         </div>
                         <div class="relative z-10 text-white">
-                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Pemulihan Otot</span>
+                            <!-- <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Pemulihan Otot</span> -->
                             <h4 class="font-display font-bold text-base uppercase mt-0.5">Free Massage Stations</h4>
-                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Layanan fisioterapi dan relaksasi otot gratis pasca race untuk pemulihan tubuh.</p>
+                            <!-- <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Layanan fisioterapi dan relaksasi otot gratis pasca race untuk pemulihan tubuh.</p> -->
                         </div>
                     </div>
 
@@ -387,57 +387,213 @@
                         <img src="{{ asset('images/gallery/gallery-1.jpg') }}" alt="Live Leaderboard" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-black/60"></div>
                         <div class="absolute top-3 left-3">
-                            <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
+                            <!-- <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
                                 LIVE LEADERBOARD
-                            </span>
+                            </span> -->
                         </div>
                         <div class="relative z-10 text-white">
-                            <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Peringkat Realtime</span>
+                            <!-- <span class="text-[10px] font-mono text-zinc-300 uppercase block tracking-wider">Peringkat Realtime</span> -->
                             <h4 class="font-display font-bold text-base uppercase mt-0.5">Live Leaderboard</h4>
-                            <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Pantau rekor catatan waktu tercepat dan posisi peringkat pelari secara realtime.</p>
+                            <!-- <p class="text-[11px] text-zinc-300 mt-1 leading-snug">Pantau rekor catatan waktu tercepat dan posisi peringkat pelari secara realtime.</p> -->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: APRESIASI PELARI - HADIAH JUARA 1–10 & VOUCHER BELANJA -->
+        <!-- SECTION: JOIN TIME ATTACK CHALLENGE & LOKASI BOOTH (MAPS) -->
+        <section id="challenges" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-t border-unerd-hairline dark:border-zinc-800 transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-8 sm:mb-12">
+                    <!-- <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                        LOKASI BOOTH & TANTANGAN AKTIF
+                    </span> -->
+                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
+                        Info Booth {{ $activePeriod ? $activePeriod->cleanName() : 'UNERD Performance Time Attack Challenge' }}
+                    </h2>
+                    <!-- <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                        Kunjungi booth resmi UNERD di lintasan untuk konfirmasi pendaftaran, mulai tantangan lari, dan raih posisi teratas di live leaderboard.
+                    </p> -->
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                    <!-- Left: Challenge Info Cards -->
+                    <div class="lg:col-span-6 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <!-- Info Bar -->
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <span class="px-3 py-1 rounded-xl bg-unerd-black text-white dark:bg-white dark:text-black font-mono font-black text-xs uppercase tracking-wider">
+                                    {{ $activePeriod?->period_code ?? 'PERIODE-2026-11-19' }}
+                                </span>
+                                @if ($activePeriod?->is_open_for_registration)
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-unerd-volt border border-emerald-500/20 font-mono font-bold text-xs uppercase">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-unerd-volt animate-ping"></span>
+                                        Pendaftaran Dibuka
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 font-mono font-bold text-xs uppercase">
+                                        Pendaftaran Ditutup
+                                    </span>
+                                @endif
+                            </div>
+
+                            <!-- 4 Key Fast Facts Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                <!-- Lokasi / Venue Booth -->
+                                <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
+                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Lokasi / Venue Lintasan</span>
+                                    <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
+                                        {{ $activePeriod?->location ?? 'Gelora Bung Karno, Jakarta' }}
+                                    </span>
+                                    <!-- <span class="text-[11px] text-amber-600 dark:text-unerd-volt font-medium mt-0.5 block">
+                                        *Booth UNERD Performance
+                                    </span> -->
+                                </div>
+
+                                <!-- Jarak Lintasan -->
+                                <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
+                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Jarak Tantangan</span>
+                                    <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
+                                        {{ $activePeriod ? $activePeriod->formattedDistance() : '3000M' }}
+                                    </span>
+                                    <!-- <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                                        {{ $activePeriod?->distance_meter ?? 3000 }} Meter Sprint
+                                    </span> -->
+                                </div>
+
+                                <!-- Tanggal Event -->
+                                <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
+                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Tanggal Challenge</span>
+                                    <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
+                                        {{ $activePeriod?->event_date ? $activePeriod->event_date->translatedFormat('d F Y') : '19 November 2026' }}
+                                    </span>
+                                    <!-- <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                                        Sesi Terbuka
+                                    </span> -->
+                                </div>
+
+                                <!-- Durasi Challenge -->
+                                <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
+                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Batas Durasi Sesi</span>
+                                    <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
+                                        {{ $activePeriod?->duration_minutes ?? 60 }} Menit
+                                    </span>
+                                    <!-- <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                                        Pencatatan Stopwatch Akurat
+                                    </span> -->
+                                </div>
+                            </div>
+
+                            <!-- Petunjuk Booth -->
+                            <!-- <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 text-xs text-unerd-body dark:text-zinc-300">
+                                <span class="font-display font-bold text-unerd-ink dark:text-white block mb-1">
+                                    Cara Menuju Booth UNERD:
+                                </span>
+                                Datang langsung ke venue <strong class="text-unerd-ink dark:text-white">{{ $activePeriod?->location ?? 'Gelora Bung Karno, Jakarta' }}</strong>, temukan booth UNERD Performance sesuai peta di samping, lalu perlihatkan kode unik registrasi akunmu ke panitia untuk memulai stopwatch!
+                            </div> -->
+                        </div>
+
+                        <!-- CTA Action Buttons -->
+                        <!-- <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                            @auth
+                                <a href="{{ route('dashboard') }}"
+                                   class="px-6 py-3.5 rounded-xl bg-unerd-volt text-unerd-ink font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider text-center hover:bg-unerd-yellow transition shadow-md">
+                                    Buka Dashboard & Konfirmasi Start →
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}"
+                                   class="px-6 py-3.5 rounded-xl bg-unerd-volt text-unerd-ink font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider text-center hover:bg-unerd-yellow transition shadow-md">
+                                    Daftar Time Attack Sekarang →
+                                </a>
+                                <a href="{{ route('login') }}"
+                                   class="px-5 py-3.5 rounded-xl bg-white dark:bg-zinc-900 text-unerd-ink dark:text-white border border-unerd-hairline dark:border-zinc-800 font-display font-bold text-xs uppercase tracking-wider text-center hover:border-unerd-volt transition">
+                                    Sudah Ada Akun? Masuk
+                                </a>
+                            @endauth
+                        </div> -->
+                    </div>
+
+                    <!-- Right: Foto Maps / Denah Lokasi Booth -->
+                    <div class="lg:col-span-6 rounded-3xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-lg overflow-hidden relative min-h-[360px] sm:min-h-[440px] flex flex-col justify-between p-6 group">
+                        @php
+                            $mapsPhoto = $activePeriod?->banner_image ? asset(ltrim($activePeriod->banner_image, '/')) : asset('images/gallery/gallery-2.jpg');
+                        @endphp
+                        <img src="{{ $mapsPhoto }}"
+                             alt="Peta Denah Lokasi Booth UNERD Performance"
+                             class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40"></div>
+
+                        <!-- Top Floating Badge -->
+                        <div class="relative z-10 flex items-center justify-between">
+                            <!-- <span class="px-3 py-1.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+                                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                PETA LOKASI BOOTH UNERD
+                            </span> -->
+
+                            <a href="{{ $mapsPhoto }}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xs text-white text-xs font-mono font-bold border border-white/20 hover:border-unerd-volt transition">
+                                Perbesar Peta ↗
+                            </a>
+                        </div>
+
+                        <!-- Bottom Location Details Overlay -->
+                        <div class="relative z-10 text-white max-w-md pt-6">
+                            <!-- <span class="text-[11px] font-mono text-zinc-300 uppercase block tracking-wider">
+                                Venue Lintasan Resmi
+                            </span> -->
+                            <h3 class="font-display font-extrabold text-xl sm:text-2xl uppercase mt-1">
+                                {{ $activePeriod?->location ?? 'Gelora Bung Karno, Jakarta' }}
+                            </h3>
+                            <!-- <p class="text-xs sm:text-sm text-zinc-300 mt-1.5 leading-relaxed">
+                                Temukan booth UNERD Performance di area lintasan untuk verifikasi stopwatch dan pengambilan refreshment.
+                            </p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: APRESIASI PELARI - THIS WEEK WINNERS -->
         <section id="prizes-rewards" class="py-14 sm:py-20 bg-unerd-surface-card dark:bg-zinc-950/60 border-t border-unerd-hairline dark:border-zinc-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     <!-- Left: Rewards List -->
                     <div class="lg:col-span-7 space-y-6">
                         <div>
-                            <span class="px-3 py-1 rounded-pill bg-unerd-volt text-unerd-ink text-[11px] font-extrabold uppercase tracking-[2px] inline-block mb-3 font-display">
+                            <!-- <span class="px-3 py-1 rounded-pill bg-unerd-volt text-unerd-ink text-[11px] font-extrabold uppercase tracking-[2px] inline-block mb-3 font-display">
                                 APRESIASI PELARI
-                            </span>
+                            </span> -->
                             <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                Hadiah Juara 1–10 & Voucher Belanja
+                                This week winners get exiting shoes from UNERD!
                             </h2>
-                            <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                                Setiap catatan waktu di lintasan berkesempatan memenangkan hadiah sepatu, uang tunai, dan voucher belanja.
-                            </p>
+                            <!-- <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
+                                Catat waktu terbaikmu di lintasan dan menangkan sepatu UNERD, sendal recovery, serta voucher diskon.
+                            </p> -->
                         </div>
 
                         <div class="space-y-3">
-                            <!-- Juara 1 -->
+                            <!-- Poin 1 -->
                             <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
                                 <div class="flex items-center gap-3.5">
                                     <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
-                                        <svg class="w-5 h-5 text-unerd-volt-dark dark:text-unerd-volt" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg class="w-5 h-5 text-amber-500 dark:text-unerd-volt" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4m-6-17h12a2 2 0 012 2v2a6 6 0 01-6 6h0a6 6 0 01-6-6V4a2 2 0 012-2zm-2 4H2a2 2 0 00-2 2v1a4 4 0 004 4h2m12-7h2a2 2 0 012 2v1a4 4 0 01-4 4h-2" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 1</span>
                                         <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Sepatu UNERD Pilihan Sesuai Ukuran Kaki
+                                            Sepatu UNERD Performance
                                         </h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
+                                            Sesuai ukuran kaki pemenang sebanyak 1 pcs dan Voucher diskon <a href="https://www.unerd.co.id" target="_blank" rel="noopener noreferrer" class="font-bold underline text-amber-500 dark:text-unerd-volt hover:opacity-80">website</a> 10%
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Juara 2 & 3 -->
+                            <!-- Poin 2 -->
                             <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
                                 <div class="flex items-center gap-3.5">
                                     <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
@@ -447,30 +603,31 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 2 & 3</span>
                                         <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Hadiah Uang Tunai
+                                            Sendal Recovery UNERD
                                         </h4>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
+                                            Sesuai ukuran kaki pemenang sebanyak 1 pcs dan Voucher diskon <a href="https://www.unerd.co.id" target="_blank" rel="noopener noreferrer" class="font-bold underline text-amber-500 dark:text-unerd-volt hover:opacity-80">website</a> 10%
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Top 10 Finisher -->
+                            <!-- Poin 3 -->
                             <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 flex items-center justify-between gap-4 transition hover:border-unerd-volt">
                                 <div class="flex items-center gap-3.5">
                                     <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-unerd-ink dark:text-white">
-                                        <svg class="w-5 h-5 text-unerd-ink dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg class="w-5 h-5 text-amber-500 dark:text-unerd-volt" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">Partisipan Challenge</span>
                                         <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                            Voucher Diskon Belanja Eksklusif 10%
+                                            Semua Partisipan Challenge
                                         </h4>
-                                        <span class="text-[11px] text-unerd-muted dark:text-zinc-400 font-mono block mt-0.5">
-                                            *Masa berlaku voucher: 1 Minggu (7 Hari) sejak diterbitkan
-                                        </span>
+                                        <p class="text-xs text-unerd-body dark:text-zinc-400 mt-0.5">
+                                            Semua partisipan dapat voucher 10% jika belanja di <a href="https://www.unerd.co.id" target="_blank" rel="noopener noreferrer" class="font-bold underline text-amber-500 dark:text-unerd-volt hover:opacity-80">website</a> resmi UNERD.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -514,14 +671,14 @@
         <!-- SECTION 5: KOLEKSI SEPATU UNERD PERFORMANCE (PRODUK DI PALING BAWAH) -->
         <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 border-t border-unerd-hairline dark:border-zinc-800">
             <div class="max-w-3xl mb-8 sm:mb-10">
-                <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
+                <!-- <span class="px-3 py-1 bg-unerd-volt text-unerd-ink font-display text-[11px] font-extrabold uppercase tracking-[2px] rounded-pill inline-block mb-3">
                     KOLEKSI RESMI UNERD
-                </span>
+                </span> -->
                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase text-unerd-ink dark:text-white">
                     Pilihan Sepatu UNERD Performance
                 </h2>
                 <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
-                    Gunakan voucher diskon belanja 10% milikmu untuk mendapatkan produk sepatu lari UNERD terbaik di Official Store.
+                    Gunakan voucher diskon belanja 10% milikmu untuk mendapatkan produk sepatu lari UNERD terbaik di <a href="https://www.unerd.co.id" target="_blank" rel="noopener noreferrer" class="font-bold underline text-amber-500 dark:text-unerd-volt hover:opacity-80">Official Website</a>.
                 </p>
             </div>
 

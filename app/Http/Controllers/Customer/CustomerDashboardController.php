@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChallengePeriod;
 use App\Models\Community;
 use App\Models\Participant;
 use App\Models\Product;
@@ -24,12 +25,14 @@ class CustomerDashboardController extends Controller
             ->first();
         $historyCount = $participant ? $participant->results()->count() : 0;
         $communities = Community::orderBy('name')->get();
+        $activePeriod = ChallengePeriod::where('is_active', true)->first();
 
         return view('customer.dashboard', [
             'user' => $user,
             'participant' => $participant,
             'historyCount' => $historyCount,
             'communities' => $communities,
+            'activePeriod' => $activePeriod,
         ]);
     }
 
