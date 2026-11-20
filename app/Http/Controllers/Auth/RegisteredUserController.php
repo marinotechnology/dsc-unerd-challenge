@@ -53,9 +53,13 @@ class RegisteredUserController extends Controller
             'phone_number' => ['nullable', 'string', 'max:25'],
             'shoe_size' => ['nullable', 'integer', 'min:38', 'max:45'],
             'role_slug' => ['nullable', 'string', Rule::in([
+                UserRole::WOMEN->value,
                 UserRole::UMUM->value,
                 UserRole::KOMUNITAS->value,
                 UserRole::PROFESIONAL->value,
+                'women',
+                'community',
+                'pro',
                 'customer',
                 'b2b-client',
             ])],
@@ -87,8 +91,9 @@ class RegisteredUserController extends Controller
 
             if ($activePeriod && $activeChallenge) {
                 $roleCategory = match ($user->role?->slug) {
-                    'komunitas' => 'Komunitas',
-                    'profesional' => 'Profesional',
+                    'women' => 'Women',
+                    'komunitas', 'community' => 'Komunitas',
+                    'profesional', 'pro' => 'Profesional',
                     default => 'Umum',
                 };
 

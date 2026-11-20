@@ -35,7 +35,7 @@ class EventOperations extends Component
     public string $search = '';
 
     /**
-     * Filter by participant category: '', 'Umum', 'Komunitas', 'Profesional'
+     * Filter by participant category: '', 'Women', 'Umum', 'Komunitas', 'Profesional'
      */
     public string $categoryFilter = '';
 
@@ -69,11 +69,18 @@ class EventOperations extends Component
 
     public string $prize1 = 'Sepatu UNERD Pilihan + Voucher 10%';
 
-    public string $prize2 = 'Uang Tunai Rp 1.500.000 + Voucher 10%';
+    public string $prize2 = 'Sepatu UNERD Pilihan (Podium 2) + Voucher 10%';
 
-    public string $prize3 = 'Uang Tunai Rp 1.000.000 + Voucher 10%';
+    public string $prize3 = 'Sepatu UNERD Pilihan (Podium 3) + Voucher 10%';
 
     public string $prizeTop10 = 'Voucher Diskon Belanja 10%';
+
+    /**
+     * Dynamic Prize Pool CRUD items
+     *
+     * @var array<int, array{rank_from: int, rank_to: int, type: string, title: string, voucher_code: string, description: string}>
+     */
+    public array $prizesList = [];
 
     public bool $periodIsOpen = true;
 
@@ -217,10 +224,50 @@ class EventOperations extends Component
     }
 
     /**
+     * Toggle status pijat gratis untuk pelari
+     */
+    public function toggleMassage(int $participantId): void
+    {
+        $participant = Participant::find($participantId);
+        if (! $participant) {
+            return;
+        }
+
+        $periodId = $this->selectedPeriodId ?? ChallengePeriod::where('is_active', true)->value('id');
+        $activeChallenge = Challenge::where('status', 'ACTIVE')->first() ?? Challenge::first();
+
+        $result = ChallengeResult::where('participant_id', $participant->id)
+            ->where('challenge_period_id', $periodId)
+            ->first();
+
+        if (! $result && $activeChallenge) {
+            $result = ChallengeResult::create([
+                'participant_id' => $participant->id,
+                'user_id' => $participant->user_id,
+                'challenge_id' => $activeChallenge->id,
+                'challenge_period_id' => $periodId,
+                'checkin_status' => 'REGISTERED',
+                'runner_status' => 'PENDING',
+                'completion_status' => 'NOT_STARTED',
+                'is_massaged' => true,
+                'massaged_at' => now(),
+            ]);
+        } elseif ($result) {
+            $result->toggleMassage();
+        }
+
+        $statusText = $result->is_massaged ? 'SUDAH PIJAT GRATIS' : 'BELUM PIJAT';
+        $this->feedbackMessage = "Status layanan pijat {$participant->display_name} ({$participant->participant_id}): {$statusText}.";
+    }
+
+    /**
      * Open stopwatch timing modal for a runner
      */
     public function openTimeModal(int $participantId): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
         $participant = Participant::with('latestResult')->find($participantId);
 
         if (! $participant) {
@@ -260,6 +307,7 @@ class EventOperations extends Component
         $this->selectedParticipantCode = '';
         $this->timeInput = '';
         $this->timePreview = '';
+        $this->resetErrorBag();
         $this->resetValidation();
     }
 
@@ -321,6 +369,7 @@ class EventOperations extends Component
         if (! $result && $activeChallenge) {
             $result = ChallengeResult::create([
                 'participant_id' => $participant->id,
+                'user_id' => $participant->user_id,
                 'challenge_id' => $activeChallenge->id,
                 'challenge_period_id' => $periodId,
                 'checkin_status' => 'CHECKED_IN',
@@ -385,49 +434,94 @@ class EventOperations extends Component
         $this->showPrizeModal = false;
     }
 
+    public function addPrizeItem(): void
+    {
+        $lastRank = 1;
+        if (! empty($this->prizesList)) {
+            $lastItem = end($this->prizesList);
+            $lastRank = (int) ($lastItem['rank_to'] ?? 1) + 1;
+        }
+
+        $this->prizesList[] = [
+            'rank_from' => $lastRank,
+            'rank_to' => $lastRank,
+            'type' => 'VOUCHER',
+            'title' => 'Voucher Diskon Belanja 10%',
+            'voucher_code' => 'MOVE-EXTRA-10%',
+            'description' => 'Voucher diskon belanja 10% untuk finisher di website resmi UNERD.',
+        ];
+    }
+
+    public function removePrizeItem(int $index): void
+    {
+        if (isset($this->prizesList[$index])) {
+            unset($this->prizesList[$index]);
+            $this->prizesList = array_values($this->prizesList);
+        }
+    }
+
+    public function resetPrizesToDefault(): void
+    {
+        if ($this->selectedPeriodId) {
+            $period = ChallengePeriod::find($this->selectedPeriodId);
+            if ($period) {
+                $period->update([
+                    'prizes_config' => ChallengePeriod::defaultPrizesConfig(),
+                ]);
+                $this->loadPeriodPrizes($period);
+                $this->feedbackMessage = 'Konfigurasi hadiah berhasil di-reset ke standar resmi (Sepatu & Voucher).';
+            }
+        }
+    }
+
     public function savePrizeSettings(): void
     {
         $period = ChallengePeriod::find($this->selectedPeriodId);
         if ($period) {
-            $prizesConfig = [
-                [
-                    'rank_from' => 1,
-                    'rank_to' => 1,
-                    'type' => 'SEPATU',
-                    'title' => $this->prize1,
-                    'voucher_code' => 'MOVE-CHAMPION-10%',
-                    'description' => 'Sepatu lari UNERD (Performance / Lifestyle) sesuai ukuran kaki pelari.',
-                ],
-                [
-                    'rank_from' => 2,
-                    'rank_to' => 2,
-                    'type' => 'UANG',
-                    'title' => $this->prize2,
-                    'voucher_code' => 'MOVE-PODIUM-10%',
-                    'description' => 'Uang tunai pembinaan podium 2 dan voucher belanja UNERD 10%.',
-                ],
-                [
-                    'rank_from' => 3,
-                    'rank_to' => 3,
-                    'type' => 'UANG',
-                    'title' => $this->prize3,
-                    'voucher_code' => 'MOVE-PODIUM-10%',
-                    'description' => 'Uang tunai pembinaan podium 3 dan voucher belanja UNERD 10%.',
-                ],
-                [
-                    'rank_from' => 4,
-                    'rank_to' => 10,
-                    'type' => 'VOUCHER',
-                    'title' => $this->prizeTop10,
-                    'voucher_code' => 'MOVE-TOP10-10%',
-                    'description' => 'Voucher belanja eksklusif 10% untuk Top 10 Finisher.',
-                ],
-            ];
+            $prizesConfig = [];
+            foreach ($this->prizesList as $item) {
+                $type = strtoupper((string) ($item['type'] ?? 'SEPATU'));
+                // Pastikan tidak ada type UANG sama sekali
+                if ($type === 'UANG') {
+                    $type = 'SEPATU';
+                }
+                if (! in_array($type, ['SEPATU', 'VOUCHER', 'MERCHANDISE'])) {
+                    $type = 'SEPATU';
+                }
+
+                $title = trim((string) ($item['title'] ?? ''));
+                if (stripos($title, 'uang tunai') !== false) {
+                    $title = str_ireplace('Uang Tunai Rp 1.500.000', 'Sepatu UNERD Pilihan', $title);
+                    $title = str_ireplace('Uang Tunai Rp 1.000.000', 'Sepatu UNERD Pilihan', $title);
+                    $title = str_ireplace('Uang Tunai', 'Sepatu UNERD Pilihan', $title);
+                }
+
+                $description = trim((string) ($item['description'] ?? ''));
+                if (stripos($description, 'uang tunai') !== false) {
+                    $description = str_ireplace('Uang tunai pembinaan', 'Sepatu lari UNERD pilihan', $description);
+                    $description = str_ireplace('uang tunai', 'sepatu lari pilihan', $description);
+                }
+
+                $prizesConfig[] = [
+                    'rank_from' => max(1, (int) ($item['rank_from'] ?? 1)),
+                    'rank_to' => max(1, (int) ($item['rank_to'] ?? 1)),
+                    'type' => $type,
+                    'title' => $title !== '' ? $title : 'Sepatu UNERD Pilihan',
+                    'voucher_code' => strtoupper(trim((string) ($item['voucher_code'] ?? 'MOVE-CHALLENGE-10%'))),
+                    'description' => $description !== '' ? $description : 'Apresiasi resmi UNERD Time Attack Challenge.',
+                ];
+            }
+
+            if (empty($prizesConfig)) {
+                $prizesConfig = ChallengePeriod::defaultPrizesConfig();
+            }
 
             $period->update([
                 'prizes_config' => $prizesConfig,
                 'is_open_for_registration' => $this->periodIsOpen,
             ]);
+
+            $this->loadPeriodPrizes($period);
 
             $this->feedbackMessage = "Pengaturan hadiah & pendaftaran {$period->name} berhasil disimpan.";
             $this->showPrizeModal = false;
@@ -437,6 +531,8 @@ class EventOperations extends Component
     public function openManagePeriodModal(): void
     {
         $this->resetPeriodForm();
+        $this->resetErrorBag();
+        $this->resetValidation();
         $this->showManagePeriodModal = true;
     }
 
@@ -461,22 +557,15 @@ class EventOperations extends Component
         $this->periodFormDate = now()->format('Y-m-d');
         $this->periodFormIsActive = false;
         $this->periodFormIsOpen = true;
-        $this->resetValidation([
-            'periodFormName',
-            'periodFormCode',
-            'periodFormLocation',
-            'periodFormDistance',
-            'periodFormDuration',
-            'periodFormStartTime',
-            'periodFormEndTime',
-            'periodFormImage',
-            'periodFormImageFile',
-            'periodFormDate',
-        ]);
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function editPeriod(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
         $period = ChallengePeriod::find($id);
         if (! $period) {
             return;
@@ -660,43 +749,89 @@ class EventOperations extends Component
             return;
         }
 
-        if ($period->results()->exists()) {
-            $this->feedbackMessage = "Periode {$period->name} tidak dapat dihapus karena sudah memiliki data catatan waktu lari.";
+        $periodName = $period->name;
+        $wasActive = (bool) $period->is_active;
 
-            return;
-        }
+        // Bersihkan seluruh data hasil lari / partisipasi yang terkait dengan periode ini
+        $period->results()->delete();
 
-        $wasActive = $period->is_active;
+        // Hapus periode
         $period->delete();
 
+        // Reset form jika sedang mengedit periode yang dihapus
+        if ($this->editingPeriodId === $id) {
+            $this->resetPeriodForm();
+        }
+        $this->resetErrorBag();
+        $this->resetValidation();
+
+        // Jika periode yang dihapus sedang aktif, aktifkan periode berikutnya yang tersedia
         if ($wasActive) {
             $next = ChallengePeriod::orderByDesc('event_date')->first();
             if ($next) {
                 $next->update(['is_active' => true]);
                 $this->selectedPeriodId = $next->id;
+                $this->periodIsOpen = (bool) $next->is_open_for_registration;
             } else {
                 $this->selectedPeriodId = null;
+                $this->periodIsOpen = false;
+                Challenge::query()->update(['status' => 'INACTIVE']);
             }
         } elseif ($this->selectedPeriodId === $id) {
-            $this->selectedPeriodId = ChallengePeriod::where('is_active', true)->value('id');
+            $this->selectedPeriodId = ChallengePeriod::where('is_active', true)->value('id')
+                ?? ChallengePeriod::orderByDesc('event_date')->value('id');
         }
 
-        $this->feedbackMessage = 'Periode berhasil dihapus.';
+        $this->feedbackMessage = "Periode '{$periodName}' beserta data catatan waktu terkait berhasil dihapus.";
     }
 
     private function loadPeriodPrizes(ChallengePeriod $period): void
     {
         $config = $period->prizes_config ?? ChallengePeriod::defaultPrizesConfig();
-        foreach ($config as $item) {
-            $from = (int) ($item['rank_from'] ?? $item['rank'] ?? 0);
+        if (empty($config)) {
+            $config = ChallengePeriod::defaultPrizesConfig();
+        }
+
+        $this->prizesList = [];
+        foreach ($config as $index => $item) {
+            $type = (string) ($item['type'] ?? 'SEPATU');
+            if ($type === 'UANG') {
+                $type = 'SEPATU';
+            }
+
+            $title = (string) ($item['title'] ?? '');
+            if (stripos($title, 'uang tunai') !== false) {
+                $title = str_ireplace('Uang Tunai Rp 1.500.000', 'Sepatu UNERD Pilihan (Podium 2)', $title);
+                $title = str_ireplace('Uang Tunai Rp 1.000.000', 'Sepatu UNERD Pilihan (Podium 3)', $title);
+                $title = str_ireplace('Uang Tunai', 'Sepatu UNERD Pilihan', $title);
+            }
+
+            $description = (string) ($item['description'] ?? '');
+            if (stripos($description, 'uang tunai') !== false) {
+                $description = str_ireplace('Uang tunai pembinaan', 'Sepatu lari UNERD pilihan', $description);
+                $description = str_ireplace('uang tunai', 'sepatu lari pilihan', $description);
+            }
+
+            $this->prizesList[] = [
+                'rank_from' => (int) ($item['rank_from'] ?? $item['rank'] ?? ($index + 1)),
+                'rank_to' => (int) ($item['rank_to'] ?? $item['rank'] ?? ($index + 1)),
+                'type' => $type,
+                'title' => $title,
+                'voucher_code' => (string) ($item['voucher_code'] ?? 'MOVE-CHALLENGE-10%'),
+                'description' => $description,
+            ];
+        }
+
+        foreach ($this->prizesList as $item) {
+            $from = (int) $item['rank_from'];
             if ($from === 1) {
-                $this->prize1 = $item['title'] ?? $this->prize1;
+                $this->prize1 = $item['title'];
             } elseif ($from === 2) {
-                $this->prize2 = $item['title'] ?? $this->prize2;
+                $this->prize2 = $item['title'];
             } elseif ($from === 3) {
-                $this->prize3 = $item['title'] ?? $this->prize3;
+                $this->prize3 = $item['title'];
             } elseif ($from === 4) {
-                $this->prizeTop10 = $item['title'] ?? $this->prizeTop10;
+                $this->prizeTop10 = $item['title'];
             }
         }
     }
@@ -808,6 +943,10 @@ class EventOperations extends Component
                     ->orWhereNotNull('verified_time_seconds');
             })->count();
 
+        $massagedCount = ChallengeResult::when($currentPeriod, fn ($q) => $q->where('challenge_period_id', $currentPeriod->id))
+            ->where('is_massaged', true)
+            ->count();
+
         $totalRegistered = Participant::count();
 
         return view('livewire.admin.event-operations', [
@@ -818,6 +957,7 @@ class EventOperations extends Component
             'pendingCount' => $pendingCount,
             'activeCount' => $activeCount,
             'finishedCount' => $finishedCount,
+            'massagedCount' => $massagedCount,
             'totalRegistered' => $totalRegistered,
         ]);
     }

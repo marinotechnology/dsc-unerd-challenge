@@ -188,3 +188,59 @@ test('admin can upload period image file and save storage url in event operation
     $storedPath = str_replace('/storage/', '', $period->banner_image);
     Storage::disk('public')->assertExists($storedPath);
 });
+
+test('admin can perform multiple consecutive CRUD operations in single session without page reload', function () {
+    $adminRole = Role::firstOrCreate(['slug' => 'administrator'], [
+        'name' => 'Administrator',
+        'hierarchy_level' => 1,
+    ]);
+
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+        'is_blocked' => false,
+    ]);
+
+    // 1. In CommunityManager: create, edit, create another, delete first without refreshing
+    $component = Livewire::actingAs($admin)->test(CommunityManager::class);
+
+    $component->call('openCreateModal')
+        ->assertSet('showModal', true)
+        ->set('name', 'Consecutive Community 1')
+        ->set('slug', 'consecutive-1')
+        ->set('city', 'Jakarta')
+        ->call('save')
+        ->assertSet('showModal', false)
+        ->assertHasNoErrors();
+
+    $c1 = Community::where('slug', 'consecutive-1')->first();
+    expect($c1)->not->toBeNull();
+
+    // Immediately open modal again for second community
+    $component->call('openCreateModal')
+        ->assertSet('showModal', true)
+        ->assertSet('editingCommunityId', null)
+        ->set('name', 'Consecutive Community 2')
+        ->set('slug', 'consecutive-2')
+        ->set('city', 'Surabaya')
+        ->call('save')
+        ->assertSet('showModal', false)
+        ->assertHasNoErrors();
+
+    $c2 = Community::where('slug', 'consecutive-2')->first();
+    expect($c2)->not->toBeNull();
+
+    // Immediately edit community 1 without refresh
+    $component->call('editCommunity', $c1->id)
+        ->assertSet('showModal', true)
+        ->assertSet('editingCommunityId', $c1->id)
+        ->set('name', 'Consecutive Community 1 Updated')
+        ->call('save')
+        ->assertSet('showModal', false)
+        ->assertHasNoErrors();
+
+    expect($c1->fresh()->name)->toBe('Consecutive Community 1 Updated');
+
+    // Immediately delete community 2 without refresh
+    $component->call('deleteCommunity', $c2->id);
+    expect(Community::find($c2->id))->toBeNull();
+});

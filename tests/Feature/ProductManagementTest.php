@@ -6,6 +6,8 @@ use App\Livewire\Admin\ProductManager;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 test('guest cannot access admin products page', function () {
@@ -81,4 +83,37 @@ test('admin can create, update, toggle and delete product via livewire component
         ->call('deleteProduct', $product->id);
 
     expect(Product::find($product->id))->toBeNull();
+});
+
+test('admin can upload product image via livewire component', function () {
+    Storage::fake('public');
+
+    $adminRole = Role::firstOrCreate(['slug' => 'administrator'], [
+        'name' => 'Administrator',
+        'hierarchy_level' => 1,
+    ]);
+
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+        'is_blocked' => false,
+    ]);
+
+    $this->actingAs($admin);
+
+    $file = UploadedFile::fake()->image('unerd-new-shoe.jpg', 600, 600);
+
+    Livewire::test(ProductManager::class)
+        ->set('name', 'UNERD Upload Test Shoe')
+        ->set('category', 'Performance')
+        ->set('retailPrice', 750000)
+        ->set('imageFile', $file)
+        ->call('saveProduct')
+        ->assertHasNoErrors();
+
+    $product = Product::where('name', 'UNERD Upload Test Shoe')->first();
+    expect($product)->not->toBeNull();
+    expect($product->image)->toContain('/storage/products/');
+
+    $storedPath = str_replace('/storage/', '', $product->image);
+    Storage::disk('public')->assertExists($storedPath);
 });

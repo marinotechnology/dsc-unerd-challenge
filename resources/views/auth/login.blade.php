@@ -126,12 +126,13 @@
 
                 <!-- Remember Me -->
                 <div class="flex items-center justify-between pt-1">
-                    <label for="remember_me" class="inline-flex items-center cursor-pointer">
+                    <label for="remember_me" class="inline-flex items-center gap-2 cursor-pointer select-none group">
                         <input id="remember_me"
                                type="checkbox"
-                               class="rounded-xs border-unerd-hairline dark:border-zinc-700 text-unerd-black dark:text-white shadow-none focus:ring-unerd-black dark:focus:ring-white w-4 h-4 cursor-pointer"
+                               value="1"
+                               class="w-4 h-4 rounded border-slate-300 dark:border-zinc-700 text-slate-900 dark:text-unerd-volt focus:ring-2 focus:ring-slate-900 dark:focus:ring-unerd-volt dark:bg-zinc-900 cursor-pointer transition"
                                name="remember">
-                        <span class="ms-2 text-xs font-medium text-unerd-body dark:text-zinc-400">Ingat sesi saya</span>
+                        <span class="text-xs font-medium text-slate-600 dark:text-zinc-300 group-hover:text-slate-900 dark:group-hover:text-white transition">Ingat saya</span>
                     </label>
                 </div>
 

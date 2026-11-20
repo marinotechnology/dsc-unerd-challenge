@@ -38,11 +38,16 @@ final class CommunityManager extends Component
     public function openCreateModal(): void
     {
         $this->resetForm();
+        $this->resetErrorBag();
+        $this->resetValidation();
         $this->showModal = true;
     }
 
     public function editCommunity(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
         $community = Community::find($id);
         if (! $community) {
             return;
@@ -108,6 +113,9 @@ final class CommunityManager extends Component
 
     public function deleteCommunity(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
         $community = Community::withCount(['participants', 'users'])->find($id);
         if (! $community) {
             return;
@@ -132,6 +140,7 @@ final class CommunityManager extends Component
         $this->slug = '';
         $this->city = 'Jakarta';
         $this->description = '';
+        $this->resetErrorBag();
         $this->resetValidation();
     }
 

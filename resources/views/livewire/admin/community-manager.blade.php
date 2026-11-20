@@ -70,7 +70,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-zinc-800/60">
                     @forelse ($communities as $item)
-                        <tr class="hover:bg-slate-50/50 dark:hover:bg-zinc-900/40 transition">
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-zinc-900/40 transition" wire:key="community-row-{{ $item->id }}">
                             <td class="p-4">
                                 <div class="font-bold text-sm text-slate-900 dark:text-white font-display">
                                     {{ $item->name }}
@@ -127,7 +127,8 @@
 
     <!-- Modal Form (Tambah / Edit Komunitas) -->
     @if ($showModal)
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto"
+             wire:key="modal-community-{{ $editingCommunityId ?? 'new' }}">
             <div class="bg-white dark:bg-[#181818] rounded-2xl max-w-lg w-full p-6 space-y-5 border border-slate-200 dark:border-zinc-800 shadow-2xl my-8">
                 <!-- Modal Header -->
                 <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-zinc-800">

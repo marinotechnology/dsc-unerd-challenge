@@ -18,7 +18,7 @@ class Leaderboard extends Component
     use WithPagination;
 
     /**
-     * Active role/category tab: 'Umum', 'Komunitas', 'Profesional', 'CommunityAvg'
+     * Active role/category tab: 'Women', 'Umum', 'Komunitas', 'Profesional', 'CommunityAvg'
      */
     public string $activeRoleTab = 'Umum';
 
@@ -97,7 +97,7 @@ class Leaderboard extends Component
             ->when($currentPeriod, fn ($q) => $q->where('challenge_period_id', $currentPeriod->id))
             ->orderBy('verified_time_seconds');
 
-        if (in_array($this->activeRoleTab, ['Umum', 'Komunitas', 'Profesional'], true)) {
+        if (in_array($this->activeRoleTab, ['Women', 'Umum', 'Komunitas', 'Profesional'], true)) {
             $query->whereHas('participant', function ($q) {
                 $q->where('participant_category', $this->activeRoleTab);
             });
@@ -128,6 +128,11 @@ class Leaderboard extends Component
         // 3. Participant counts for tabs within current period
         $periodFilter = fn ($q) => $currentPeriod ? $q->where('challenge_period_id', $currentPeriod->id) : $q;
 
+        $countWomen = ChallengeResult::verified()
+            ->tap($periodFilter)
+            ->whereHas('participant', fn ($q) => $q->where('participant_category', 'Women'))
+            ->count();
+
         $countUmum = ChallengeResult::verified()
             ->tap($periodFilter)
             ->whereHas('participant', fn ($q) => $q->where('participant_category', 'Umum'))
@@ -146,6 +151,7 @@ class Leaderboard extends Component
         return view('livewire.leaderboard', [
             'results' => $results,
             'communityRankings' => $communityRankings,
+            'countWomen' => $countWomen,
             'countUmum' => $countUmum,
             'countKomunitas' => $countKomunitas,
             'countProfesional' => $countProfesional,

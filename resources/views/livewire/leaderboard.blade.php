@@ -161,9 +161,10 @@
                 </label>
                 <select wire:model.live="activeRoleTab"
                         class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm font-bold focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
+                    <option value="Women">Pelari Women ({{ $countWomen }})</option>
                     <option value="Umum">Pelari Umum ({{ $countUmum }})</option>
-                    <option value="Komunitas">Pelari Komunitas ({{ $countKomunitas }})</option>
-                    <option value="Profesional">Pelari Profesional ({{ $countProfesional }})</option>
+                    <option value="Komunitas">Pelari Komunitas (Community) ({{ $countKomunitas }})</option>
+                    <option value="Profesional">Pelari Profesional (Pro) ({{ $countProfesional }})</option>
                     <option value="CommunityAvg">Klasemen Komunitas (Top 3 Avg)</option>
                 </select>
             </div>
@@ -194,6 +195,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Quick Category Tabs (Women, Umum, Community, Pro, Komunitas Avg) -->
+    <!-- <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <button type="button" wire:click="setRoleTab('Women')"
+                class="px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 {{ $activeRoleTab === 'Women' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-xs' : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-400' }}">
+            <span>Women</span>
+            <span class="px-1.5 py-0.2 rounded font-mono text-[10px] {{ $activeRoleTab === 'Women' ? 'bg-white/20 dark:bg-black/20 text-white dark:text-black' : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400' }}">{{ $countWomen }}</span>
+        </button>
+        <button type="button" wire:click="setRoleTab('Umum')"
+                class="px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 {{ $activeRoleTab === 'Umum' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-xs' : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-400' }}">
+            <span>Umum</span>
+            <span class="px-1.5 py-0.2 rounded font-mono text-[10px] {{ $activeRoleTab === 'Umum' ? 'bg-white/20 dark:bg-black/20 text-white dark:text-black' : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400' }}">{{ $countUmum }}</span>
+        </button>
+        <button type="button" wire:click="setRoleTab('Komunitas')"
+                class="px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 {{ $activeRoleTab === 'Komunitas' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-xs' : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-400' }}">
+            <span>Community</span>
+            <span class="px-1.5 py-0.2 rounded font-mono text-[10px] {{ $activeRoleTab === 'Komunitas' ? 'bg-white/20 dark:bg-black/20 text-white dark:text-black' : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400' }}">{{ $countKomunitas }}</span>
+        </button>
+        <button type="button" wire:click="setRoleTab('Profesional')"
+                class="px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 {{ $activeRoleTab === 'Profesional' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-xs' : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-400' }}">
+            <span>Pro</span>
+            <span class="px-1.5 py-0.2 rounded font-mono text-[10px] {{ $activeRoleTab === 'Profesional' ? 'bg-white/20 dark:bg-black/20 text-white dark:text-black' : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400' }}">{{ $countProfesional }}</span>
+        </button>
+        <button type="button" wire:click="setRoleTab('CommunityAvg')"
+                class="px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 {{ $activeRoleTab === 'CommunityAvg' ? 'bg-slate-900 text-white dark:bg-unerd-volt dark:text-black shadow-xs' : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-400' }}">
+            <span>Klasemen Komunitas (Avg)</span>
+        </button>
+    </div> -->
 
     <!-- MAIN LEADERBOARD DISPLAY -->
     @if ($activeRoleTab === 'CommunityAvg')

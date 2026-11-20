@@ -97,11 +97,11 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-zinc-800/60">
                     @forelse ($products as $item)
-                        <tr class="hover:bg-slate-50/70 dark:hover:bg-zinc-900/40 transition">
+                        <tr class="hover:bg-slate-50/70 dark:hover:bg-zinc-900/40 transition" wire:key="product-row-{{ $item->id }}">
                             <!-- Image Thumbnail -->
                             <td class="py-3.5 px-4 w-16">
                                 <div class="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden border border-slate-200 dark:border-zinc-700 shrink-0">
-                                    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="w-full h-full object-cover" />
+                                    <img src="{{ asset(ltrim($item->image, '/')) }}" alt="{{ $item->name }}" class="w-full h-full object-cover" />
                                 </div>
                             </td>
 
@@ -197,6 +197,7 @@
     <!-- MODAL TAMBAH / EDIT PRODUK -->
     @if ($showModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto"
+             wire:key="modal-product-{{ $editingProductId ?? 'new' }}"
              wire:keydown.escape="closeModal">
             <div class="bg-white dark:bg-[#181818] rounded-2xl border border-slate-200 dark:border-zinc-800 p-6 w-full max-w-xl text-left shadow-2xl space-y-4 my-8">
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-zinc-800 pb-3">
@@ -213,7 +214,7 @@
                     </button>
                 </div>
 
-                <form wire:submit.prevent="saveProduct" class="space-y-4 text-xs">
+                <form wire:submit="saveProduct" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">Nama Produk *</label>
                         <input type="text" wire:model="name" placeholder="Contoh: UNERD Beat Flow Pro"
@@ -258,11 +259,33 @@
                     </div>
 
                     <div>
-                        <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">Path Gambar Produk *</label>
-                        <input type="text" wire:model="image" placeholder="images/products/unerd-beat-flow-performance.jpg"
-                               class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white font-mono text-xs focus:border-unerd-volt" />
-                        <span class="text-[10px] text-slate-400">Gunakan path relatif dari folder public/ (contoh: images/products/...)</span>
-                        @error('image') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                        <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">Upload Foto Produk (Storage)</label>
+                        <input type="file" wire:model="imageFile" accept="image/*"
+                               wire:key="input-product-image-{{ $editingProductId ?? 'new' }}"
+                               class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-white text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-slate-900 file:text-white dark:file:bg-unerd-volt dark:file:text-black hover:file:opacity-90 cursor-pointer" />
+                        @error('imageFile') <span class="text-rose-500 text-[10px] block mt-1">{{ $message }}</span> @enderror
+
+                        <div wire:loading wire:target="imageFile" class="text-[10px] font-mono text-emerald-600 dark:text-unerd-volt mt-1">
+                            Mengunggah gambar...
+                        </div>
+
+                        @if ($imageFile)
+                            <div class="mt-2.5 flex items-center gap-3 p-2.5 bg-slate-100 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800">
+                                <img src="{{ $imageFile->temporaryUrl() }}" class="w-14 h-14 object-cover rounded-lg border border-slate-300 dark:border-zinc-700 shrink-0" alt="Preview Baru" />
+                                <div class="text-[11px] text-slate-600 dark:text-zinc-300">
+                                    <span class="font-bold text-emerald-600 dark:text-unerd-volt block">Foto baru terpilih</span>
+                                    <span class="text-[10px] text-slate-400">Siap disimpan ke storage</span>
+                                </div>
+                            </div>
+                        @elseif ($image)
+                            <div class="mt-2.5 flex items-center gap-3 p-2.5 bg-slate-100 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800">
+                                <img src="{{ asset(ltrim($image, '/')) }}" class="w-14 h-14 object-cover rounded-lg border border-slate-300 dark:border-zinc-700 shrink-0" alt="Foto Saat Ini" />
+                                <div class="text-[11px] text-slate-600 dark:text-zinc-300 truncate max-w-xs">
+                                    <span class="font-bold text-slate-800 dark:text-zinc-200 block">Foto produk aktif</span>
+                                    <span class="font-mono text-[10px] text-slate-400 truncate block">{{ basename($image) }}</span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div>

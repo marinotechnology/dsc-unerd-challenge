@@ -25,6 +25,12 @@ class RoleAndUserSeeder extends Seeder
                 'is_system_reserved' => true,
             ],
             [
+                'name' => 'Women',
+                'slug' => UserRole::WOMEN->value,
+                'description' => 'Pelari kategori Women (Wanita).',
+                'is_system_reserved' => true,
+            ],
+            [
                 'name' => 'Umum',
                 'slug' => UserRole::UMUM->value,
                 'description' => 'Pelari kategori Umum (Individu / Mandiri).',

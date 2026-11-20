@@ -29,6 +29,8 @@ class ChallengeResult extends Model
         'checkin_status',
         'runner_status',
         'completion_status',
+        'is_massaged',
+        'massaged_at',
         'recorded_time_seconds',
         'verified_time_seconds',
         'verification_status',
@@ -43,6 +45,8 @@ class ChallengeResult extends Model
     protected function casts(): array
     {
         return [
+            'is_massaged' => 'boolean',
+            'massaged_at' => 'datetime',
             'recorded_time_seconds' => 'decimal:2',
             'verified_time_seconds' => 'decimal:2',
             'rank_in_period' => 'integer',
@@ -302,5 +306,15 @@ class ChallengeResult extends Model
     public function getFormattedPaceAttribute(): string
     {
         return $this->formattedPace();
+    }
+
+    /**
+     * Toggle the massage status for the participant in this result.
+     */
+    public function toggleMassage(): void
+    {
+        $this->is_massaged = ! $this->is_massaged;
+        $this->massaged_at = $this->is_massaged ? now() : null;
+        $this->save();
     }
 }

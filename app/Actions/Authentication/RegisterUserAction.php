@@ -37,11 +37,14 @@ final class RegisterUserAction
 
     private function resolveRoleId(?string $roleSlug): int
     {
-        // Public registration allows: umum, komunitas, profesional (and backwards-compatible customer/b2b-client)
+        // Public registration allows: women, umum, community/komunitas, pro/profesional
         $permittedRegistrationSlugs = [
+            UserRole::WOMEN->value,
             UserRole::UMUM->value,
             UserRole::KOMUNITAS->value,
             UserRole::PROFESIONAL->value,
+            'community',
+            'pro',
             'customer',
             'b2b-client',
         ];
@@ -50,12 +53,17 @@ final class RegisterUserAction
             ? $roleSlug
             : UserRole::UMUM->value;
 
-        // Map legacy slugs if present
+        // Map alias slugs
         if ($targetSlug === 'customer') {
             $targetSlug = UserRole::UMUM->value;
+        } elseif ($targetSlug === 'community') {
+            $targetSlug = UserRole::KOMUNITAS->value;
+        } elseif ($targetSlug === 'pro') {
+            $targetSlug = UserRole::PROFESIONAL->value;
         }
 
         $roleNames = [
+            UserRole::WOMEN->value => 'Women',
             UserRole::UMUM->value => 'Umum',
             UserRole::KOMUNITAS->value => 'Komunitas',
             UserRole::PROFESIONAL->value => 'Profesional',

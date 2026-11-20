@@ -828,3 +828,171 @@ test('user registration with join_challenge automatically joins active period an
 
     $response->assertRedirect(route('everyday-league.success', $participant->participant_id));
 });
+
+test('admin can toggle free massage status for runner in event operations', function () {
+    $adminRole = Role::where('slug', 'administrator')->first();
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+
+    $challenge = Challenge::where('status', 'ACTIVE')->first();
+    $period = ChallengePeriod::where('is_active', true)->first();
+
+    $user = User::factory()->create();
+    $participant = Participant::create([
+        'participant_id' => 'UMS-TEST-MASSAGE',
+        'user_id' => $user->id,
+        'full_name' => 'Budi Pijat',
+        'display_name' => 'Budi',
+        'email' => 'budipijat@example.com',
+        'whatsapp' => '081234567899',
+        'participant_category' => 'Umum',
+        'shoe_size' => '42',
+        'consent_health' => true,
+        'consent_terms' => true,
+    ]);
+
+    $result = ChallengeResult::create([
+        'participant_id' => $participant->id,
+        'user_id' => $user->id,
+        'challenge_id' => $challenge->id,
+        'challenge_period_id' => $period->id,
+        'checkin_status' => 'REGISTERED',
+        'runner_status' => 'PENDING',
+        'completion_status' => 'NOT_STARTED',
+        'is_massaged' => false,
+    ]);
+
+    Livewire::actingAs($admin)
+        ->test(EventOperations::class)
+        ->call('setRunnerMode', 'PENDING')
+        ->assertSee('Belum Pijat')
+        ->call('toggleMassage', $participant->id)
+        ->assertSee('Sudah Pijat')
+        ->assertSee('SUDAH PIJAT GRATIS');
+
+    $result->refresh();
+    expect($result->is_massaged)->toBeTrue();
+    expect($result->massaged_at)->not->toBeNull();
+
+    // Toggle back
+    Livewire::actingAs($admin)
+        ->test(EventOperations::class)
+        ->call('setRunnerMode', 'PENDING')
+        ->call('toggleMassage', $participant->id)
+        ->assertSee('BELUM PIJAT');
+
+    $result->refresh();
+    expect($result->is_massaged)->toBeFalse();
+    expect($result->massaged_at)->toBeNull();
+});
+
+test('admin can directly record stopwatch time without starting the runner first', function () {
+    $adminRole = Role::where('slug', 'administrator')->first();
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+
+    $challenge = Challenge::where('status', 'ACTIVE')->first();
+    $period = ChallengePeriod::where('is_active', true)->first();
+
+    $user = User::factory()->create();
+    $participant = Participant::create([
+        'participant_id' => 'UMS-DIRECT-TIME',
+        'user_id' => $user->id,
+        'full_name' => 'Direct Runner',
+        'display_name' => 'Direct',
+        'email' => 'directrunner@example.com',
+        'whatsapp' => '081234567888',
+        'participant_category' => 'Umum',
+        'shoe_size' => '41',
+        'consent_health' => true,
+        'consent_terms' => true,
+    ]);
+
+    // Pelari baru terdaftar tanpa start lari lebih dulu
+    $result = ChallengeResult::create([
+        'participant_id' => $participant->id,
+        'user_id' => $user->id,
+        'challenge_id' => $challenge->id,
+        'challenge_period_id' => $period->id,
+        'checkin_status' => 'REGISTERED',
+        'runner_status' => 'PENDING',
+        'completion_status' => 'NOT_STARTED',
+    ]);
+
+    Livewire::actingAs($admin)
+        ->test(EventOperations::class)
+        ->call('setRunnerMode', 'PENDING')
+        ->assertSee('Catat Waktu')
+        ->call('openTimeModal', $participant->id)
+        ->assertSet('showTimeModal', true)
+        ->set('timeInput', '032045') // 03:20,45
+        ->call('saveTime')
+        ->assertSet('showTimeModal', false);
+
+    $result->refresh();
+    expect($result->runner_status)->toBe('FINISHED');
+    expect($result->completion_status)->toBe('COMPLETED');
+    expect((float) $result->verified_time_seconds)->toBe(200.45);
+});
+
+test('user can register with women role and joins challenge in women category', function () {
+    $response = $this->post(route('register'), [
+        'name' => 'Maya Runner',
+        'email' => 'maya.women@example.com',
+        'phone_number' => '081233445566',
+        'shoe_size' => 38,
+        'role_slug' => 'women',
+        'password' => 'password123',
+        'join_challenge' => 1,
+    ]);
+
+    $user = User::where('email', 'maya.women@example.com')->first();
+    expect($user)->not->toBeNull();
+    expect($user->role?->slug)->toBe('women');
+
+    $participant = Participant::where('email', 'maya.women@example.com')->first();
+    expect($participant)->not->toBeNull();
+    expect($participant->participant_category)->toBe('Women');
+
+    $response->assertRedirect(route('everyday-league.success', $participant->participant_id));
+});
+
+test('leaderboard displays women category and filters women runners correctly', function () {
+    $challenge = Challenge::where('status', 'ACTIVE')->first();
+    $period = ChallengePeriod::where('is_active', true)->first();
+
+    $user = User::factory()->create();
+    $participant = Participant::create([
+        'participant_id' => 'UMS-WOMEN-01',
+        'user_id' => $user->id,
+        'full_name' => 'Rina Srikandi',
+        'display_name' => 'Rina S',
+        'email' => 'rina.srikandi@example.com',
+        'whatsapp' => '081233332222',
+        'participant_category' => 'Women',
+        'shoe_size' => '38',
+        'consent_health' => true,
+        'consent_terms' => true,
+    ]);
+
+    $result = ChallengeResult::create([
+        'participant_id' => $participant->id,
+        'user_id' => $user->id,
+        'challenge_id' => $challenge->id,
+        'challenge_period_id' => $period->id,
+        'checkin_status' => 'CHECKED_IN',
+        'runner_status' => 'FINISHED',
+        'completion_status' => 'COMPLETED',
+        'verified_time_seconds' => 180.50,
+        'verification_status' => 'VERIFIED',
+    ]);
+
+    Livewire::test(Leaderboard::class)
+        ->call('setRoleTab', 'Women')
+        ->assertSet('activeRoleTab', 'Women')
+        ->assertSee('Rina S')
+        ->assertSee('UMS-WOMEN-01')
+        ->assertSee('03:00,50');
+});

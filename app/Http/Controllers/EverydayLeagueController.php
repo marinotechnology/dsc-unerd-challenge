@@ -135,8 +135,9 @@ class EverydayLeagueController extends Controller
 
         // Determine user's role category
         $roleCategory = match ($user?->role?->slug) {
-            'komunitas' => 'Komunitas',
-            'profesional' => 'Profesional',
+            'women' => 'Women',
+            'komunitas', 'community' => 'Komunitas',
+            'profesional', 'pro' => 'Profesional',
             default => 'Umum',
         };
 
@@ -179,8 +180,9 @@ class EverydayLeagueController extends Controller
         $shoeSize = $user?->shoe_size ?? $request->input('shoe_size', 42);
 
         $roleCategory = match ($user?->role?->slug) {
-            'komunitas' => 'Komunitas',
-            'profesional' => 'Profesional',
+            'women' => 'Women',
+            'komunitas', 'community' => 'Komunitas',
+            'profesional', 'pro' => 'Profesional',
             default => $request->input('participant_category', 'Umum'),
         };
 
@@ -286,7 +288,7 @@ class EverydayLeagueController extends Controller
             ->verified()
             ->orderBy('verified_time_seconds');
 
-        if ($selectedCategory && in_array($selectedCategory, ['Umum', 'Komunitas', 'Pekerja'], true)) {
+        if ($selectedCategory && in_array($selectedCategory, ['Women', 'Umum', 'Komunitas', 'Profesional'], true)) {
             $individualQuery->whereHas('participant', function ($q) use ($selectedCategory) {
                 $q->where('participant_category', $selectedCategory);
             });
@@ -347,12 +349,14 @@ class EverydayLeagueController extends Controller
             $participant->load('community');
         }
 
-        // Calculate runner's rank in period if verified
-        $overallRank = null;
+        // Calculate runner's rank in period by participant category if verified
+        $categoryRank = null;
         if ($result && $result->verified_time_seconds) {
-            $overallRank = $result->rank_in_period ?? (
+            $category = $participant->participant_category ?? 'Umum';
+            $categoryRank = $result->rank_in_period ?? (
                 ChallengeResult::verified()
                     ->when($result->challenge_period_id, fn ($q) => $q->where('challenge_period_id', $result->challenge_period_id))
+                    ->whereHas('participant', fn ($q) => $q->where('participant_category', $category))
                     ->where('verified_time_seconds', '<', $result->verified_time_seconds)
                     ->count() + 1
             );
@@ -371,8 +375,8 @@ class EverydayLeagueController extends Controller
             'participant' => $participant,
             'result' => $result,
             'activePeriod' => $result?->period ?? ChallengePeriod::where('is_active', true)->first(),
-            'overallRank' => $overallRank,
-            'rank' => $overallRank ?? 1,
+            'overallRank' => $categoryRank,
+            'rank' => $categoryRank ?? 1,
             'prize' => $prize,
             'voucherCode' => $voucherCode,
         ]);

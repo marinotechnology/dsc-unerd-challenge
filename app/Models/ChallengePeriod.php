@@ -193,23 +193,23 @@ class ChallengePeriod extends Model
                 'type' => 'SEPATU',
                 'title' => 'Sepatu UNERD Pilihan + Voucher 10%',
                 'voucher_code' => 'MOVE-CHAMPION-10%',
-                'description' => 'Sepatu lari UNERD (Performance / Lifestyle) sesuai ukuran kaki pelari.',
+                'description' => 'Sepatu lari UNERD (Performance / Lifestyle) pilihan sesuai ukuran kaki pelari.',
             ],
             [
                 'rank_from' => 2,
                 'rank_to' => 2,
-                'type' => 'UANG',
-                'title' => 'Uang Tunai Rp 1.500.000 + Voucher 10%',
+                'type' => 'SEPATU',
+                'title' => 'Sepatu UNERD Pilihan (Podium 2) + Voucher 10%',
                 'voucher_code' => 'MOVE-PODIUM-10%',
-                'description' => 'Uang tunai pembinaan podium 2 dan voucher belanja UNERD 10%.',
+                'description' => 'Sepatu lari UNERD pilihan untuk podium 2 dan voucher belanja UNERD 10%.',
             ],
             [
                 'rank_from' => 3,
                 'rank_to' => 3,
-                'type' => 'UANG',
-                'title' => 'Uang Tunai Rp 1.000.000 + Voucher 10%',
+                'type' => 'SEPATU',
+                'title' => 'Sepatu UNERD Pilihan (Podium 3) + Voucher 10%',
                 'voucher_code' => 'MOVE-PODIUM-10%',
-                'description' => 'Uang tunai pembinaan podium 3 dan voucher belanja UNERD 10%.',
+                'description' => 'Sepatu lari UNERD pilihan untuk podium 3 dan voucher belanja UNERD 10%.',
             ],
             [
                 'rank_from' => 4,
@@ -248,17 +248,36 @@ class ChallengePeriod extends Model
     }
 
     /**
-     * Recalculate and update ranks for all verified results in this period
+     * Recalculate and update ranks for all verified results in this period grouped by participant category
      */
     public function recalculateRanks(): void
     {
-        $results = $this->results()
+        $categories = ['Women', 'Umum', 'Komunitas', 'Profesional'];
+
+        foreach ($categories as $category) {
+            $results = $this->results()
+                ->whereNotNull('verified_time_seconds')
+                ->where('verification_status', 'VERIFIED')
+                ->whereHas('participant', fn ($q) => $q->where('participant_category', $category))
+                ->orderBy('verified_time_seconds')
+                ->get();
+
+            foreach ($results as $index => $result) {
+                $result->update([
+                    'rank_in_period' => $index + 1,
+                ]);
+            }
+        }
+
+        // Handle any participant with undefined or other categories
+        $otherResults = $this->results()
             ->whereNotNull('verified_time_seconds')
             ->where('verification_status', 'VERIFIED')
+            ->whereHas('participant', fn ($q) => $q->whereNotIn('participant_category', $categories))
             ->orderBy('verified_time_seconds')
             ->get();
 
-        foreach ($results as $index => $result) {
+        foreach ($otherResults as $index => $result) {
             $result->update([
                 'rank_in_period' => $index + 1,
             ]);

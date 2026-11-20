@@ -142,48 +142,62 @@
                 @csrf
                 <input type="hidden" name="join_challenge" value="{{ request('join_challenge', 1) }}">
 
-                <!-- Role Selector (3 Pilihan: Umum, Komunitas, Profesional) -->
+                <!-- Role Selector (4 Pilihan: Women, Umum, Community, Pro) -->
                 <div>
                     <div class="flex items-center justify-between">
-                        <x-input-label value="Kategori Peserta di Challenge" class="mb-0" />
+                        <x-input-label value="Pilih Kategori Pelari" class="mb-0" />
                         <span class="text-[10px] text-unerd-volt dark:text-unerd-volt font-mono font-bold uppercase">
                             Leaderboard Terpisah
                         </span>
                     </div>
-                    <div class="grid grid-cols-3 gap-2 mt-1.5">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1.5">
+                        <!-- 1. Women -->
+                        <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
+                            <input type="radio" name="role_slug" value="women" x-model="role" class="sr-only">
+                            <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
+                                Women
+                            </span>
+                            <!-- <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                                Pelari Wanita
+                            </span> -->
+                        </label>
+
+                        <!-- 2. Umum -->
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
                             <input type="radio" name="role_slug" value="umum" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
                                 Umum
                             </span>
-                            <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                            <!-- <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
                                 Individu {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }}
-                            </span>
+                            </span> -->
                         </label>
 
+                        <!-- 3. Community -->
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
                             <input type="radio" name="role_slug" value="komunitas" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
-                                Komunitas
+                                Community
                             </span>
-                            <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                            <!-- <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
                                 Klub / Run Crew
-                            </span>
+                            </span> -->
                         </label>
 
+                        <!-- 4. Pro -->
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
                             <input type="radio" name="role_slug" value="profesional" x-model="role" class="sr-only">
                             <span class="font-display text-xs font-bold text-unerd-ink dark:text-white block">
-                                Profesional
+                                Pro / Atlet
                             </span>
-                            <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
+                            <!-- <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
                                 Atlet / Pro
-                            </span>
+                            </span> -->
                         </label>
                     </div>
 
                     <!-- Dropdown & Add Komunitas (Only visible when role === 'komunitas') -->
-                    <div x-show="role === 'komunitas'" x-transition class="mt-3 p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+                    <div x-show="role === 'komunitas' || role === 'community'" x-transition class="mt-3 p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
                         <x-input-label value="Pilih atau Tambah Komunitas Lari" />
                         <x-community-select :communities="$communities ?? []" :selected-id="old('community_id')" />
                         <p class="text-[10px] text-slate-500 dark:text-zinc-400">

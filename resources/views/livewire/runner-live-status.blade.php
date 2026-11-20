@@ -179,7 +179,7 @@
                 @if ($currentResult->rank_in_period)
                     <div class="flex items-center gap-2">
                         <span class="px-3.5 py-1.5 rounded-xl font-display font-extrabold text-xs uppercase tracking-wider {{ $currentResult->rank_in_period === 1 ? 'bg-unerd-volt text-black font-black' : ($currentResult->rank_in_period <= 3 ? 'bg-amber-400 text-black font-bold' : ($currentResult->rank_in_period <= 10 ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300')) }}">
-                            {{ $currentResult->rank_in_period <= 3 ? 'Juara '.$currentResult->rank_in_period : ($currentResult->rank_in_period <= 10 ? 'Top 10 (Peringkat #'.$currentResult->rank_in_period.')' : 'Peringkat #'.$currentResult->rank_in_period) }}
+                            {{ $currentResult->rank_in_period <= 3 ? 'Juara '.$currentResult->rank_in_period.' ('.$participant?->participant_category.')' : ($currentResult->rank_in_period <= 10 ? 'Top 10 '.$participant?->participant_category.' (Peringkat #'.$currentResult->rank_in_period.')' : 'Peringkat #'.$currentResult->rank_in_period.' '.$participant?->participant_category) }}
                         </span>
                     </div>
                 @endif
@@ -204,11 +204,11 @@
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-center">
-                    <span class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Posisi Klasemen Periode</span>
+                    <span class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Posisi Klasemen Leaderboard</span>
                     <span class="text-3xl font-mono font-black text-slate-900 dark:text-white mt-1 block">
                         #{{ $currentResult->rank_in_period ?? '-' }}
                     </span>
-                    <span class="text-[11px] text-slate-400">{{ $activePeriod?->name }}</span>
+                    <span class="text-[11px] text-slate-400 block truncate">{{ $activePeriod?->name }} • {{ $participant?->participant_category ?? 'Umum' }}</span>
                 </div>
             </div>
 
@@ -248,12 +248,25 @@
                 </div>
             @endif
 
+            <!-- Tombol Cepat Menuju Kartu Hasil Resmi & Detail Lari -->
+            <div class="pt-1 flex flex-col sm:flex-row items-center gap-3">
+                <a href="{{ route('everyday-league.result', $participant?->participant_id) }}"
+                   class="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-xs cursor-pointer">
+                    <span>Buka Detail Hasil Lari & Share</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+                <a href="{{ route('everyday-league.leaderboard') }}"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
+                    <span>Lihat Leaderboard Live</span>
+                </a>
+            </div>
+
             <!-- Info 1 Kesempatan Lari per Periode (No duplicate / No replay button) -->
             <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs text-slate-600 dark:text-zinc-400 flex items-center gap-2">
                 <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <span>Catatan waktu  telah tersimpan di periode ini. Setiap peserta memiliki 1 kesempatan  per periode. Untuk tantangan berikutnya, pantau pembukaan periode baru!</span>
+                <span>Catatan waktu telah tersimpan di periode ini. Setiap peserta memiliki 1 kesempatan per periode. Untuk tantangan berikutnya, pantau pembukaan periode baru!</span>
             </div>
         </div>
     @elseif ($activePeriod)

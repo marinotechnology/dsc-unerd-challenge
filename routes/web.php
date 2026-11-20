@@ -88,8 +88,8 @@ Route::middleware(['auth', 'role:komunitas,b2b-client,admin,administrator'])->pr
     Route::get('/dashboard', [PortalDashboardController::class, 'index'])->name('dashboard');
 });
 
-// Peserta Lari Account Routes (Pelari Umum, Komunitas, Profesional, Customer)
-Route::middleware(['auth', 'role:umum,komunitas,profesional,customer,admin,administrator'])->prefix('customer')->name('customer.')->group(function () {
+// Peserta Lari Account Routes (Pelari Women, Umum, Komunitas, Profesional, Customer)
+Route::middleware(['auth', 'role:women,umum,komunitas,profesional,customer,admin,administrator'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/history', [CustomerDashboardController::class, 'history'])->name('history');
     Route::get('/rewards', [CustomerDashboardController::class, 'rewards'])->name('rewards');

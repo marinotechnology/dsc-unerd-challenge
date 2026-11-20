@@ -61,6 +61,18 @@
 
                 <!-- Right Cluster: Theme Switcher & Auth Buttons -->
                 <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Link unerd.co.id (Clean & Minimalist) -->
+                    <a href="https://unerd.co.id"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white rounded-md hover:bg-slate-100 dark:hover:bg-zinc-800 transition group"
+                       title="Website Resmi unerd.co.id">
+                        <span>unerd.co.id</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 dark:group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </a>
+
                     <x-theme-toggle />
 
                     @auth
@@ -121,6 +133,10 @@
                     </a>
                     <a href="#prizes-rewards" @click="mobileNavOpen = false" class="px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition">
                         Hadiah Juara & Voucher
+                    </a>
+                    <a href="https://unerd.co.id" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-200 flex items-center justify-between">
+                        <span>Website Resmi UNERD</span>
+                        <span class="text-[10px] font-mono text-slate-400">unerd.co.id ↗</span>
                     </a>
                 </nav>
 
@@ -830,7 +846,7 @@
                                         <div>
                                             <span class="font-mono text-[10px] uppercase font-bold text-unerd-muted dark:text-zinc-400">PODIUM 2 & 3</span>
                                             <h4 class="font-display font-extrabold text-sm sm:text-base uppercase text-unerd-ink dark:text-white">
-                                                Hadiah Uang Tunai
+                                                Sepatu UNERD Pilihan Sesuai Ukuran Kaki
                                             </h4>
                                         </div>
                                     </div>
@@ -879,11 +895,11 @@
                             </div>
                             <div class="absolute bottom-5 left-5 right-5 text-white">
                                 <span class="text-xs font-mono text-zinc-300 uppercase block">Finisher & Champion Pride</span>
-                                <h3 class="font-display font-extrabold text-xl uppercase mt-0.5">
-                                    Apresiasi Kemenangan di GBK
+                                <h3 class="font-display font-extrabold text-base sm:text-lg uppercase mt-0.5 leading-snug">
+                                    Dapatkan hadiah sepatu dan sendal recovery untuk pemenang time attack challenge
                                 </h3>
                                 <p class="text-xs text-zinc-300 mt-1">
-                                    Hadiah sepatu UNERD dan voucher langsung dapat diklaim pelari tercepat.
+                                    Hadiah sepatu UNERD, sendal recovery, dan voucher belanja resmi dapat diklaim pelari tercepat.
                                 </p>
                             </div>
                         </div>

@@ -8,10 +8,12 @@ use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 final class ProductManager extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     public string $search = '';
@@ -38,6 +40,11 @@ final class ProductManager extends Component
 
     public string $image = 'images/products/unerd-beat-flow-performance.jpg';
 
+    /**
+     * @var mixed
+     */
+    public $imageFile = null;
+
     public string $shopeeUrl = '';
 
     public bool $isActive = true;
@@ -55,9 +62,21 @@ final class ProductManager extends Component
         'subtitle' => ['nullable', 'string', 'max:255'],
         'description' => ['nullable', 'string'],
         'tag' => ['nullable', 'string', 'max:100'],
-        'image' => ['required', 'string', 'max:255'],
+        'image' => ['nullable', 'string', 'max:255'],
+        'imageFile' => ['nullable', 'image', 'max:5120'],
         'shopeeUrl' => ['nullable', 'string'],
         'isActive' => ['boolean'],
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected array $messages = [
+        'name.required' => 'Nama produk wajib diisi.',
+        'category.required' => 'Kategori produk wajib dipilih.',
+        'retailPrice.required' => 'Harga retail normal wajib diisi.',
+        'imageFile.image' => 'File harus berupa gambar (JPG, PNG, WebP).',
+        'imageFile.max' => 'Ukuran file gambar maksimal 5MB.',
     ];
 
     public function updatingSearch(): void
@@ -73,11 +92,16 @@ final class ProductManager extends Component
     public function openCreateModal(): void
     {
         $this->resetForm();
+        $this->resetErrorBag();
+        $this->resetValidation();
         $this->showModal = true;
     }
 
     public function editProduct(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
         $product = Product::find($id);
         if (! $product) {
             return;
@@ -92,10 +116,10 @@ final class ProductManager extends Component
         $this->discountedPrice = $product->discounted_price;
         $this->tag = $product->tag ?? '';
         $this->image = $product->image;
+        $this->imageFile = null;
         $this->shopeeUrl = $product->shopee_url ?? '';
         $this->isActive = $product->is_active;
 
-        $this->resetValidation();
         $this->showModal = true;
     }
 
@@ -116,8 +140,10 @@ final class ProductManager extends Component
         $this->discountedPrice = 405000;
         $this->tag = 'PERFORMANCE';
         $this->image = 'images/products/unerd-beat-flow-performance.jpg';
+        $this->imageFile = null;
         $this->shopeeUrl = '';
         $this->isActive = true;
+        $this->resetErrorBag();
         $this->resetValidation();
     }
 
@@ -138,6 +164,13 @@ final class ProductManager extends Component
             'Women' => 'blaze',
             default => 'volt',
         };
+
+        if ($this->imageFile) {
+            $stored = $this->imageFile->store('products', 'public');
+            $this->image = '/storage/'.$stored;
+        } elseif (empty($this->image)) {
+            $this->image = 'images/products/unerd-beat-flow-performance.jpg';
+        }
 
         if ($this->editingProductId) {
             $product = Product::find($this->editingProductId);
@@ -185,6 +218,8 @@ final class ProductManager extends Component
 
     public function toggleStatus(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
         $product = Product::find($id);
         if ($product) {
             $product->update(['is_active' => ! $product->is_active]);
@@ -195,6 +230,8 @@ final class ProductManager extends Component
 
     public function deleteProduct(int $id): void
     {
+        $this->resetErrorBag();
+        $this->resetValidation();
         $product = Product::find($id);
         if ($product) {
             $name = $product->name;

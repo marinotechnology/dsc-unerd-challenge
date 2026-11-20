@@ -578,7 +578,7 @@
                                 APRESIASI PELARI
                             </span> -->
                             <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-unerd-ink dark:text-white">
-                                This week winners get exiting shoes from UNERD!
+                                Dapatkan hadiah sepatu dan sendal recovery untuk pemenang time attack challenge
                             </h2>
                             <!-- <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-2">
                                 Catat waktu terbaikmu di lintasan dan menangkan sepatu UNERD, sendal recovery, serta voucher diskon.
@@ -646,34 +646,19 @@
                         </div>
                     </div>
 
-                    <!-- Right: Two Photos (gallery-7.jpg & gallery-1.jpg) -->
-                    <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-7.jpg') }}" alt="Podium Juara" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="absolute top-3 left-3">
-                                <span class="px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-[10px] uppercase">
-                                    PODIUM JUARA
-                                </span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <h4 class="font-display font-bold text-sm uppercase">Apresiasi Kemenangan</h4>
-                                <span class="text-[11px] text-zinc-300">Hadiah sepatu UNERD & voucher diskon</span>
-                            </div>
+                    <!-- Right: Single Photo (gallery-7.jpg) -->
+                    <div class="lg:col-span-5 group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xl h-80 sm:h-[450px]">
+                        <img src="{{ asset('images/gallery/gallery-7.jpg') }}" alt="Podium Juara Hadiah Sepatu UNERD" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-black/60"></div>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 rounded-full bg-unerd-volt text-unerd-ink font-mono font-bold text-xs uppercase tracking-wider">
+                                PODIUM JUARA
+                            </span>
                         </div>
-
-                        <div class="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-md h-72 sm:h-96">
-                            <img src="{{ asset('images/gallery/gallery-1.jpg') }}" alt="Solidaritas Finisher" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="absolute top-3 left-3">
-                                <span class="px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white border border-white/20 font-mono font-bold text-[10px] uppercase">
-                                    FINISHER VIBE
-                                </span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <h4 class="font-display font-bold text-sm uppercase">Semangat Komunitas</h4>
-                                <span class="text-[11px] text-zinc-300">Merayakan pencapaian personal record di lintasan lari</span>
-                            </div>
+                        <div class="absolute bottom-5 left-5 right-5 text-white">
+                            <h3 class="font-display font-extrabold text-base sm:text-xl uppercase leading-snug">
+                                Dapatkan hadiah sepatu dan sendal recovery untuk pemenang time attack challenge
+                            </h3>
                         </div>
                     </div>
                 </div>

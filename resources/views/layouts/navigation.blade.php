@@ -83,6 +83,18 @@
 
             <!-- Right Profile, Dark Mode Toggle & Role Badge Cluster -->
             <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Link Website Resmi unerd.co.id (Clean & Minimalist) -->
+                <a href="https://unerd.co.id"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white rounded-md hover:bg-slate-100 dark:hover:bg-zinc-800 transition group"
+                   title="Kunjungi Website Resmi unerd.co.id">
+                    <span>unerd.co.id</span>
+                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 dark:group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                </a>
+
                 <!-- Theme Toggle Button (Light / Dark) -->
                 <x-theme-toggle />
 
@@ -201,6 +213,10 @@
         @endif
 
         <div class="pt-3 border-t border-unerd-hairline dark:border-zinc-800 space-y-1">
+            <a href="https://unerd.co.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 text-sm font-bold text-slate-700 dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md">
+                <span>Website Resmi UNERD</span>
+                <span class="text-xs font-mono text-slate-400">unerd.co.id ↗</span>
+            </a>
             <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-sm text-unerd-body dark:text-zinc-300 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md">Profil Akun</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
