@@ -44,6 +44,19 @@
                 <x-theme-toggle />
             </div>
 
+            @if (request('join_challenge') || ($joinChallenge ?? false))
+                <div class="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-unerd-surface-card dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 text-xs shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-unerd-volt shrink-0 animate-pulse"></span>
+                    <span class="font-display font-extrabold text-[11px] uppercase tracking-wider text-unerd-ink dark:text-white">
+                        Join Challenge
+                    </span>
+                    <!-- <span class="text-unerd-muted dark:text-zinc-600 font-mono text-[10px]">&bull;</span> -->
+                    <!-- <span class="text-unerd-body dark:text-zinc-300 text-[11px]">
+                        Masuk untuk lanjut ke pendaftaran event
+                    </span> -->
+                </div>
+            @endif
+
             <div class="mb-6">
                 <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-unerd-ink dark:text-white">
                     Masuk ke UNERD MOVE
@@ -74,6 +87,9 @@
             <!-- Clean Mobile-First Form -->
             <form method="POST" action="{{ route('login') }}" class="space-y-4">
                 @csrf
+                @if (request('join_challenge') || ($joinChallenge ?? false))
+                    <input type="hidden" name="join_challenge" value="1">
+                @endif
 
                 <!-- Email Address -->
                 <div>
@@ -130,7 +146,7 @@
             <!-- Register Link -->
             <div class="mt-6 text-center text-xs text-unerd-body dark:text-zinc-400">
                 Belum mendaftar UNERD MOVE?
-                <a href="{{ route('register') }}" class="font-bold text-unerd-ink dark:text-white hover:underline ms-1">
+                <a href="{{ route('register', ['join_challenge' => 1]) }}" class="font-bold text-unerd-ink dark:text-white hover:underline ms-1">
                     Daftar Peserta Baru
                 </a>
             </div>

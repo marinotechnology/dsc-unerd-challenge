@@ -1,9 +1,10 @@
 <div wire:poll.2s class="py-6 sm:py-10">
-    <div class="max-w-xl mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6">
         @php
             $isRunning = $currentResult && $currentResult->isRunning();
             $isFinished = $currentResult && $currentResult->isFinished();
             $isCheckedIn = $currentResult && ($isRunning || $isFinished || $currentResult->checkin_status === 'CHECKED_IN');
+            $mapsPhoto = $period?->banner_image ? asset(ltrim($period->banner_image, '/')) : asset('images/gallery/gallery-2.jpg');
         @endphp
 
         @if ($isRunning)
@@ -20,9 +21,6 @@
                 <h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tight font-display">
                     Silakan Mulai Lari!
                 </h1>
-                <!-- <p class="text-xs sm:text-sm text-slate-600 dark:text-zinc-300 mt-2 max-w-md mx-auto leading-relaxed">
-                    Petugas telah mengaktifkan sesimu di lintasan <strong class="text-slate-900 dark:text-white">{{ $distance }}</strong>. Pacu ritme terbaikmu dan petugas di garis finish siap mencatat waktu stopwatch resmimu!
-                </p> -->
             </div>
         @elseif ($isFinished)
             <!-- TAMPILAN FINISH: SELESAI LARI -->
@@ -36,7 +34,7 @@
                     Selamat, Kamu Telah Finish!
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1">
-                    Waktu lari resmi telah dicatat. Buka kartu hasilmu untuk melihat rekor dan hadiahmu!
+                    Waktu lari resmi telah dicatat oleh panitia. Buka kartu hasilmu untuk melihat rekor dan hadiahmu!
                 </p>
             </div>
         @else
@@ -50,22 +48,18 @@
                 <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight font-display">
                     Registrasi Berhasil!
                 </h1>
-                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+                <!-- <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                     ID Pelarimu telah diterbitkan untuk gelaran UNERD Move Series di {{ $venueLocation }}.
-                </p>
+                </p> -->
             </div>
         @endif
 
-        <!-- Digital  / Runner Card (High-Impact Design) -->
+        <!-- Digital Runner Card (High-Impact Design) -->
         <div class="relative bg-zinc-950 rounded-3xl border-2 {{ $isRunning ? 'border-rose-500 dark:border-unerd-volt' : 'border-slate-800 dark:border-unerd-volt/40' }} p-6 sm:p-8 shadow-2xl text-white overflow-hidden mb-6">
-            @if ($period?->banner_image)
-                <div class="absolute inset-0 opacity-15 bg-cover bg-center pointer-events-none" style="background-image: url('{{ $period->banner_image }}');"></div>
-            @endif
-
-            <!-- Decorative Graphic -->
-            <div class="absolute right-4 top-4 opacity-10 font-black text-7xl select-none">
-                RUN
-            </div>
+            <!-- Subtle Logo Watermark (Polos Bersih Tanpa Foto Background) -->
+            <img src="{{ asset('images/logos/master-dark.png') }}"
+                 alt="UNERD Watermark"
+                 class="absolute right-4 top-1/2 -translate-y-1/2 h-20 sm:h-28 opacity-[0.06] pointer-events-none select-none filter grayscale contrast-200" />
 
             <!-- Top Row: Logos & Status -->
             <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6 relative z-10">
@@ -80,7 +74,7 @@
                 </span>
             </div>
 
-            <!-- Big Participant ID ( Number) -->
+            <!-- Big Participant ID -->
             <div class="text-center py-4 my-2 relative z-10">
                 <span class="text-[11px] uppercase tracking-widest font-mono text-slate-400">
                     OFFICIAL RUNNER ID
@@ -89,7 +83,7 @@
                     {{ $participant->participant_id }}
                 </div>
                 <p class="text-[11px] text-slate-400 mt-1">
-                    {{ $isRunning ? 'Sebutkan ID ini kepada kru pencatat waktu saat menyentuh garis finish' : 'Tunjukkan kode ini kepada petugas UNERD di titik check-in venue' }}
+                    {{ $isRunning ? 'Sebutkan ID ini kepada panitia pencatat waktu saat menyentuh garis finish' : 'Tunjukkan kode ini kepada panitia UNERD di booth' }}
                 </p>
             </div>
 
@@ -111,7 +105,7 @@
                 </div>
 
                 <div>
-                    <span class="block text-[10px] uppercase tracking-wider text-slate-400">Lokasi Venue</span>
+                    <span class="block text-[10px] uppercase tracking-wider text-slate-400">Lokasi Booth</span>
                     <span class="font-bold text-white text-sm truncate block">
                         {{ $venueLocation }}
                     </span>
@@ -120,7 +114,7 @@
 
             <!-- Bottom Status Pill -->
             <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
-                <span>Status Lari:</span>
+                <span>Status:</span>
                 @if ($isRunning)
                     <span class="inline-flex items-center gap-1.5 font-bold text-rose-400 dark:text-unerd-volt">
                         <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
@@ -134,30 +128,30 @@
                 @elseif ($isCheckedIn)
                     <span class="inline-flex items-center gap-1 font-bold text-emerald-400">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Checked-In di Venue
+                        Checked-In di Booth
                     </span>
                 @else
                     <span class="inline-flex items-center gap-1 font-bold text-amber-300">
                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                        Menunggu di Venue
+                        Perlu ke lokasi booth
                     </span>
                 @endif
             </div>
         </div>
 
-        <!-- Guidance Card -->
-        <div class="bg-white dark:bg-[#181818] rounded-2xl border border-slate-200 dark:border-zinc-800 p-6 shadow-sm mb-6">
+        <!-- Guidance Card (Wording Panitia & Booth) -->
+        <div class="bg-white dark:bg-[#181818] rounded-2xl border border-slate-200 dark:border-zinc-800 p-5 sm:p-6 shadow-sm mb-6">
             <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white mb-4 flex items-center gap-2 font-display">
                 <svg class="w-4 h-4 text-slate-900 dark:text-unerd-volt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Panduan Pelari di Venue ({{ $venueLocation }})
+                Panduan Challenger di Booth ({{ $venueLocation }})
             </h2>
 
             <ol class="space-y-3.5 text-xs text-slate-600 dark:text-zinc-300">
                 <li class="flex items-start gap-3">
                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">1</span>
-                    <span><strong>Kunjungi Booth Aktivasi UNERD</strong> di lokasi venue <strong>{{ $venueLocation }}</strong> dan tunjukkan <strong>ID {{ $participant->participant_id }}</strong> kepada petugas.</span>
+                    <span><strong>Kunjungi Booth UNERD</strong> di lokasi <strong>{{ $venueLocation }}</strong> dan tunjukkan <strong>ID {{ $participant->participant_id }}</strong> kepada panitia.</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">2</span>
@@ -165,13 +159,82 @@
                 </li>
                 <li class="flex items-start gap-3">
                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">3</span>
-                    <span><strong>Mulai Lari {{ $distance }}:</strong> Berlari di lintasan {{ $distance }} sesuai instruksi petugas. Petugas akan mencatat catatan waktumu menggunakan stopwatch resmi.</span>
+                    <span><strong>Mulai Lari {{ $distance }}:</strong> Berlari di lintasan {{ $distance }} sesuai instruksi panitia. Panitia akan mencatat catatan waktumu menggunakan stopwatch. Gunakan strava sebagai pelacak rute lari anda, akan ditunjukan kepanitia di akhir sesi lari.</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold flex items-center justify-center text-[10px]">4</span>
-                    <span><strong>Cek Hasil & Leaderboard:</strong> Segera setelah finish, cek hasil hingga selesai dan raih hadiah podium serta voucher belanja eksklusif!</span>
+                    <span><strong>Cek Hasil & Leaderboard:</strong> Segera setelah finish, cek hasil lari dan raih hadiah podium serta voucher diskon belanja 10%!</span>
                 </li>
             </ol>
+        </div>
+
+        <!-- PETA & TITIK LOKASI BOOTH LINTASAN (1-PAGE TERINTEGRASI) -->
+        <div class="bg-white dark:bg-[#181818] rounded-2xl border border-slate-200 dark:border-zinc-800 p-5 sm:p-6 shadow-sm mb-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white font-display">
+                        Titik lokasi booth
+                    </h2>
+                </div>
+                <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300">
+                    {{ $period?->cleanName() ?? 'Event Aktif' }}
+                </span>
+            </div>
+
+            <!-- Foto Maps / Denah Lokasi Booth -->
+            <a href="{{ $mapsPhoto }}" target="_blank" class="group relative block overflow-hidden rounded-xl bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-48 sm:h-64 shadow-xs">
+                <img src="{{ $mapsPhoto }}"
+                     alt="Denah Lokasi Booth {{ $venueLocation }}"
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+
+                <div class="absolute bottom-3 right-3">
+                    <span class="px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-xs text-white text-[11px] font-mono font-bold border border-white/20 group-hover:border-unerd-volt transition flex items-center gap-1.5">
+                        <span>Perbesar peta</span>
+                        <span>↗</span>
+                    </span>
+                </div>
+            </a>
+
+            <!-- 4 Clean Fast Facts Boxes -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
+                    <div class="text-[9px] font-mono text-slate-400 font-bold uppercase">JARAK</div>
+                    <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5">
+                        {{ $distance }}
+                    </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
+                    <div class="text-[9px] font-mono text-slate-400 font-bold uppercase">LOKASI BOOTH</div>
+                    <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5 truncate">
+                        {{ explode(',', $venueLocation)[0] }}
+                    </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
+                    <div class="text-[9px] font-mono text-slate-400 font-bold uppercase">TANGGAL</div>
+                    <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5">
+                        {{ $period?->event_date ? $period->event_date->format('d/m/Y') : '-' }}
+                    </div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
+                    <div class="text-[9px] font-mono text-slate-400 font-bold uppercase">WAKTU (WIB)</div>
+                    <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5 truncate">
+                        {{ $period?->formattedTimeRange() ?? '06:00 - 09:00 WIB' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Petunjuk Konfirmasi di Booth -->
+            <!-- <div class="p-3 rounded-xl bg-slate-50 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 text-xs text-slate-600 dark:text-zinc-300 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-base">📍</span>
+                    <span>Tunjukkan ID <strong class="font-mono text-slate-900 dark:text-white">{{ $participant->participant_id }}</strong> kepada panitia di booth untuk aktivasi start.</span>
+                </div>
+                <a href="{{ $mapsPhoto }}" target="_blank" class="shrink-0 text-xs font-bold text-unerd-volt-dark dark:text-unerd-volt hover:underline">
+                    Perbesar Peta ↗
+                </a>
+            </div> -->
         </div>
 
         <!-- Action Buttons: When Running or Finished, show "Lihat Hasil", otherwise only show the 2 navigation buttons -->

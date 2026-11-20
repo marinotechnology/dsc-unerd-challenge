@@ -202,7 +202,7 @@
             <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.01]">
                 <div>
                     <h2 class="text-sm font-black uppercase tracking-tight text-slate-900 dark:text-white font-display">
-                        Klasemen Rata-Rata Komunitas (3 KM)
+                        Klasemen Rata-Rata Komunitas ({{ $currentPeriod ? $currentPeriod->formattedDistance() : '3 KM' }})
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         Dihitung dari rata-rata waktu 3 pelari tercepat per komunitas (min. 3 finisher).
@@ -223,7 +223,7 @@
                                 <th class="py-3 px-4">Nama Komunitas</th>
                                 <th class="py-3 px-4 hidden sm:table-cell">Kota Basis</th>
                                 <th class="py-3 px-4 text-center">Finisher</th>
-                                <th class="py-3 px-4 text-right">Rata-Rata Waktu (3 KM)</th>
+                                <th class="py-3 px-4 text-right">Rata-Rata Waktu ({{ $currentPeriod ? $currentPeriod->formattedDistance() : '3 KM' }})</th>
                                 <th class="py-3 px-4 text-right hidden sm:table-cell">Pace Rata-Rata</th>
                             </tr>
                         </thead>
@@ -284,7 +284,7 @@
                                 <th class="py-3 px-4">Nama Pelari</th>
                                 <th class="py-3 px-4 hidden sm:table-cell">Kategori</th>
                                 <th class="py-3 px-4 hidden md:table-cell">Komunitas</th>
-                                <th class="py-3 px-4 text-right">Waktu 3 KM</th>
+                                <th class="py-3 px-4 text-right">Waktu ({{ $currentPeriod ? $currentPeriod->formattedDistance() : '3 KM' }})</th>
                                 <th class="py-3 px-4 text-right hidden sm:table-cell">Pace</th>
                                 <th class="py-3 px-4 text-center w-28">Detail & Share</th>
                             </tr>

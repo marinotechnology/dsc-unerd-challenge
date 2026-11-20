@@ -95,12 +95,12 @@
                                 Time Attack Challenge
                             </h3>
                             <p class="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed">
-                                {{ $activeChallenge->description ?? 'Time attack sprint 3 KM di lintasan resmi. Catat waktu stopwatch terbaikmu dan bawa namamu ke puncak leaderboard.' }}
+                                Time attack sprint {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }} di lintasan resmi. Catat waktu stopwatch terbaikmu dan bawa namamu ke puncak leaderboard.
                             </p>
                         </div>
 
                         <!-- Real Challenge Specs Grid -->
-                        <div class="grid grid-cols-3 gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-zinc-800 text-xs">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-zinc-800 text-xs">
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Jarak Lintasan</span>
                                 <span class="font-bold text-slate-900 dark:text-white font-mono mt-0.5 block">
@@ -114,9 +114,15 @@
                                 </span>
                             </div>
                             <div>
-                                <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Format</span>
-                                <span class="font-bold text-emerald-600 dark:text-unerd-volt mt-0.5 block">
-                                    Time Attack
+                                <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Tanggal Event</span>
+                                <span class="font-bold text-slate-900 dark:text-white mt-0.5 block">
+                                    {{ $activePeriod?->event_date ? $activePeriod->event_date->format('d/m/Y') : '-' }}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-[10px] uppercase font-mono font-bold">Waktu (WIB)</span>
+                                <span class="font-bold text-emerald-600 dark:text-unerd-volt mt-0.5 block font-mono">
+                                    {{ $activePeriod ? $activePeriod->formattedTimeRange() : '06:00 - 09:00 WIB' }}
                                 </span>
                             </div>
                         </div>

@@ -31,6 +31,7 @@ class ChallengePeriod extends Model
         'banner_image',
         'period_code',
         'event_date',
+        'start_time',
         'end_time',
         'is_active',
         'is_open_for_registration',
@@ -46,7 +47,6 @@ class ChallengePeriod extends Model
             'distance_meter' => 'integer',
             'duration_minutes' => 'integer',
             'event_date' => 'date',
-            'end_time' => 'datetime',
             'is_active' => 'boolean',
             'is_open_for_registration' => 'boolean',
             'prizes_config' => 'array',
@@ -65,18 +65,63 @@ class ChallengePeriod extends Model
     }
 
     /**
-     * Check if challenge period is expired based on end_time or duration
+     * Get clean start time formatted with WIB (e.g. "06:00 WIB")
+     */
+    public function formattedStartTime(): string
+    {
+        $time = $this->start_time ? substr((string) $this->start_time, 0, 5) : '06:00';
+
+        return $time.' WIB';
+    }
+
+    /**
+     * Get clean end time formatted with WIB (e.g. "09:00 WIB")
+     */
+    public function formattedEndTime(): string
+    {
+        $raw = (string) $this->end_time;
+        if (preg_match('/(\d{2}:\d{2})/', $raw, $matches)) {
+            $time = $matches[1];
+        } else {
+            $time = '09:00';
+        }
+
+        return $time.' WIB';
+    }
+
+    /**
+     * Get combined start & end time formatted with WIB (e.g. "06:00 - 09:00 WIB")
+     */
+    public function formattedTimeRange(): string
+    {
+        $start = $this->start_time ? substr((string) $this->start_time, 0, 5) : '06:00';
+        $raw = (string) $this->end_time;
+        if (preg_match('/(\d{2}:\d{2})/', $raw, $matches)) {
+            $end = $matches[1];
+        } else {
+            $end = '09:00';
+        }
+
+        return "{$start} - {$end} WIB";
+    }
+
+    /**
+     * Check if challenge period is expired based on event_date and end_time
      */
     public function isExpired(): bool
     {
-        if ($this->end_time && now()->greaterThan($this->end_time)) {
-            return true;
-        }
-
-        if ($this->event_date && $this->duration_minutes) {
-            $eventDayEnd = $this->event_date->clone()->endOfDay();
-            if (now()->greaterThan($eventDayEnd)) {
-                return true;
+        if ($this->event_date) {
+            $rawEnd = (string) $this->end_time;
+            if (preg_match('/(\d{2}):(\d{2})/', $rawEnd, $matches)) {
+                $periodEnd = $this->event_date->clone()->setTime((int) $matches[1], (int) $matches[2]);
+                if (now()->greaterThan($periodEnd)) {
+                    return true;
+                }
+            } else {
+                $eventDayEnd = $this->event_date->clone()->endOfDay();
+                if (now()->greaterThan($eventDayEnd)) {
+                    return true;
+                }
             }
         }
 

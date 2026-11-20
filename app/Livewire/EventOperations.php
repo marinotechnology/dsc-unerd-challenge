@@ -99,6 +99,10 @@ class EventOperations extends Component
 
     public ?int $periodFormDuration = 60;
 
+    public string $periodFormStartTime = '06:00';
+
+    public string $periodFormEndTime = '09:00';
+
     public string $periodFormImage = '';
 
     /**
@@ -450,6 +454,8 @@ class EventOperations extends Component
         $this->periodFormLocation = 'Gelora Bung Karno, Jakarta';
         $this->periodFormDistance = 3000;
         $this->periodFormDuration = 60;
+        $this->periodFormStartTime = '06:00';
+        $this->periodFormEndTime = '09:00';
         $this->periodFormImage = '';
         $this->periodFormImageFile = null;
         $this->periodFormDate = now()->format('Y-m-d');
@@ -461,6 +467,8 @@ class EventOperations extends Component
             'periodFormLocation',
             'periodFormDistance',
             'periodFormDuration',
+            'periodFormStartTime',
+            'periodFormEndTime',
             'periodFormImage',
             'periodFormImageFile',
             'periodFormDate',
@@ -480,6 +488,13 @@ class EventOperations extends Component
         $this->periodFormLocation = $period->location ?? 'Gelora Bung Karno, Jakarta';
         $this->periodFormDistance = (int) ($period->distance_meter ?: 3000);
         $this->periodFormDuration = $period->duration_minutes ? (int) $period->duration_minutes : 60;
+        $this->periodFormStartTime = $period->start_time ? substr((string) $period->start_time, 0, 5) : '06:00';
+        $rawEnd = (string) $period->end_time;
+        if (preg_match('/(\d{2}:\d{2})/', $rawEnd, $m)) {
+            $this->periodFormEndTime = $m[1];
+        } else {
+            $this->periodFormEndTime = '09:00';
+        }
         $this->periodFormImage = $period->banner_image ?? '';
         $this->periodFormImageFile = null;
         $this->periodFormDate = $period->event_date?->format('Y-m-d') ?? now()->format('Y-m-d');
@@ -495,17 +510,30 @@ class EventOperations extends Component
             'periodFormCode' => ['required', 'string', 'max:100'],
             'periodFormLocation' => ['nullable', 'string', 'max:255'],
             'periodFormDistance' => ['required', 'integer', 'min:100'],
-            'periodFormDuration' => ['nullable', 'integer', 'min:1'],
+            'periodFormStartTime' => ['required', 'string', 'max:10'],
+            'periodFormEndTime' => ['required', 'string', 'max:10'],
             'periodFormImageFile' => ['nullable', 'image', 'max:5120'],
             'periodFormDate' => ['required', 'date'],
         ], [
             'periodFormName.required' => 'Nama periode wajib diisi.',
             'periodFormCode.required' => 'Kode periode wajib diisi.',
             'periodFormDistance.required' => 'Jarak lintasan wajib diisi.',
+            'periodFormStartTime.required' => 'Jam mulai event wajib diisi.',
+            'periodFormEndTime.required' => 'Jam selesai event wajib diisi.',
             'periodFormDate.required' => 'Tanggal event wajib diisi.',
             'periodFormImageFile.image' => 'File harus berupa gambar.',
             'periodFormImageFile.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
+
+        $startMinutes = 360;
+        if (preg_match('/^(\d{1,2}):(\d{2})/', $this->periodFormStartTime, $sm)) {
+            $startMinutes = ((int) $sm[1] * 60) + (int) $sm[2];
+        }
+        $endMinutes = 540;
+        if (preg_match('/^(\d{1,2}):(\d{2})/', $this->periodFormEndTime, $em)) {
+            $endMinutes = ((int) $em[1] * 60) + (int) $em[2];
+        }
+        $calculatedDuration = max(1, $endMinutes - $startMinutes);
 
         $imagePath = $this->periodFormImage ?: null;
         if ($this->periodFormImageFile) {
@@ -529,7 +557,9 @@ class EventOperations extends Component
                     'period_code' => $this->periodFormCode,
                     'location' => $this->periodFormLocation ?: 'Gelora Bung Karno, Jakarta',
                     'distance_meter' => $this->periodFormDistance,
-                    'duration_minutes' => $this->periodFormDuration,
+                    'duration_minutes' => $calculatedDuration,
+                    'start_time' => $this->periodFormStartTime,
+                    'end_time' => $this->periodFormEndTime,
                     'banner_image' => $imagePath,
                     'event_date' => $this->periodFormDate,
                     'is_active' => $this->periodFormIsActive,
@@ -547,7 +577,9 @@ class EventOperations extends Component
                 'period_code' => $this->periodFormCode,
                 'location' => $this->periodFormLocation ?: 'Gelora Bung Karno, Jakarta',
                 'distance_meter' => $this->periodFormDistance,
-                'duration_minutes' => $this->periodFormDuration,
+                'duration_minutes' => $calculatedDuration,
+                'start_time' => $this->periodFormStartTime,
+                'end_time' => $this->periodFormEndTime,
                 'banner_image' => $imagePath,
                 'event_date' => $this->periodFormDate,
                 'is_active' => $this->periodFormIsActive,

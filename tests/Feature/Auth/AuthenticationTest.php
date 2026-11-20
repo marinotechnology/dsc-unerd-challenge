@@ -31,6 +31,19 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('users can authenticate with join_challenge and redirect to challenge register screen', function () {
+    $user = User::factory()->create();
+
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'join_challenge' => 1,
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('everyday-league.register'));
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

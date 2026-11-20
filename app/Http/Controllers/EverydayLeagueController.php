@@ -370,6 +370,7 @@ class EverydayLeagueController extends Controller
         return view('everyday-league.result', [
             'participant' => $participant,
             'result' => $result,
+            'activePeriod' => $result?->period ?? ChallengePeriod::where('is_active', true)->first(),
             'overallRank' => $overallRank,
             'rank' => $overallRank ?? 1,
             'prize' => $prize,

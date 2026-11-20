@@ -54,6 +54,13 @@
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('customer.dashboard') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
                             Hub Pelari
                         </a>
+                        @if (Auth::user()->participant)
+                            <a href="{{ route('everyday-league.success', Auth::user()->participant->participant_id) }}"
+                               class="px-3 py-1.5 text-xs font-black uppercase tracking-[1px] rounded-md transition flex items-center gap-1.5 {{ request()->is('everyday-league/success*') ? 'bg-unerd-volt text-unerd-ink' : 'text-unerd-ink dark:text-unerd-volt hover:bg-unerd-volt/15 border border-unerd-volt/40' }}">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Tiket Lari ({{ Auth::user()->participant->participant_id }})</span>
+                            </a>
+                        @endif
                         <a href="{{ route('customer.history') }}"
                            class="px-3 py-1.5 text-xs font-bold uppercase tracking-[1px] rounded-md transition {{ request()->routeIs('customer.history') ? 'bg-unerd-black text-white dark:bg-white dark:text-unerd-black' : 'text-unerd-body dark:text-zinc-300 hover:text-unerd-ink dark:hover:text-white hover:bg-unerd-surface-card dark:hover:bg-zinc-800' }}">
                             Riwayat Lari
@@ -113,6 +120,14 @@
                                 <div class="text-[11px] text-unerd-muted font-mono truncate">{{ Auth::user()->email }}</div>
                             </div>
 
+                            @if (Auth::user()->participant)
+                                <x-dropdown-link :href="route('everyday-league.success', Auth::user()->participant->participant_id)" class="font-bold text-unerd-ink dark:text-unerd-volt flex items-center justify-between">
+                                    <span>Tiket Lari Saya</span>
+                                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-unerd-volt/20 text-unerd-ink dark:text-unerd-volt font-black">{{ Auth::user()->participant->participant_id }}</span>
+                                </x-dropdown-link>
+                                <div class="border-t border-unerd-hairline dark:border-zinc-800"></div>
+                            @endif
+
                             <x-dropdown-link :href="route('profile.edit')">
                                 Profil Akun
                             </x-dropdown-link>
@@ -169,6 +184,15 @@
         @elseif (Auth::user()->isB2bClient())
             <a href="{{ route('portal.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md bg-unerd-surface-card dark:bg-zinc-800 dark:text-white">Komunitas & Partner</a>
         @else
+            @if (Auth::user()->participant)
+                <a href="{{ route('everyday-league.success', Auth::user()->participant->participant_id) }}" class="flex items-center justify-between px-3 py-2 text-sm font-black rounded-md bg-unerd-volt text-unerd-ink shadow-xs">
+                    <span class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-black animate-ping"></span>
+                        <span>Tiket & ID Pelari</span>
+                    </span>
+                    <span class="font-mono text-xs">{{ Auth::user()->participant->participant_id }} &rarr;</span>
+                </a>
+            @endif
             <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.dashboard') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Hub Pelari (Tantangan Aktif)</a>
             <a href="{{ route('customer.history') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.history') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Riwayat Lari & Rekor</a>
             <a href="{{ route('customer.rewards') }}" class="block px-3 py-2 text-sm font-bold rounded-md {{ request()->routeIs('customer.rewards') ? 'bg-unerd-surface-card dark:bg-zinc-800 dark:text-white' : 'hover:bg-unerd-surface-card dark:hover:bg-zinc-800 dark:text-zinc-200' }}">Voucher & Hadiah Sepatu</a>

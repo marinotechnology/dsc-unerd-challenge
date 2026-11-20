@@ -14,9 +14,11 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.login');
+        return view('auth.login', [
+            'joinChallenge' => $request->boolean('join_challenge'),
+        ]);
     }
 
     /**
@@ -27,6 +29,10 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if ($request->boolean('join_challenge')) {
+            return redirect()->intended(route('everyday-league.register'));
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

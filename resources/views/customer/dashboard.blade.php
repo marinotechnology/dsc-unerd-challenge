@@ -27,8 +27,8 @@
                         {{ $activePeriod->location ?? 'Gelora Bung Karno, Jakarta' }}
                     </h3>
 
-                    <!-- Fast Facts: 3 Clean Grid Boxes like Homepage -->
-                    <div class="grid grid-cols-3 gap-2 pt-1">
+                    <!-- Fast Facts: 4 Clean Grid Boxes like Homepage -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                         <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
                             <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 font-bold uppercase">JARAK</div>
                             <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5">
@@ -44,7 +44,13 @@
                         <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
                             <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 font-bold uppercase">TANGGAL</div>
                             <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5">
-                                {{ $activePeriod->event_date ? $activePeriod->event_date->format('d/m/Y') : '19/11/2026' }}
+                                {{ $activePeriod->event_date ? $activePeriod->event_date->format('d/m/Y') : '20/11/2026' }}
+                            </div>
+                        </div>
+                        <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800">
+                            <div class="text-[9px] sm:text-[10px] font-mono text-slate-400 font-bold uppercase">WAKTU (WIB)</div>
+                            <div class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase mt-0.5 truncate">
+                                {{ $activePeriod->formattedTimeRange() }}
                             </div>
                         </div>
                     </div>

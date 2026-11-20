@@ -16,6 +16,10 @@
             </div>
 
             <div class="my-auto py-10 relative z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-unerd-volt/20 text-unerd-volt border border-unerd-volt/40 text-[11px] font-mono font-bold uppercase tracking-wider mb-4">
+                    <span class="w-2 h-2 rounded-full bg-unerd-volt animate-ping"></span>
+                    <span>1-Step Registration & Challenge Pass</span>
+                </div>
                 <h1 class="font-display text-4xl lg:text-6xl font-extrabold tracking-[-2px] leading-[0.98] text-white uppercase">
                     RUN. RECORD. <br>
                     <span class="text-unerd-volt">COMPETE.</span>
@@ -23,6 +27,22 @@
                 <p class="text-xs uppercase tracking-[3px] font-bold text-zinc-300 font-mono mt-4">
                     GBK JAKARTA • TIME ATTACK CHALLENGE
                 </p>
+
+                <!-- 1-Step Benefit Bullets on Desktop -->
+                <div class="mt-8 space-y-2.5 pt-6 border-t border-white/10 text-xs text-zinc-300">
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-full bg-unerd-volt text-black flex items-center justify-center font-bold text-[10px]">✓</span>
+                        <span>Akun Pelari & Profil Ukuran Sepatu</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-full bg-unerd-volt text-black flex items-center justify-center font-bold text-[10px]">✓</span>
+                        <span>Otomatis Terdaftar di Time Attack Challenge GBK</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-full bg-unerd-volt text-black flex items-center justify-center font-bold text-[10px]">✓</span>
+                        <span>Terbit Nomor ID Pelari (UMS ID) untuk Booth Start</span>
+                    </div>
+                </div>
             </div>
 
             <div class="relative z-10 pt-6 border-t border-white/10 text-xs text-zinc-400">
@@ -40,12 +60,70 @@
                 <x-theme-toggle />
             </div>
 
-            <div class="mb-6">
+            @if ($activePeriod ?? null)
+                <!-- Kartu Prominen Challenge Pass (Penanda Jelas Otomatis Join Challenge) -->
+                <div class="mb-6 rounded-2xl bg-zinc-950 text-white border-2 border-unerd-volt shadow-xl overflow-hidden relative">
+                    <!-- Accent Volt Top Header Strip -->
+                    <div class="bg-unerd-volt px-4 py-2 flex items-center justify-between text-black">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-black animate-ping"></span>
+                            <span class="font-display font-black text-xs uppercase tracking-wider">
+                                Join Challenge
+                            </span>
+                        </div>
+                        <!-- <span class="px-2 py-0.5 rounded bg-black text-unerd-volt text-[10px] font-mono font-black uppercase tracking-wider">
+                            Join Challenge
+                        </span> -->
+                    </div>
+
+                    <!-- Inner Card Details -->
+                    <div class="p-4 sm:p-5 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+                            <div>
+                                <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-unerd-volt">
+                                    
+                                </div>
+                                <h3 class="font-display font-black text-base sm:text-lg uppercase text-white mt-0.5">
+                                    {{ $activePeriod->cleanName() }}
+                                </h3>
+                            </div>
+                            <div class="inline-flex items-center gap-1.5 self-start sm:self-center px-2.5 py-1 rounded-lg bg-white/10 text-white font-mono font-bold text-xs">
+                                <span>🏁</span>
+                                <span>Jarak {{ $activePeriod->formattedDistance() }}</span>
+                            </div>
+                        </div>
+
+                        <!-- 3 Fast Specs Grid -->
+                        <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-mono">
+                            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+                                <div class="text-[9px] uppercase text-zinc-400 font-bold">LOKASI</div>
+                                <div class="font-bold text-white mt-0.5 truncate">
+                                    {{ explode(',', $activePeriod->location ?? 'GBK Jakarta')[0] }}
+                                </div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+                                <div class="text-[9px] uppercase text-zinc-400 font-bold">TANGGAL</div>
+                                <div class="font-bold text-white mt-0.5">
+                                    {{ $activePeriod->event_date ? $activePeriod->event_date->format('d/m/Y') : 'Hari Ini' }}
+                                </div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+                                <div class="text-[9px] uppercase text-zinc-400 font-bold">WAKTU (WIB)</div>
+                                <div class="font-bold text-unerd-volt mt-0.5">
+                                    {{ $activePeriod->formattedTimeRange() }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <div class="mb-5">
                 <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-unerd-ink dark:text-white">
-                    Gabung UNERD MOVE
+                    Form Pendaftaran Akun & Challenge
                 </h2>
                 <p class="text-xs sm:text-sm text-unerd-body dark:text-zinc-400 mt-1">
-                    Pilih kategori pelari dan masukkan ukuran sepatumu untuk join challenge & rekomendasi sepatu performace buat kamu.
+                    Silakan isi data diri Anda di bawah ini untuk mengaktifkan akun dan mengklaim nomor peserta lari.
                 </p>
             </div>
 
@@ -62,10 +140,16 @@
 
             <form method="POST" action="{{ route('register') }}" class="space-y-4" x-data="{ role: '{{ old('role_slug', 'umum') }}' }">
                 @csrf
+                <input type="hidden" name="join_challenge" value="{{ request('join_challenge', 1) }}">
 
                 <!-- Role Selector (3 Pilihan: Umum, Komunitas, Profesional) -->
                 <div>
-                    <x-input-label value="Pilih Kategori Pelari" />
+                    <div class="flex items-center justify-between">
+                        <x-input-label value="Kategori Peserta di Challenge" class="mb-0" />
+                        <span class="text-[10px] text-unerd-volt dark:text-unerd-volt font-mono font-bold uppercase">
+                            Leaderboard Terpisah
+                        </span>
+                    </div>
                     <div class="grid grid-cols-3 gap-2 mt-1.5">
                         <label class="relative flex flex-col p-3 rounded-xl border border-unerd-hairline dark:border-zinc-700 cursor-pointer hover:border-unerd-black dark:hover:border-white transition has-[:checked]:border-unerd-black dark:has-[:checked]:border-unerd-volt has-[:checked]:bg-unerd-surface-card dark:has-[:checked]:bg-zinc-800 text-center">
                             <input type="radio" name="role_slug" value="umum" x-model="role" class="sr-only">
@@ -73,7 +157,7 @@
                                 Umum
                             </span>
                             <span class="text-[10px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
-                                Individu 3 KM
+                                Individu {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }}
                             </span>
                         </label>
 
@@ -185,16 +269,24 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div class="pt-3">
-                    <x-primary-button class="w-full text-center py-3">
-                        Daftar Akun Pelari Sekarang →
-                    </x-primary-button>
+                <div class="pt-2">
+                    <button type="submit" class="w-full inline-flex flex-col items-center justify-center py-3.5 px-4 rounded-xl bg-unerd-volt hover:bg-unerd-volt-dark text-unerd-ink transition shadow-lg cursor-pointer group">
+                        <span class="font-display font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
+                            <span>DAFTAR AKUN & Join CHALLENGE</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </span>
+                        <!-- <span class="text-[10px] font-medium text-unerd-ink/80 mt-0.5">
+                            1x Submit: Akun aktif & otomatis diterbitkan nomor ID Pelari resmi
+                        </span> -->
+                    </button>
                 </div>
             </form>
 
             <div class="mt-6 text-center text-xs text-unerd-body dark:text-zinc-400">
                 Sudah memiliki akun terdaftar?
-                <a href="{{ route('login') }}" class="font-bold text-unerd-ink dark:text-white hover:underline ms-1">
+                <a href="{{ route('login', ['join_challenge' => request('join_challenge', 1)]) }}" class="font-bold text-unerd-ink dark:text-white hover:underline ms-1">
                     Masuk ke Akun
                 </a>
             </div>

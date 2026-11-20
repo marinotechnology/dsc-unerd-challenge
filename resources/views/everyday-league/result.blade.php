@@ -48,7 +48,7 @@
                 @if ($result)
                     <div class="bg-white/5 rounded-2xl border border-white/10 p-5 text-center my-4">
                         <span class="text-[10px] uppercase font-mono tracking-widest text-slate-400 block font-bold">
-                            CATATAN WAKTU (3 KM RUN)
+                            CATATAN WAKTU ({{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }} RUN)
                         </span>
                         <div class="text-4xl sm:text-5xl font-black tracking-wider text-unerd-volt font-mono my-2.5">
                             {{ $result->formatted_time }}
@@ -57,7 +57,7 @@
                         <div class="grid grid-cols-3 gap-2 pt-3 border-t border-white/10 text-xs">
                             <div>
                                 <span class="block text-[10px] uppercase text-slate-400 font-mono">Jarak</span>
-                                <span class="font-bold text-white">3.0 KM</span>
+                                <span class="font-bold text-white">{{ $activePeriod ? $activePeriod->formattedDistance() : '3.0 KM' }}</span>
                             </div>
                             <div>
                                 <span class="block text-[10px] uppercase text-slate-400 font-mono">Pace</span>
@@ -85,7 +85,7 @@
                     <div class="bg-amber-500/10 rounded-2xl border border-amber-500/30 p-5 text-center my-4">
                         <p class="text-xs font-bold text-amber-300">Menunggu Verifikasi Waktu</p>
                         <p class="text-[11px] text-slate-400 mt-1">
-                            Kamu telah terdaftar. Selesaikan sprint 3 KM di lintasan dan kru akan mencatat waktumu langsung di stopwatch.
+                            Kamu telah terdaftar. Selesaikan sprint {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }} di lintasan dan kru akan mencatat waktumu langsung di stopwatch.
                         </p>
                     </div>
                 @endif
@@ -110,7 +110,7 @@
                     </button>
 
                     <!-- WhatsApp Share Button -->
-                    <a href="https://api.whatsapp.com/send?text={{ rawurlencode('Catatan waktu 3 KM ' . $participant->display_name . ' di UNERD Move Series: ' . ($result?->formatted_time ?? '--:--') . '! Cek kartu hasil lengkap di sini: ' . url()->current()) }}"
+                    <a href="https://api.whatsapp.com/send?text={{ rawurlencode('Catatan waktu ' . ($activePeriod ? $activePeriod->formattedDistance() : '3 KM') . ' ' . $participant->display_name . ' di UNERD Move Series: ' . ($result?->formatted_time ?? '--:--') . '! Cek kartu hasil lengkap di sini: ' . url()->current()) }}"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-wider bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-xs">
@@ -134,7 +134,7 @@
                     if (navigator.share) {
                         navigator.share({
                             title: 'Kartu Hasil Lari - {{ $participant->display_name }}',
-                            text: 'Catatan waktu 3 KM: {{ $result?->formatted_time ?? "--:--" }} di UNERD Move Series!',
+                            text: 'Catatan waktu {{ $activePeriod ? $activePeriod->formattedDistance() : "3 KM" }}: {{ $result?->formatted_time ?? "--:--" }} di UNERD Move Series!',
                             url: window.location.href,
                         }).catch(() => {});
                     } else {

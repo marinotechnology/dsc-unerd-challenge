@@ -23,6 +23,13 @@
                 <x-theme-toggle />
 
                 @auth
+                    @if (auth()->user()->participant)
+                        <a href="{{ route('everyday-league.success', auth()->user()->participant->participant_id) }}"
+                           class="hidden sm:inline-flex items-center justify-center gap-1.5 h-10 px-3.5 sm:px-4 bg-unerd-volt hover:bg-unerd-volt-dark text-unerd-ink text-xs font-black uppercase tracking-wider rounded-md transition shadow-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                            <span>Tiket Saya</span>
+                        </a>
+                    @endif
                     <a href="{{ route('dashboard') }}"
                        class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition">
                         Dashboard →
@@ -32,7 +39,7 @@
                        class="hidden sm:inline-flex items-center justify-center h-10 px-3 sm:px-4 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-200 hover:bg-unerd-surface-card dark:hover:bg-zinc-800 rounded-md transition">
                         Masuk
                     </a>
-                    <a href="{{ route('register') }}"
+                    <a href="{{ route('register', ['join_challenge' => 1]) }}"
                        class="hidden sm:inline-flex items-center justify-center h-10 px-4 sm:px-5 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-md transition shadow-xs">
                         Daftar Akun
                     </a>
@@ -88,14 +95,19 @@
 
             <div class="pt-3 border-t border-slate-100 dark:border-zinc-800 flex flex-col gap-2">
                 @auth
+                    @if (auth()->user()->participant)
+                        <a href="{{ route('everyday-league.success', auth()->user()->participant->participant_id) }}" class="w-full text-center py-3 bg-unerd-volt text-unerd-ink text-xs font-black uppercase tracking-wider rounded-xl transition shadow-xs flex items-center justify-center gap-2">
+                            <span>Tiket & ID Pelari ({{ auth()->user()->participant->participant_id }}) &rarr;</span>
+                        </a>
+                    @endif
                     <a href="{{ route('dashboard') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition">
                         Buka Dashboard &rarr;
                     </a>
                 @else
-                    <a href="{{ route('register') }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition shadow-xs">
+                    <a href="{{ route('register', ['join_challenge' => 1]) }}" class="w-full text-center py-3 bg-unerd-black dark:bg-white text-white dark:text-unerd-black text-xs font-bold uppercase tracking-wider rounded-xl transition shadow-xs">
                         Daftar Akun Baru
                     </a>
-                    <a href="{{ route('login') }}" class="w-full text-center py-2.5 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition">
+                    <a href="{{ route('login', ['join_challenge' => 1]) }}" class="w-full text-center py-2.5 text-xs font-bold uppercase tracking-wider text-unerd-ink dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition">
                         Masuk ke Akun
                     </a>
                 @endauth
@@ -117,7 +129,7 @@
                     </div>
 
                     <p class="text-sm sm:text-base text-unerd-body dark:text-zinc-300 leading-relaxed font-sans max-w-xl">
-                        Daftarkan dirimu dan Ikuti tantangan lari 3000 Meter dari UNERD Performance, Buktikan bahwa dirimu yang tercepat di live leaderboard!
+                        Daftarkan dirimu dan Ikuti tantangan lari {{ $activePeriod ? $activePeriod->formattedDistance() : '3000 Meter' }} dari UNERD Performance, Buktikan bahwa dirimu yang tercepat di live leaderboard!
                     </p>
 
                     <!-- CTAs -->
@@ -128,13 +140,13 @@
                                 DASHBOARD
                             </a>
                         @else
-                            <a href="{{ route('register') }}"
+                            <a href="{{ route('register', ['join_challenge' => 1]) }}"
                                class="inline-flex items-center justify-center h-12 px-6 sm:px-7 bg-unerd-black dark:bg-white hover:bg-unerd-black-active dark:hover:bg-zinc-200 text-white dark:text-unerd-black font-display text-xs sm:text-sm font-bold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
                                 DAFTAR SEKARANG
                             </a>
                         @endauth
 
-                        <a href="{{ auth()->check() ? route('everyday-league.register') : route('register') }}"
+                        <a href="{{ auth()->check() ? route('everyday-league.register') : route('register', ['join_challenge' => 1]) }}"
                            class="inline-flex items-center justify-center h-12 px-6 sm:px-7 bg-unerd-volt hover:bg-unerd-volt-dark text-unerd-ink font-display text-xs sm:text-sm font-extrabold tracking-[0.5px] uppercase rounded-md transition shadow-md text-center">
                             JOIN CHALLENGE
                         </a>
@@ -146,23 +158,29 @@
                     </div>
 
                     <!-- Fast Facts for Runners -->
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-unerd-hairline dark:border-zinc-800 max-w-lg text-center sm:text-left">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 pt-6 border-t border-unerd-hairline dark:border-zinc-800 max-w-xl text-center sm:text-left">
                         <div class="p-2 sm:p-0">
                             <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">JARAK</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
-                                3000M
+                                {{ $activePeriod ? $activePeriod->formattedDistance() : '3000M' }}
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
                             <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">LOKASI</div>
-                            <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5">
+                            <div class="font-display font-black text-sm sm:text-base text-unerd-ink dark:text-white mt-0.5 truncate">
                                 {{ $activePeriod ? explode(',', $activePeriod->location ?? 'GBK Jakarta')[0] : 'GBK Jakarta' }}
                             </div>
                         </div>
                         <div class="p-2 sm:p-0">
                             <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">TANGGAL</div>
                             <div class="font-display font-black text-sm sm:text-base text-unerd-volt mt-0.5">
-                                {{ ($activePeriod && $activePeriod->event_date) ? $activePeriod->event_date->translatedFormat('d M Y') : '21 Nov 2026' }}
+                                {{ ($activePeriod && $activePeriod->event_date) ? $activePeriod->event_date->translatedFormat('d M Y') : '20 Nov 2026' }}
+                            </div>
+                        </div>
+                        <div class="p-2 sm:p-0">
+                            <div class="text-[10px] sm:text-[11px] uppercase tracking-wider text-unerd-muted dark:text-zinc-400 font-bold">WAKTU (WIB)</div>
+                            <div class="font-display font-black text-xs sm:text-sm text-unerd-ink dark:text-white mt-0.5">
+                                {{ $activePeriod ? $activePeriod->formattedTimeRange() : '06:00 - 09:00 WIB' }}
                             </div>
                         </div>
                     </div>
@@ -259,7 +277,7 @@
                                     01
                                 </div>
                                 <div class="text-xs sm:text-sm font-medium text-unerd-ink dark:text-zinc-200">
-                                    Buat akun gratis <a href="{{ route('register') }}" class="underline font-bold text-unerd-volt hover:text-unerd-volt/80 transition">disini</a>
+                                    Buat akun gratis <a href="{{ route('register', ['join_challenge' => 1]) }}" class="underline font-bold text-unerd-volt hover:text-unerd-volt/80 transition">disini</a>
                                 </div>
                             </div>
 
@@ -465,22 +483,16 @@
                                 <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
                                     <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Tanggal Challenge</span>
                                     <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
-                                        {{ $activePeriod?->event_date ? $activePeriod->event_date->translatedFormat('d F Y') : '19 November 2026' }}
+                                        {{ $activePeriod?->event_date ? $activePeriod->event_date->translatedFormat('d F Y') : '20 November 2026' }}
                                     </span>
-                                    <!-- <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
-                                        Sesi Terbuka
-                                    </span> -->
                                 </div>
 
-                                <!-- Durasi Challenge -->
+                                <!-- Jam Mulai & Jam Selesai Event (WIB) -->
                                 <div class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-unerd-hairline dark:border-zinc-800 shadow-xs">
-                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Batas Durasi Sesi</span>
+                                    <span class="block text-[10px] font-mono uppercase font-bold text-unerd-muted dark:text-zinc-400">Jam Mulai & Selesai (WIB)</span>
                                     <span class="font-display font-extrabold text-sm sm:text-base text-unerd-ink dark:text-white mt-1 block">
-                                        {{ $activePeriod?->duration_minutes ?? 60 }} Menit
+                                        {{ $activePeriod ? $activePeriod->formattedTimeRange() : '06:00 - 09:00 WIB' }}
                                     </span>
-                                    <!-- <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-0.5 block">
-                                        Pencatatan Stopwatch Akurat
-                                    </span> -->
                                 </div>
                             </div>
 

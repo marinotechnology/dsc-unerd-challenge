@@ -802,3 +802,29 @@ test('user registration saves community affiliation', function () {
     expect($user->community_id)->toBe($community->id);
     expect($user->community?->name)->toBe('Tangerang Pace Crew');
 });
+
+test('user registration with join_challenge automatically joins active period and preserves community', function () {
+    $community = Community::create([
+        'name' => 'Senayan Runners Club',
+        'slug' => 'senayan-runners-club',
+        'city' => 'Jakarta Pusat',
+    ]);
+
+    $response = $this->post(route('register'), [
+        'name' => 'Dewi Runner',
+        'email' => 'dewi.runner@example.com',
+        'phone_number' => '081299998888',
+        'shoe_size' => 39,
+        'role_slug' => 'komunitas',
+        'community_id' => $community->id,
+        'password' => 'password123',
+        'join_challenge' => 1,
+    ]);
+
+    $participant = Participant::where('email', 'dewi.runner@example.com')->first();
+    expect($participant)->not->toBeNull();
+    expect($participant->community_id)->toBe($community->id);
+    expect($participant->participant_category)->toBe('Komunitas');
+
+    $response->assertRedirect(route('everyday-league.success', $participant->participant_id));
+});

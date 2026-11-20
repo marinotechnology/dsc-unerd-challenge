@@ -607,24 +607,32 @@
                             @error('periodFormLocation') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
                         </div>
 
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                                Jarak (Meter)
+                            </label>
+                            <input type="number" wire:model="periodFormDistance"
+                                   placeholder="3000"
+                                   class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
+                            @error('periodFormDistance') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                                    Jarak (Meter)
+                                    Jam Mulai (WIB)
                                 </label>
-                                <input type="number" wire:model="periodFormDistance"
-                                       placeholder="3000"
+                                <input type="time" wire:model="periodFormStartTime"
                                        class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
-                                @error('periodFormDistance') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                                @error('periodFormStartTime') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                                    Durasi (Menit)
+                                    Jam Selesai (WIB)
                                 </label>
-                                <input type="number" wire:model="periodFormDuration"
-                                       placeholder="60"
+                                <input type="time" wire:model="periodFormEndTime"
                                        class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium focus:border-unerd-volt" />
-                                @error('periodFormDuration') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
+                                @error('periodFormEndTime') <span class="text-rose-500 text-[10px]">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -715,7 +723,7 @@
                                         </td>
                                         <td class="p-2.5 text-[11px] text-slate-600 dark:text-zinc-400">
                                             <span class="font-medium text-slate-800 dark:text-zinc-200 block truncate max-w-[140px]">{{ $item->location ?? 'GBK, Jakarta' }}</span>
-                                            <span class="font-mono text-[10px] text-emerald-600 dark:text-unerd-volt font-bold">{{ $item->formattedDistance() }} &bull; {{ $item->duration_minutes ?? 60 }} mnt</span>
+                                            <span class="font-mono text-[10px] text-emerald-600 dark:text-unerd-volt font-bold">{{ $item->formattedDistance() }} &bull; {{ $item->formattedTimeRange() }}</span>
                                         </td>
                                         <td class="p-2.5 font-mono text-slate-600 dark:text-zinc-400">
                                             {{ $item->event_date?->format('d M Y') ?? '-' }}

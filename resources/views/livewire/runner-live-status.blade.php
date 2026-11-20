@@ -20,7 +20,7 @@
                             </h2>
                             <span class="text-xs font-mono text-slate-500 dark:text-zinc-400">
                                 @if ($activePeriod->event_date)
-                                    {{ $activePeriod->event_date->translatedFormat('d F Y') }} &bull; {{ $activeChallenge->location ?? 'Lintasan Lari ' }}
+                                    {{ $activePeriod->event_date->translatedFormat('d F Y') }} &bull; {{ $activePeriod->formattedTimeRange() }} &bull; {{ $activePeriod->location ?? $activeChallenge->location ?? 'Lintasan Lari' }}
                                 @endif
                             </span>
                         </div>
