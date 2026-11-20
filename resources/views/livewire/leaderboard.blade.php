@@ -161,9 +161,8 @@
                 </label>
                 <select wire:model.live="activeRoleTab"
                         class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121212] text-slate-900 dark:text-white text-xs sm:text-sm font-bold focus:border-unerd-volt focus:ring-1 focus:ring-unerd-volt transition">
+                    <option value="Umum">Pelari Umum & Pelari Komunitas (Community) ({{ $countUmumKomunitas }})</option>
                     <option value="Women">Pelari Women ({{ $countWomen }})</option>
-                    <option value="Umum">Pelari Umum ({{ $countUmum }})</option>
-                    <option value="Komunitas">Pelari Komunitas (Community) ({{ $countKomunitas }})</option>
                     <option value="Profesional">Pelari Profesional (Pro) ({{ $countProfesional }})</option>
                     <option value="CommunityAvg">Klasemen Komunitas (Top 3 Avg)</option>
                 </select>
@@ -293,15 +292,23 @@
             @endif
         </div>
     @else
-        <!-- LEADERBOARD INDIVIDU SPESIFIK ROLE (Umum, Komunitas, atau Profesional) -->
+        <!-- LEADERBOARD INDIVIDU SPESIFIK ROLE (Umum & Komunitas, Women, atau Profesional) -->
         <div class="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
 
             @if ($results->isEmpty())
+                @php
+                    $tabLabel = match($activeRoleTab) {
+                        'Umum', 'Komunitas' => 'Umum & Komunitas',
+                        'Women' => 'Women',
+                        'Profesional' => 'Profesional',
+                        default => $activeRoleTab,
+                    };
+                @endphp
                 <div class="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
                     @if (! empty($search))
-                        Tidak ada pelari yang cocok dengan pencarian "<strong class="text-slate-900 dark:text-white">{{ $search }}</strong>" pada kategori {{ $activeRoleTab }}.
+                        Tidak ada pelari yang cocok dengan pencarian "<strong class="text-slate-900 dark:text-white">{{ $search }}</strong>" pada kategori {{ $tabLabel }}.
                     @else
-                        Belum ada pelari dengan catatan waktu  untuk kategori {{ $activeRoleTab }}.
+                        Belum ada pelari dengan catatan waktu untuk kategori {{ $tabLabel }}.
                     @endif
                 </div>
             @else

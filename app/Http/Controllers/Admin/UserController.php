@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -82,7 +83,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update user details and role.
+     * Update user details, role, and optional password.
      */
     public function update(Request $request, User $user): RedirectResponse
     {
@@ -92,17 +93,40 @@ class UserController extends Controller
             'phone_number' => ['nullable', 'string', 'max:25'],
             'role_id' => ['required', 'integer', 'exists:roles,id'],
             'community_id' => ['nullable', 'integer', 'exists:communities,id'],
+            'password' => ['nullable', 'string', Password::defaults()],
         ]);
 
-        $user->update([
+        $updatePayload = [
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'phone_number' => $validatedData['phone_number'] ?? null,
             'role_id' => (int) $validatedData['role_id'],
             'community_id' => ! empty($validatedData['community_id']) ? (int) $validatedData['community_id'] : null,
-        ]);
+        ];
+
+        if (! empty($validatedData['password'])) {
+            $updatePayload['password'] = Hash::make($validatedData['password']);
+        }
+
+        $user->update($updatePayload);
 
         return redirect()->route('admin.users.index')->with('status', 'Data pengguna berhasil diperbarui.');
+    }
+
+    /**
+     * Reset or update user password directly by an administrator.
+     */
+    public function updatePassword(Request $request, User $user): RedirectResponse
+    {
+        $validatedData = $request->validate([
+            'password' => ['required', 'string', Password::defaults(), 'confirmed'],
+        ]);
+
+        $user->update([
+            'password' => Hash::make($validatedData['password']),
+        ]);
+
+        return redirect()->route('admin.users.index')->with('status', "Kata sandi akun {$user->name} berhasil diperbarui.");
     }
 
     /**

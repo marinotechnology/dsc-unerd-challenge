@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\Role;
 use App\Models\User;
 use App\Support\Enums\UserRole;
+use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
     // Seed core roles for test environment
@@ -160,4 +161,57 @@ test('registration supports registering as b2b client partner', function () {
     $user = User::where('email', 'bandung.kicks@example.com')->first();
     expect($user)->not->toBeNull();
     expect($user->role->slug)->toBe(UserRole::B2B_CLIENT->value);
+});
+
+test('administrator can update user details and update password optionally', function () {
+    $adminRole = Role::where('slug', UserRole::ADMINISTRATOR->value)->first();
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+
+    $targetRole = Role::where('slug', UserRole::CUSTOMER->value)->first();
+    $targetUser = User::factory()->create([
+        'role_id' => $targetRole->id,
+        'password' => 'oldpassword123',
+    ]);
+
+    $response = $this->actingAs($admin)->put(route('admin.users.update', $targetUser), [
+        'name' => 'Updated User Name',
+        'email' => 'updated.user@example.com',
+        'phone_number' => '081299988877',
+        'role_id' => $targetRole->id,
+        'password' => 'newsecretpassword123',
+    ]);
+
+    $response->assertRedirect(route('admin.users.index'));
+    $response->assertSessionHas('status');
+
+    $targetUser->refresh();
+    expect($targetUser->name)->toBe('Updated User Name');
+    expect($targetUser->email)->toBe('updated.user@example.com');
+    expect(Hash::check('newsecretpassword123', $targetUser->password))->toBeTrue();
+});
+
+test('administrator can directly reset user password with confirmation', function () {
+    $adminRole = Role::where('slug', UserRole::ADMINISTRATOR->value)->first();
+    $admin = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+
+    $targetRole = Role::where('slug', UserRole::CUSTOMER->value)->first();
+    $targetUser = User::factory()->create([
+        'role_id' => $targetRole->id,
+        'password' => 'originalpassword123',
+    ]);
+
+    $response = $this->actingAs($admin)->patch(route('admin.users.update-password', $targetUser), [
+        'password' => 'brandnewpassword123',
+        'password_confirmation' => 'brandnewpassword123',
+    ]);
+
+    $response->assertRedirect(route('admin.users.index'));
+    $response->assertSessionHas('status');
+
+    $targetUser->refresh();
+    expect(Hash::check('brandnewpassword123', $targetUser->password))->toBeTrue();
 });

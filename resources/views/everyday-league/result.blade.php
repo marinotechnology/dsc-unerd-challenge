@@ -66,7 +66,7 @@
                                 <span class="font-bold text-white font-mono">{{ $result->formatted_pace }}</span>
                             </div>
                             <div>
-                                <span class="block text-[10px] uppercase text-slate-400 font-mono">Peringkat ({{ $participant->participant_category ?? 'Umum' }})</span>
+                                <span class="block text-[10px] uppercase text-slate-400 font-mono">Peringkat ({{ in_array($participant->participant_category, ['Umum', 'Komunitas'], true) ? 'Umum & Komunitas' : ($participant->participant_category ?? 'Umum') }})</span>
                                 <span class="font-bold text-amber-400 font-mono">#{{ $rank }}</span>
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                         ctx.fillText('#{{ $rank }}', 840, 1175);
                         ctx.font = 'bold 18px sans-serif';
                         ctx.fillStyle = '#A1A1AA';
-                        ctx.fillText('({{ $participant->participant_category ?? "Umum" }})', 840, 1220);
+                        ctx.fillText('({{ in_array($participant->participant_category, ["Umum", "Komunitas"], true) ? "Umum & Komunitas" : ($participant->participant_category ?? "Umum") }})', 840, 1220);
 
                         // 5. Footer Taglines & Hashtags
                         ctx.textAlign = 'center';

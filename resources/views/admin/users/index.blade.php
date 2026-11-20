@@ -131,7 +131,7 @@
                                 {{ $userItem->created_at->format('d M Y') }}
                             </td>
                             <td class="py-4 text-right">
-                                <div class="inline-flex items-center gap-2">
+                                <div class="inline-flex items-center gap-1.5">
                                     <!-- Toggle Block Action -->
                                     <form method="POST" action="{{ route('admin.users.toggle-block', $userItem) }}" class="inline">
                                         @csrf
@@ -148,6 +148,17 @@
                                             </button>
                                         @endif
                                     </form>
+
+                                    <!-- Reset Password Modal Trigger -->
+                                    <button type="button"
+                                            onclick="openResetPasswordModal({{ $userItem->id }}, '{{ addslashes($userItem->name) }}', '{{ addslashes($userItem->email) }}')"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900 border border-amber-200 dark:border-amber-800 rounded transition cursor-pointer"
+                                            title="Ganti Kata Sandi">
+                                        <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                        </svg>
+                                        <span>Sandi</span>
+                                    </button>
 
                                     <!-- Edit Role Modal Trigger -->
                                     <button type="button"
@@ -300,12 +311,66 @@
                     </select>
                 </div>
 
+                <div>
+                    <x-input-label for="edit_password" value="Kata Sandi Baru (Opsional)" />
+                    <x-text-input id="edit_password" class="block w-full" type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah kata sandi" />
+                    <span class="text-[11px] text-unerd-muted dark:text-zinc-400 mt-1 block">Minimal 8 karakter. Biarkan kosong bila tidak ingin mengganti kata sandi pengguna.</span>
+                </div>
+
                 <div class="flex items-center justify-end gap-3 pt-3 border-t border-unerd-hairline dark:border-zinc-800">
                     <x-secondary-button type="button" onclick="document.getElementById('modal-edit-user').classList.add('hidden')">
                         Batal
                     </x-secondary-button>
                     <x-primary-button>
                         Perbarui Data
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Reset Password Pengguna -->
+    <div id="modal-reset-password" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-unerd-hairline dark:border-zinc-800 shadow-2xl max-w-md w-full p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-unerd-hairline dark:border-zinc-800">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="font-display text-base font-bold text-unerd-ink dark:text-white">Ganti Kata Sandi</h3>
+                        <p class="text-xs text-unerd-muted dark:text-zinc-400" id="reset_user_label">Perbarui kata sandi akun</p>
+                    </div>
+                </div>
+                <button type="button" onclick="document.getElementById('modal-reset-password').classList.add('hidden')" class="text-unerd-muted dark:text-zinc-400 hover:text-unerd-ink dark:hover:text-white p-1 rounded-lg cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form id="form-reset-password" method="POST" action="" class="space-y-4 mt-5">
+                @csrf
+                @method('PATCH')
+
+                <div>
+                    <x-input-label for="reset_password" value="Kata Sandi Baru" />
+                    <x-text-input id="reset_password" class="block w-full" type="password" name="password" required placeholder="Minimal 8 karakter" />
+                </div>
+
+                <div>
+                    <x-input-label for="reset_password_confirmation" value="Konfirmasi Kata Sandi Baru" />
+                    <x-text-input id="reset_password_confirmation" class="block w-full" type="password" name="password_confirmation" required placeholder="Ulangi kata sandi baru" />
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-3 border-t border-unerd-hairline dark:border-zinc-800">
+                    <x-secondary-button type="button" onclick="document.getElementById('modal-reset-password').classList.add('hidden')">
+                        Batal
+                    </x-secondary-button>
+                    <x-primary-button>
+                        Simpan Kata Sandi
                     </x-primary-button>
                 </div>
             </form>
@@ -320,10 +385,16 @@
             document.getElementById('edit_phone').value = phone;
             document.getElementById('edit_role').value = roleId;
             document.getElementById('edit_community').value = communityId || '';
+            document.getElementById('edit_password').value = '';
             document.getElementById('modal-edit-user').classList.remove('hidden');
         }
-    </script>
-            document.getElementById('modal-edit-user').classList.remove('hidden');
+
+        function openResetPasswordModal(id, name, email) {
+            document.getElementById('form-reset-password').action = '/admin/users/' + id + '/password';
+            document.getElementById('reset_user_label').innerText = name + ' (' + email + ')';
+            document.getElementById('reset_password').value = '';
+            document.getElementById('reset_password_confirmation').value = '';
+            document.getElementById('modal-reset-password').classList.remove('hidden');
         }
     </script>
 </x-app-layout>

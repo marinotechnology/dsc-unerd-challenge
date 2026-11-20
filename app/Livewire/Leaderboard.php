@@ -97,7 +97,11 @@ class Leaderboard extends Component
             ->when($currentPeriod, fn ($q) => $q->where('challenge_period_id', $currentPeriod->id))
             ->orderBy('verified_time_seconds');
 
-        if (in_array($this->activeRoleTab, ['Women', 'Umum', 'Komunitas', 'Profesional'], true)) {
+        if (in_array($this->activeRoleTab, ['Umum', 'Komunitas'], true)) {
+            $query->whereHas('participant', function ($q) {
+                $q->whereIn('participant_category', ['Umum', 'Komunitas']);
+            });
+        } elseif (in_array($this->activeRoleTab, ['Women', 'Profesional'], true)) {
             $query->whereHas('participant', function ($q) {
                 $q->where('participant_category', $this->activeRoleTab);
             });
@@ -143,6 +147,8 @@ class Leaderboard extends Component
             ->whereHas('participant', fn ($q) => $q->where('participant_category', 'Komunitas'))
             ->count();
 
+        $countUmumKomunitas = $countUmum + $countKomunitas;
+
         $countProfesional = ChallengeResult::verified()
             ->tap($periodFilter)
             ->whereHas('participant', fn ($q) => $q->where('participant_category', 'Profesional'))
@@ -154,6 +160,7 @@ class Leaderboard extends Component
             'countWomen' => $countWomen,
             'countUmum' => $countUmum,
             'countKomunitas' => $countKomunitas,
+            'countUmumKomunitas' => $countUmumKomunitas,
             'countProfesional' => $countProfesional,
             'activeChallenge' => $activeChallenge,
             'periods' => $periods,

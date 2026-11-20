@@ -248,17 +248,21 @@ class ChallengePeriod extends Model
     }
 
     /**
-     * Recalculate and update ranks for all verified results in this period grouped by participant category
+     * Recalculate and update ranks for all verified results in this period grouped by participant category segment
      */
     public function recalculateRanks(): void
     {
-        $categories = ['Women', 'Umum', 'Komunitas', 'Profesional'];
+        $segmentGroups = [
+            'Women' => ['Women'],
+            'Umum' => ['Umum', 'Komunitas'],
+            'Profesional' => ['Profesional'],
+        ];
 
-        foreach ($categories as $category) {
+        foreach ($segmentGroups as $categories) {
             $results = $this->results()
                 ->whereNotNull('verified_time_seconds')
                 ->where('verification_status', 'VERIFIED')
-                ->whereHas('participant', fn ($q) => $q->where('participant_category', $category))
+                ->whereHas('participant', fn ($q) => $q->whereIn('participant_category', $categories))
                 ->orderBy('verified_time_seconds')
                 ->get();
 
@@ -269,11 +273,13 @@ class ChallengePeriod extends Model
             }
         }
 
+        $allHandledCategories = ['Women', 'Umum', 'Komunitas', 'Profesional'];
+
         // Handle any participant with undefined or other categories
         $otherResults = $this->results()
             ->whereNotNull('verified_time_seconds')
             ->where('verification_status', 'VERIFIED')
-            ->whereHas('participant', fn ($q) => $q->whereNotIn('participant_category', $categories))
+            ->whereHas('participant', fn ($q) => $q->whereNotIn('participant_category', $allHandledCategories))
             ->orderBy('verified_time_seconds')
             ->get();
 

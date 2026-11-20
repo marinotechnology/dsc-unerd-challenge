@@ -288,10 +288,16 @@ class EverydayLeagueController extends Controller
             ->verified()
             ->orderBy('verified_time_seconds');
 
-        if ($selectedCategory && in_array($selectedCategory, ['Women', 'Umum', 'Komunitas', 'Profesional'], true)) {
-            $individualQuery->whereHas('participant', function ($q) use ($selectedCategory) {
-                $q->where('participant_category', $selectedCategory);
-            });
+        if ($selectedCategory) {
+            if (in_array($selectedCategory, ['Umum', 'Komunitas'], true)) {
+                $individualQuery->whereHas('participant', function ($q) {
+                    $q->whereIn('participant_category', ['Umum', 'Komunitas']);
+                });
+            } elseif (in_array($selectedCategory, ['Women', 'Profesional'], true)) {
+                $individualQuery->whereHas('participant', function ($q) use ($selectedCategory) {
+                    $q->where('participant_category', $selectedCategory);
+                });
+            }
         }
 
         $individualLeaderboard = $individualQuery->paginate(20)->withQueryString();
@@ -353,10 +359,14 @@ class EverydayLeagueController extends Controller
         $categoryRank = null;
         if ($result && $result->verified_time_seconds) {
             $category = $participant->participant_category ?? 'Umum';
+            $categoryGroup = in_array($category, ['Umum', 'Komunitas'], true)
+                ? ['Umum', 'Komunitas']
+                : [$category];
+
             $categoryRank = $result->rank_in_period ?? (
                 ChallengeResult::verified()
                     ->when($result->challenge_period_id, fn ($q) => $q->where('challenge_period_id', $result->challenge_period_id))
-                    ->whereHas('participant', fn ($q) => $q->where('participant_category', $category))
+                    ->whereHas('participant', fn ($q) => $q->whereIn('participant_category', $categoryGroup))
                     ->where('verified_time_seconds', '<', $result->verified_time_seconds)
                     ->count() + 1
             );

@@ -177,9 +177,12 @@
                 </div>
 
                 @if ($currentResult->rank_in_period)
+                    @php
+                        $segmentName = in_array($participant?->participant_category, ['Umum', 'Komunitas'], true) ? 'Umum & Komunitas' : ($participant?->participant_category ?? 'Umum');
+                    @endphp
                     <div class="flex items-center gap-2">
                         <span class="px-3.5 py-1.5 rounded-xl font-display font-extrabold text-xs uppercase tracking-wider {{ $currentResult->rank_in_period === 1 ? 'bg-unerd-volt text-black font-black' : ($currentResult->rank_in_period <= 3 ? 'bg-amber-400 text-black font-bold' : ($currentResult->rank_in_period <= 10 ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300')) }}">
-                            {{ $currentResult->rank_in_period <= 3 ? 'Juara '.$currentResult->rank_in_period.' ('.$participant?->participant_category.')' : ($currentResult->rank_in_period <= 10 ? 'Top 10 '.$participant?->participant_category.' (Peringkat #'.$currentResult->rank_in_period.')' : 'Peringkat #'.$currentResult->rank_in_period.' '.$participant?->participant_category) }}
+                            {{ $currentResult->rank_in_period <= 3 ? 'Juara '.$currentResult->rank_in_period.' ('.$segmentName.')' : ($currentResult->rank_in_period <= 10 ? 'Top 10 '.$segmentName.' (Peringkat #'.$currentResult->rank_in_period.')' : 'Peringkat #'.$currentResult->rank_in_period.' '.$segmentName) }}
                         </span>
                     </div>
                 @endif
@@ -208,7 +211,7 @@
                     <span class="text-3xl font-mono font-black text-slate-900 dark:text-white mt-1 block">
                         #{{ $currentResult->rank_in_period ?? '-' }}
                     </span>
-                    <span class="text-[11px] text-slate-400 block truncate">{{ $activePeriod?->name }} • {{ $participant?->participant_category ?? 'Umum' }}</span>
+                    <span class="text-[11px] text-slate-400 block truncate">{{ $activePeriod?->name }} • {{ in_array($participant?->participant_category, ['Umum', 'Komunitas'], true) ? 'Umum & Komunitas' : ($participant?->participant_category ?? 'Umum') }}</span>
                 </div>
             </div>
 
