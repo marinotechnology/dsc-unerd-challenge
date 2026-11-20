@@ -507,7 +507,7 @@ class EventOperations extends Component
                     'rank_to' => max(1, (int) ($item['rank_to'] ?? 1)),
                     'type' => $type,
                     'title' => $title !== '' ? $title : 'Sepatu UNERD Pilihan',
-                    'voucher_code' => strtoupper(trim((string) ($item['voucher_code'] ?? 'MOVE-CHALLENGE-10%'))),
+                    'voucher_code' => ! empty(trim((string) ($item['voucher_code'] ?? ''))) ? strtoupper(trim((string) $item['voucher_code'])) : null,
                     'description' => $description !== '' ? $description : 'Apresiasi resmi UNERD Time Attack Challenge.',
                 ];
             }
@@ -817,7 +817,7 @@ class EventOperations extends Component
                 'rank_to' => (int) ($item['rank_to'] ?? $item['rank'] ?? ($index + 1)),
                 'type' => $type,
                 'title' => $title,
-                'voucher_code' => (string) ($item['voucher_code'] ?? 'MOVE-CHALLENGE-10%'),
+                'voucher_code' => (string) ($item['voucher_code'] ?? ''),
                 'description' => $description,
             ];
         }

@@ -215,7 +215,7 @@
                 </div>
             </div>
 
-            <!-- HADIAH JUARA & VOUCHER TOP 10 -->
+            <!-- HADIAH JUARA & VOUCHER KLASEMEN -->
             @php
                 $prize = $currentResult->getPrize();
             @endphp
@@ -230,10 +230,10 @@
                                 <span>HADIAH  TOP 10 TERVERIFIKASI</span>
                             </div>
                             <h3 class="text-lg font-black uppercase text-slate-900 dark:text-white font-display mt-0.5">
-                                {{ $prize['title'] ?? 'Hadiah Top 10 Finisher' }}
+                                {{ $prize['title'] ?? 'Hadiah Peringkat Tantangan' }}
                             </h3>
                             <p class="text-xs text-slate-600 dark:text-zinc-300 mt-1">
-                                {{ $prize['description'] ?? 'Selamat! Catatan waktumu berhasil masuk dalam jajaran 10 besar tercepat.' }}
+                                {{ $prize['description'] ?? 'Selamat! Catatan waktumu berhasil masuk dalam jajaran penerima apresiasi hadiah.' }}
                             </p>
                         </div>
                         @if (! empty($prize['voucher_code']))

@@ -355,6 +355,11 @@ class EverydayLeagueController extends Controller
             $participant->load('community');
         }
 
+        $activePeriod = ChallengePeriod::where('is_active', true)->first();
+        if ($result && ! $result->challenge_period_id && $activePeriod) {
+            $result->setRelation('period', $activePeriod);
+        }
+
         // Calculate runner's rank in period by participant category if verified
         $categoryRank = null;
         if ($result && $result->verified_time_seconds) {
@@ -372,8 +377,8 @@ class EverydayLeagueController extends Controller
             );
         }
 
-        $prize = $result?->getPrize();
-        $voucherCode = ! empty($prize['voucher_code']) ? $prize['voucher_code'] : 'MOVE-GBK-10%';
+        $prize = $result?->getPrize($categoryRank);
+        $voucherCode = ! empty($prize['voucher_code']) ? $prize['voucher_code'] : null;
 
         // Log result view & share event
         ActivityEvent::create([
@@ -425,9 +430,14 @@ class EverydayLeagueController extends Controller
             return redirect()->away($shopeeUrls[$productSlug]);
         }
 
-        $voucher = 'MOVE-GBK-10%';
+        $activePeriod = ChallengePeriod::where('is_active', true)->first();
+        $prize = $participant?->latestResult?->getPrize();
+        $voucher = (! empty($prize['voucher_code']) && $activePeriod && ! $activePeriod->isExpired())
+            ? $prize['voucher_code']
+            : ($activePeriod?->getPrizeForRank(1)['voucher_code'] ?? null);
         $size = $participant?->shoe_size ?? 42;
-        $targetUrl = "https://unerd.com/products/{$productSlug}?promo=".urlencode($voucher)."&size={$size}";
+        $promoParam = $voucher ? '?promo='.urlencode($voucher).'&size='.$size : '?size='.$size;
+        $targetUrl = "https://unerd.com/products/{$productSlug}{$promoParam}";
 
         return redirect()->away($targetUrl);
     }

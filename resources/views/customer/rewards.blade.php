@@ -3,35 +3,92 @@
         @include('customer.partials.profile-header', ['user' => $user, 'participant' => $participant])
     </x-slot>
 
-    <!-- UNLOCKED EVENT REWARD VOUCHER 10% BANNER -->
-    <div class="p-5 sm:p-7 rounded-2xl bg-slate-900 dark:bg-[#181818] text-white border border-slate-800 dark:border-zinc-800 mb-8 shadow-md">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
-            <div class="space-y-2 max-w-xl">
-                <span class="inline-block px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-display text-[10px] font-extrabold uppercase tracking-wider">
-                    EVENT REWARD UNLOCKED
-                </span>
-                <h2 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-white">
-                    Voucher Diskon 10% UNERD Footwear
-                </h2>
-                <p class="text-xs sm:text-sm text-slate-300 dark:text-zinc-300 leading-relaxed font-sans">
-                    Sebagai pelari terdaftar kategori <strong class="text-white">{{ $user->role?->name ?? 'Umum' }}</strong>, kamu berhak atas diskon 10% untuk seluruh koleksi sepatu UNERD favoritmu dengan ukuran <strong class="text-unerd-volt">EU {{ $user->shoe_size ?? 42 }}</strong>.
-                </p>
-            </div>
-
-            <div x-data="{ copied: false }" class="p-4 rounded-xl bg-white/10 dark:bg-black/40 border border-white/20 dark:border-zinc-700 text-center shrink-0">
-                <div class="text-[10px] uppercase font-mono tracking-widest text-slate-400">KODE PROMO:</div>
-                <div @click="navigator.clipboard.writeText('MOVE-GBK-10%'); copied = true; setTimeout(() => copied = false, 2000)"
-                     class="font-mono font-black text-xl sm:text-2xl text-unerd-volt my-1 cursor-pointer select-all hover:opacity-90 transition title='Klik untuk menyalin'">
-                    MOVE-GBK-10%
+    <!-- DYNAMIC EVENT REWARD VOUCHER BANNER (Based on Active Challenge & Prize List) -->
+    @if (! $isEventActive)
+        <div class="p-5 sm:p-7 rounded-2xl bg-slate-900/90 dark:bg-[#181818] text-white border border-rose-500/30 mb-8 shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-xl">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-display text-[10px] font-extrabold uppercase tracking-wider">
+                        TANTANGAN NON-AKTIF / DITUTUP
+                    </span>
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-white">
+                        Voucher Hadiah Tidak Berlaku
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 dark:text-zinc-400 leading-relaxed font-sans">
+                        Saat ini tidak ada periode tantangan lari yang sedang aktif atau periode event telah berakhir. Seluruh kode promo dan voucher hadiah pada periode ini otomatis dinonaktifkan dan ditutup. Pantau pembukaan periode baru berikutnya!
+                    </p>
                 </div>
-                <div class="text-[10px] text-slate-300 dark:text-zinc-300">Potongan 10% di Official Store</div>
-                <div class="text-[10px] font-mono font-bold text-amber-300 dark:text-amber-400 mt-1">Masa Berlaku: 1 Minggu (7 Hari)</div>
-                <div x-show="copied" class="text-[10px] text-emerald-400 font-bold mt-1" style="display: none;">
-                    Kode voucher berhasil disalin!
+                <div class="p-4 rounded-xl bg-rose-950/30 border border-rose-500/30 text-center shrink-0">
+                    <div class="text-[10px] uppercase font-mono tracking-widest text-slate-400">STATUS VOUCHER:</div>
+                    <div class="font-mono font-bold text-sm text-rose-400 my-1">
+                        KODE TIDAK AKTIF
+                    </div>
+                    <div class="text-[10px] text-slate-400">Menunggu Event Dibuka</div>
                 </div>
             </div>
         </div>
-    </div>
+    @elseif ($unlockedVoucher)
+        <div class="p-5 sm:p-7 rounded-2xl bg-slate-900 dark:bg-[#181818] text-white border border-slate-800 dark:border-zinc-800 mb-8 shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-xl">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-unerd-volt text-unerd-ink font-display text-[10px] font-extrabold uppercase tracking-wider">
+                            EVENT REWARD UNLOCKED • PERINGKAT #{{ $currentResult->rank_in_period }}
+                        </span>
+                        <span class="text-xs font-mono text-slate-400">{{ $activePeriod?->cleanName() }}</span>
+                    </div>
+                    <h2 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-white">
+                        {{ $prize['title'] ?? 'Voucher Hadiah Tantangan' }}
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 dark:text-zinc-300 leading-relaxed font-sans">
+                        {{ $prize['description'] ?? 'Selamat! Catatan waktumu berhasil masuk dalam jajaran penerima apresiasi hadiah.' }} Sebagai pelari terdaftar kategori <strong class="text-white">{{ $user->role?->name ?? 'Umum' }}</strong>, kamu berhak menggunakan kode voucher ini untuk pembelian sepatu UNERD pilihan dengan ukuran <strong class="text-unerd-volt">EU {{ $user->shoe_size ?? 42 }}</strong>.
+                    </p>
+                </div>
+
+                <div x-data="{ copied: false }" class="p-4 rounded-xl bg-white/10 dark:bg-black/40 border border-white/20 dark:border-zinc-700 text-center shrink-0">
+                    <div class="text-[10px] uppercase font-mono tracking-widest text-slate-400">KODE PROMO / VOUCHER:</div>
+                    <div @click="navigator.clipboard.writeText('{{ $unlockedVoucher }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                         class="font-mono font-black text-xl sm:text-2xl text-unerd-volt my-1 cursor-pointer select-all hover:opacity-90 transition"
+                         title="Klik untuk menyalin">
+                        {{ $unlockedVoucher }}
+                    </div>
+                    <div class="text-[10px] text-slate-300 dark:text-zinc-300">Potongan Belanja di Official Store UNERD</div>
+                    <div class="text-[10px] font-mono font-bold text-amber-300 dark:text-amber-400 mt-1">Masa Berlaku: 1 Minggu (7 Hari)</div>
+                    <div x-show="copied" class="text-[10px] text-emerald-400 font-bold mt-1" style="display: none;">
+                        Kode voucher berhasil disalin!
+                    </div>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="p-5 sm:p-7 rounded-2xl bg-slate-900 dark:bg-[#181818] text-white border border-slate-800 dark:border-zinc-800 mb-8 shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div class="space-y-2 max-w-xl">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 font-display text-[10px] font-extrabold uppercase tracking-wider">
+                        VOUCHER HADIAH TANTANGAN ({{ $activePeriod?->cleanName() }})
+                    </span>
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-white">
+                        Masuk Daftar Peringkat Hadiah untuk Membuka Voucher
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 dark:text-zinc-300 leading-relaxed font-sans">
+                        @if (! $currentResult || ! $currentResult->verified_time_seconds)
+                            Selesaikan sprint di lintasan {{ $activePeriod ? $activePeriod->formattedDistance() : '3 KM' }} dan verifikasi catatan waktumu dengan panitia booth. Setiap pelari yang masuk ke dalam list peringkat hadiah akan otomatis membuka kode voucher promo di sini!
+                        @else
+                            Catatan waktu kamu saat ini berada di peringkat <strong class="text-unerd-volt">#{{ $currentResult->rank_in_period }}</strong>. Terus pertajam catatan waktumu di lintasan untuk menembus rentang peringkat hadiah dan membuka kode promo!
+                        @endif
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center shrink-0">
+                    <div class="text-[10px] uppercase font-mono tracking-widest text-slate-400">KODE VOUCHER:</div>
+                    <div class="font-mono font-bold text-sm text-slate-400 my-1 py-1 px-3 bg-white/5 rounded border border-white/10">
+                        TERKUNCI
+                    </div>
+                    <div class="text-[10px] text-slate-400">Berdasarkan Peringkat Hadiah</div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- POST-RUN RECOVERY FOOTWEAR HIGHLIGHT -->
     @if (! empty($recoveryFootwear))

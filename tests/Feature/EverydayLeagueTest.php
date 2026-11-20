@@ -222,7 +222,7 @@ test('runner can view result page with verified time and voucher discount', func
     $response->assertSee('UMS-9903');
     $response->assertSee('Fajar N');
     $response->assertSee('01:28,20');
-    $response->assertSee('MOVE-GBK-10%');
+    $response->assertSee('MOVE-CHAMPION-10%');
     $response->assertSee('EU 42');
 });
 
@@ -244,7 +244,7 @@ test('runner clicking product recommendation tracks event and redirects to store
         'product' => 'astral-speed',
     ]));
 
-    $response->assertRedirect('https://unerd.com/products/astral-speed?promo=MOVE-GBK-10%25&size=41');
+    $response->assertRedirect('https://unerd.com/products/astral-speed?promo=MOVE-CHAMPION-10%25&size=41');
 
     $this->assertDatabaseHas('activity_events', [
         'event_type' => 'product_click',
@@ -995,4 +995,61 @@ test('leaderboard displays women category and filters women runners correctly', 
         ->assertSee('Rina S')
         ->assertSee('UMS-WOMEN-01')
         ->assertSee('03:00,50');
+});
+
+test('voucher code is dynamically resolved from period prize config for any configured rank up to 200', function () {
+    $period = ChallengePeriod::where('is_active', true)->first();
+    $period->update([
+        'prizes_config' => [
+            [
+                'rank_from' => 1,
+                'rank_to' => 3,
+                'type' => 'SEPATU',
+                'title' => 'Sepatu UNERD Juara',
+                'voucher_code' => 'MOVE-PODIUM-VOUCHER',
+                'description' => 'Sepatu juara podium',
+            ],
+            [
+                'rank_from' => 4,
+                'rank_to' => 200,
+                'type' => 'VOUCHER',
+                'title' => 'Voucher Hadiah Top 200',
+                'voucher_code' => 'MOVE-TOP200-SPECIAL',
+                'description' => 'Voucher spesial diskon belanja untuk 200 finisher pertama.',
+            ],
+        ],
+    ]);
+
+    $prizeRank50 = $period->getPrizeForRank(50);
+    expect($prizeRank50)->not->toBeNull();
+    expect($prizeRank50['voucher_code'])->toBe('MOVE-TOP200-SPECIAL');
+
+    $prizeRank1 = $period->getPrizeForRank(1);
+    expect($prizeRank1)->not->toBeNull();
+    expect($prizeRank1['voucher_code'])->toBe('MOVE-PODIUM-VOUCHER');
+
+    // Rank outside defined range (201) returns null
+    $prizeRank201 = $period->getPrizeForRank(201);
+    expect($prizeRank201)->toBeNull();
+});
+
+test('voucher is disabled and codes disappear when period or challenge is deactivated', function () {
+    $period = ChallengePeriod::where('is_active', true)->first();
+    $period->update([
+        'is_active' => false,
+    ]);
+
+    expect($period->getPrizeForRank(1))->toBeNull();
+
+    $role = Role::whereIn('slug', ['umum', 'customer'])->first();
+    $user = User::factory()->create([
+        'email' => 'runner.voucher.test@example.com',
+        'role_id' => $role?->id,
+    ]);
+
+    $response = $this->actingAs($user)->get(route('customer.rewards'));
+    $response->assertStatus(200);
+    $response->assertSee('TANTANGAN NON-AKTIF / DITUTUP');
+    $response->assertSee('KODE TIDAK AKTIF');
+    $response->assertDontSee('MOVE-CHAMPION-10%');
 });

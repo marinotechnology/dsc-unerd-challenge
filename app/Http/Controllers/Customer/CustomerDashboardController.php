@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Challenge;
 use App\Models\ChallengePeriod;
+use App\Models\ChallengeResult;
 use App\Models\Community;
 use App\Models\Participant;
 use App\Models\Product;
@@ -124,6 +126,29 @@ class CustomerDashboardController extends Controller
         $recoveryFootwear = array_values(array_filter($featuredFootwearDrops, fn ($d) => ! empty($d['is_recovery'])));
         $runningFootwear = array_values(array_filter($featuredFootwearDrops, fn ($d) => empty($d['is_recovery'])));
 
+        $activePeriod = ChallengePeriod::where('is_active', true)->first();
+        $activeChallenge = Challenge::where('status', 'ACTIVE')->first();
+
+        // Check if event/challenge and period is currently active and open
+        $isEventActive = (bool) ($activePeriod && $activeChallenge && ! $activePeriod->isExpired());
+
+        $currentResult = null;
+        $prize = null;
+        $unlockedVoucher = null;
+
+        if ($participant && $activePeriod) {
+            $currentResult = ChallengeResult::where('participant_id', $participant->id)
+                ->where('challenge_period_id', $activePeriod->id)
+                ->first();
+
+            if ($currentResult && $isEventActive) {
+                $prize = $currentResult->getPrize();
+                if ($prize && ! empty($prize['voucher_code'])) {
+                    $unlockedVoucher = $prize['voucher_code'];
+                }
+            }
+        }
+
         return view('customer.rewards', [
             'user' => $user,
             'participant' => $participant,
@@ -131,6 +156,12 @@ class CustomerDashboardController extends Controller
             'featuredFootwearDrops' => $featuredFootwearDrops,
             'recoveryFootwear' => $recoveryFootwear,
             'runningFootwear' => $runningFootwear,
+            'isEventActive' => $isEventActive,
+            'activePeriod' => $activePeriod,
+            'activeChallenge' => $activeChallenge,
+            'currentResult' => $currentResult,
+            'prize' => $prize,
+            'unlockedVoucher' => $unlockedVoucher,
         ]);
     }
 }

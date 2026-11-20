@@ -80,10 +80,32 @@
                     </div>
                 @endif
 
+                @if ($prize && $voucherCode)
+                    <div class="bg-unerd-volt/10 rounded-2xl border border-unerd-volt/30 p-4 text-center my-3 relative z-10">
+                        <span class="text-[10px] font-mono uppercase font-bold tracking-wider text-unerd-volt block">
+                            APRESIASI HADIAH TERVERIFIKASI
+                        </span>
+                        <div class="text-sm font-black text-white uppercase font-display mt-0.5">
+                            {{ $prize['title'] }}
+                        </div>
+                        <div class="mt-2 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-black/60 border border-unerd-volt/50">
+                            <span class="text-[10px] font-mono text-slate-400">KODE VOUCHER:</span>
+                            <span class="font-mono font-black text-unerd-volt text-sm">{{ $voucherCode }}</span>
+                        </div>
+                        @if (! empty($prize['description']))
+                            <p class="text-[11px] text-slate-300 mt-1.5">
+                                {{ $prize['description'] }}
+                            </p>
+                        @endif
+                    </div>
+                @endif
+
                 <!-- Card Footer: Tagline UNERD Performance -->
                 <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono relative z-10">
                     <span class="font-bold text-slate-400 tracking-wider uppercase">Engineered for Every Week Performance</span>
-                    <span class="hidden">{{ $voucherCode }}</span>
+                    @if ($voucherCode)
+                        <span class="font-mono font-bold text-unerd-volt text-[11px]">{{ $voucherCode }}</span>
+                    @endif
                 </div>
             </div>
 

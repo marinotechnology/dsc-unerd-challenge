@@ -223,14 +223,31 @@ class ChallengePeriod extends Model
     }
 
     /**
-     * Resolve prize definition for a specific leaderboard rank (1 - 10)
+     * Resolve prize definition for a specific leaderboard rank based on active period & challenge
      *
      * @return array<string, mixed>|null
      */
     public function getPrizeForRank(int $rank): ?array
     {
-        if ($rank < 1 || $rank > 10) {
+        if ($rank < 1) {
             return null;
+        }
+
+        // If this period is inactive or expired, vouchers and prizes are closed
+        if (! $this->is_active || $this->isExpired()) {
+            return null;
+        }
+
+        // If parent challenge exists and is not active, prizes and vouchers are closed
+        if ($this->relationLoaded('challenge')) {
+            if ($this->challenge && $this->challenge->status !== 'ACTIVE') {
+                return null;
+            }
+        } elseif ($this->challenge_id) {
+            $parent = Challenge::find($this->challenge_id);
+            if ($parent && $parent->status !== 'ACTIVE') {
+                return null;
+            }
         }
 
         $config = $this->prizes_config ?? static::defaultPrizesConfig();

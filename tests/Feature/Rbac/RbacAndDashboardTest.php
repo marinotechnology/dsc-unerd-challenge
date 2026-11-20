@@ -131,7 +131,7 @@ test('customer can access separate history and rewards pages', function () {
 
     $rewardsResponse = $this->actingAs($customer)->get('/customer/rewards');
     $rewardsResponse->assertStatus(200);
-    $rewardsResponse->assertSee('MOVE-GBK-10%');
+    $rewardsResponse->assertSee('Voucher Hadiah');
 });
 
 test('blocked user is deactivated and rejected by role middleware', function () {

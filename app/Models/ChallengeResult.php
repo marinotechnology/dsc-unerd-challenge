@@ -117,23 +117,31 @@ class ChallengeResult extends Model
     }
 
     /**
-     * Resolve prize for this result based on its rank in period
+     * Resolve prize for this result based on its rank in period and active status
      *
      * @return array<string, mixed>|null
      */
-    public function getPrize(): ?array
+    public function getPrize(?int $rank = null): ?array
     {
-        if (! $this->rank_in_period || $this->rank_in_period > 10) {
+        $resolvedRank = $rank ?? $this->rank_in_period;
+
+        if (! $resolvedRank || $resolvedRank < 1) {
             return null;
         }
 
-        if ($this->relationLoaded('period')) {
-            return $this->period?->getPrizeForRank($this->rank_in_period);
+        if ($this->verification_status !== 'VERIFIED') {
+            return null;
         }
 
-        $period = $this->challenge_period_id ? ChallengePeriod::find($this->challenge_period_id) : null;
+        $period = $this->relationLoaded('period')
+            ? $this->period
+            : ($this->challenge_period_id ? ChallengePeriod::find($this->challenge_period_id) : null);
 
-        return $period?->getPrizeForRank($this->rank_in_period);
+        if (! $period) {
+            return null;
+        }
+
+        return $period->getPrizeForRank($resolvedRank);
     }
 
     /**
