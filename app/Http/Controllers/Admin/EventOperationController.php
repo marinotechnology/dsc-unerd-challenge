@@ -147,6 +147,34 @@ class EventOperationController extends Controller
     }
 
     /**
+     * Reset runner's recorded time to null and remove from leaderboard.
+     */
+    public function resetTime(Participant $participant): RedirectResponse
+    {
+        $result = $participant->latestResult;
+
+        if ($result) {
+            $periodId = $result->challenge_period_id;
+            $result->update([
+                'recorded_time_seconds' => null,
+                'verified_time_seconds' => null,
+                'verification_status' => 'PENDING',
+                'runner_status' => 'REGISTERED',
+                'completion_status' => 'REGISTERED',
+                'rank_in_period' => null,
+                'verified_by' => null,
+            ]);
+
+            if ($periodId) {
+                $period = ChallengePeriod::find($periodId);
+                $period?->recalculateRanks();
+            }
+        }
+
+        return back()->with('status', "Waktu lari {$participant->display_name} berhasil di-reset menjadi kosong (null). Pelari telah dikeluarkan dari leaderboard.");
+    }
+
+    /**
      * Export participants and verified times to CSV filtered by period.
      */
     public function exportCsv(Request $request): StreamedResponse

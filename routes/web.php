@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin,administrator,field-sales'])->prefix('adm
     Route::get('/event', [EventOperationController::class, 'index'])->name('event.index');
     Route::post('/event/check-in/{participant}', [EventOperationController::class, 'checkIn'])->name('event.check-in');
     Route::post('/event/record-time/{participant}', [EventOperationController::class, 'recordTime'])->name('event.record-time');
+    Route::post('/event/reset-time/{participant}', [EventOperationController::class, 'resetTime'])->name('event.reset-time');
     Route::get('/event/export-csv', [EventOperationController::class, 'exportCsv'])->name('event.export-csv');
     Route::get('/event/export-users-csv', [EventOperationController::class, 'exportUsersCsv'])->name('event.export-users-csv');
 });

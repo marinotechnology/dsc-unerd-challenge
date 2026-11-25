@@ -1053,3 +1053,59 @@ test('voucher is disabled and codes disappear when period or challenge is deacti
     $response->assertSee('KODE TIDAK AKTIF');
     $response->assertDontSee('MOVE-CHAMPION-10%');
 });
+
+test('crew can reset runner race time to null and runner is removed from leaderboard', function () {
+    $adminRole = Role::where('slug', 'administrator')->first();
+    $crew = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+
+    $period = ChallengePeriod::where('is_active', true)->first();
+    $challenge = Challenge::where('status', 'ACTIVE')->first();
+
+    $participant = Participant::create([
+        'participant_id' => 'UMS-RESET-01',
+        'full_name' => 'Budi Reset',
+        'display_name' => 'Budi R',
+        'email' => 'budi.reset@example.com',
+        'whatsapp' => '081299990000',
+        'participant_category' => 'Umum',
+        'shoe_size' => '42',
+        'consent_health' => true,
+        'consent_terms' => true,
+    ]);
+
+    $result = ChallengeResult::create([
+        'participant_id' => $participant->id,
+        'challenge_id' => $challenge->id,
+        'challenge_period_id' => $period->id,
+        'checkin_status' => 'CHECKED_IN',
+        'runner_status' => 'FINISHED',
+        'completion_status' => 'COMPLETED',
+        'recorded_time_seconds' => 190.0,
+        'verified_time_seconds' => 190.0,
+        'verification_status' => 'VERIFIED',
+    ]);
+    $period->recalculateRanks();
+
+    // Verify runner initially appears on leaderboard
+    Livewire::test(Leaderboard::class)
+        ->assertSee('Budi R')
+        ->assertSee('UMS-RESET-01');
+
+    // Crew triggers resetTime via Livewire EventOperations
+    Livewire::actingAs($crew)
+        ->test(EventOperations::class)
+        ->call('resetTime', $participant->id)
+        ->assertSee('berhasil di-reset menjadi kosong (null)');
+
+    $result->refresh();
+    expect($result->recorded_time_seconds)->toBeNull();
+    expect($result->verified_time_seconds)->toBeNull();
+    expect($result->verification_status)->toBe('PENDING');
+    expect($result->rank_in_period)->toBeNull();
+
+    // Verify runner no longer appears in leaderboard
+    Livewire::test(Leaderboard::class)
+        ->assertDontSee('UMS-RESET-01');
+});

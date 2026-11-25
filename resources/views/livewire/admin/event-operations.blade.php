@@ -412,6 +412,15 @@
                                                 class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 font-bold text-[10px] uppercase tracking-wider transition cursor-pointer">
                                             Edit Waktu
                                         </button>
+
+                                        <!-- Tombol Reset Waktu (Jadi Null & Keluar Leaderboard) -->
+                                        <button wire:click="resetTime({{ $p->id }})"
+                                                wire:confirm="Yakin ingin mereset waktu lari {{ $p->display_name }} menjadi kosong (null)? Pelari akan otomatis dikeluarkan dari leaderboard."
+                                                type="button"
+                                                class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/40 font-bold text-[10px] uppercase tracking-wider transition cursor-pointer"
+                                                title="Reset Waktu Lari Jadi Null">
+                                            Reset Waktu
+                                        </button>
                                     @else
                                         <!-- Tombol Konfirmasi Hadir & Mulai Lari -->
                                         <button wire:click="checkIn({{ $p->id }})"
@@ -521,13 +530,25 @@
                     <span class="text-[10px] text-slate-400">Menit : Detik , Milidetik</span>
                 </div>
 
-                <div class="pt-3 border-t border-slate-200 dark:border-zinc-800 flex justify-end gap-2">
-                    <button wire:click="closeTimeModal" type="button" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 text-xs font-bold text-slate-500 cursor-pointer">
-                        Batal
-                    </button>
-                    <button wire:click="saveTime" type="button" class="px-5 py-2 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider transition cursor-pointer">
-                        Simpan & Selesaikan Lari &rarr;
-                    </button>
+                <div class="pt-3 border-t border-slate-200 dark:border-zinc-800 flex items-center justify-between gap-2">
+                    <div>
+                        @if ($selectedParticipantId)
+                            <button wire:click="resetTime({{ $selectedParticipantId }})"
+                                    wire:confirm="Yakin ingin mereset waktu lari ini menjadi kosong (null)? Pelari akan dikeluarkan dari leaderboard."
+                                    type="button"
+                                    class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-bold transition cursor-pointer">
+                                Reset Waktu (Null)
+                            </button>
+                        @endif
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button wire:click="closeTimeModal" type="button" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 text-xs font-bold text-slate-500 cursor-pointer">
+                            Batal
+                        </button>
+                        <button wire:click="saveTime" type="button" class="px-5 py-2 rounded-xl bg-slate-900 text-white dark:bg-unerd-volt dark:text-black font-black text-xs uppercase tracking-wider transition cursor-pointer">
+                            Simpan & Selesaikan Lari &rarr;
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

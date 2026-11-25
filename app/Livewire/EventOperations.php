@@ -405,6 +405,46 @@ class EventOperations extends Component
     }
 
     /**
+     * Reset runner's recorded & verified time to null, removing from leaderboard
+     */
+    public function resetTime(?int $participantId = null): void
+    {
+        $targetParticipantId = $participantId ?? $this->selectedParticipantId;
+        if (! $targetParticipantId) {
+            $this->closeTimeModal();
+
+            return;
+        }
+
+        $participant = Participant::find($targetParticipantId);
+        $periodId = $this->selectedPeriodId ?? ChallengePeriod::where('is_active', true)->value('id');
+
+        $result = ChallengeResult::where('participant_id', $targetParticipantId)
+            ->where('challenge_period_id', $periodId)
+            ->first();
+
+        if ($result) {
+            $result->update([
+                'recorded_time_seconds' => null,
+                'verified_time_seconds' => null,
+                'verification_status' => 'PENDING',
+                'runner_status' => 'REGISTERED',
+                'completion_status' => 'REGISTERED',
+                'rank_in_period' => null,
+                'verified_by' => null,
+            ]);
+
+            $period = ChallengePeriod::find($periodId);
+            $period?->recalculateRanks();
+
+            $name = $participant?->display_name ?? 'Pelari';
+            $this->feedbackMessage = "Catatan waktu {$name} berhasil di-reset menjadi kosong (null). Pelari telah dikeluarkan dari leaderboard.";
+        }
+
+        $this->closeTimeModal();
+    }
+
+    /**
      * Toggle whether registration for the selected period is OPEN or CLOSED
      */
     public function toggleRegistrationOpen(): void
